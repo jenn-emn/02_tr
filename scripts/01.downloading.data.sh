@@ -6,6 +6,16 @@
 # release desciption https://humanpangenome.org/hprc-data-release-2/
 # sample data description https://github.com/human-pangenomics/hprc_intermediate_assembly/blob/main/data_tables/sample/README.md
 
+# 1. The VCF (.dip.vcf.gz) shows the variants found in the descendant that differ from the parents, each line containing specific positions (SNPs and Indels).
+# Example
+# ##FORMAT=<ID=AD,Number=R,Type=Integer,Description="Allelic depths for the ref and alt alleles in the order listed">
+# #CHROM POS ID REF ALT QUAL FILTER INFO FORMAT syndip
+# chr1 89177 . A G 30 . . GT:AD 1|1:0,2
+
+# 2. The BED (.dip.bed) shows regions and confidence (regions of perfect assembly compared to the reference) where the VCF variants are contained. Each line is a start and end interval.
+# Example
+# chr1 89153 180104 # the sequencing is correct in this region.
+
 
 
 # 1. HG002, HG002.f1_assembly_v2.dip.bed, HG002.f1_assembly_v2.dip.vcf.gz,.
