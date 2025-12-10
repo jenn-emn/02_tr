@@ -16,7 +16,7 @@
 
 
 # paths
-path_int="/home/jennifer/02_datas/04_data_processing_trios/01_intermediate/"
+path_int="/home/jennifer/02_datas/04_data_processing_trios/01_intermediate"
 path_hprc="${path_int}/hprc.mhc"
 path_hlamapper="${path_int}/hlamapper.mhc"
 
@@ -86,7 +86,18 @@ for name in "${names[@]}"; do
         -Oz \
         -o "${path_hprc}/${name}.dip.vcf.gz"
     
-    bcftools index "${path_hprc}/${name}.dip.vcf.gz"
+    #bcftools index "${path_hprc}/${name}.dip.vcf.gz"
+    
+    bcftools reheader \
+        "${path_hprc}/${name}.dip.vcf.gz"
+        -n "${name}"
+        -o "${path_hlamapper}/${name}.dip.reheaded.vcf.gz"
+
+    bcftools index "${path_hlamapper}/${name}.dip.reheaded.vcf.gz"
+
+    if [ -s "${path_hlamapper}/${name}.dip.reheaded.vcf.gz.csi" ]; then
+        rm "${path_hlamapper}/${name}.dip.vcf.gz"
+    fi
 
 done
 
@@ -108,7 +119,7 @@ for name in "${names[@]}"; do
         "/dados/home/DATA/HLAcalls_1kgenHGDP_2024/SABE_1KGEN_HGDP/vcf_nay/whatshap/whatshap_bialelico_shapeit_multialelico_EDITADO7.vcf.gz" \
         -Oz \
         -o "${path_hlamapper}/${name}.mapper.vcf.gz"
-    
+
     bcftools index "${path_hlamapper}/${name}.mapper.vcf.gz"
 
 done
