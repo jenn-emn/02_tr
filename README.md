@@ -6,7 +6,7 @@
 
 ### HPRC
 
-The Human Pangenome Reference Consortium was launched in May 2025 ([HPRC Release 2](https://humanpangenome.org/hprc-data-release-2/), [timeline](https://humanpangenome.org/release-timeline/), [ensemble](https://projects.ensembl.org/hprc/)) and contains genomic data from 234 samples ((github)[https://github.com/human-pangenomics/hprc_intermediate_assembly/blob/main/data_tables/sample/README.md], ).
+The Human Pangenome Reference Consortium was launched in May 2025 ([HPRC Release 2](https://humanpangenome.org/hprc-data-release-2/), [timeline](https://humanpangenome.org/release-timeline/), [ensemble](https://projects.ensembl.org/hprc/)) and contains genomic data from 234 samples ([github]([https://github.com/human-pangenomics/hprc_intermediate_assembly/blob/main/data_tables/sample/README.md), ).
 
 - Several sequencing technologies were used: PacBio HiFi, ONT Ultralong, Dovetail/Illumina Hi-C, PacBio Kinnex RNA, and Illumina WGS. High coverage: 60X PacBio HiFi and 30X Oxford Nanopore in 100 kb.
 
