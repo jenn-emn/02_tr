@@ -17,7 +17,7 @@ There are [234 samples](https://github.com/human-pangenomics/hprc_intermediate_a
 
 - The [year1_freeze_assembly_v2](https://s3-us-west-2.amazonaws.com/human-pangenomics/index.html?prefix=working/HPRC_PLUS/HG01109/assemblies/year1_freeze_assembly_v2/) is the curated and polished version. The consortium took the [raw data](https://github.com/human-pangenomics/HPP_Year1_Assemblies), cleaned it, checked the quality, and standardized it. This is the "Gold Standard" published in the Year 1 paper. They used dipcall ([dipcall github](https://github.com/lh3/dipcall/tree/master)) to convert the fasta files to vcf, writing each line perfectly phased (1|0 or 0|1).
 
-- The [S3 root of HPRC_PLUS](https://s3-us-west-2.amazonaws.com/human-pangenomics/index.html?prefix=working/HPRC_PLUS/) have 18 samples from the child, originating from the trios.
+- The [S3 root of HPRC_PLUS](https://s3-us-west-2.amazonaws.com/human-pangenomics/index.html?prefix=working/HPRC_PLUS/) have 18 samples from the offspring, originating from the trios.
 
 
 end
