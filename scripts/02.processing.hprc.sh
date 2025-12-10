@@ -17,8 +17,8 @@
 
 # paths
 path_int="/home/jennifer/02_datas/04_data_processing_trios/01_intermediate/"
-path_hprc="${path_int}/mhc.hprc"
-path_hlamapper="${path_int}/mhc.hlamapper"
+path_hprc="${path_int}/hprc.mhc"
+path_hlamapper="${path_int}/hlamapper.mhc"
 
 # to check names
 samples_list="${path_int}/mapper.samples.in.hprc.txt"
