@@ -17,8 +17,18 @@
 
 # paths
 path_int="/home/jennifer/02_datas/04_data_processing_trios/01_intermediate/"
+path_hprc="${path_int}/mhc.hprc"
+path_hlamapper="${path_int}/mhc.hlamapper"
+
+# to check names
+samples_list="${path_int}/mapper.samples.in.hprc.txt"
+
+# to .log
+log="${path_int}/01.log"
 
 
+
+# SAMPLES
 
 # sample names
 n1="HG002"
@@ -41,23 +51,31 @@ n17="NA20129"
 n18="NA21309"
 names=(${n1} ${n2} ${n3} ${n4} ${n5} ${n6} ${n7} ${n8} ${n9} ${n10} ${n11} ${n12} ${n13} ${n14} ${n15} ${n16} ${n17} ${n18})
 
-# checking name
-
-bcftools query -l "/dados/home/DATA/HLAcalls_1kgenHGDP_2024/SABE_1KGEN_HGDP/vcf_nay/whatshap/whatshap_bialelico_shapeit_multialelico_EDITADO7.vcf.gz" > \
-    "${path_int}/mapper.samples.in.hprc.txt"
+bcftools \
+    query -l \
+    "/dados/home/DATA/HLAcalls_1kgenHGDP_2024/SABE_1KGEN_HGDP/vcf_nay/whatshap/whatshap_bialelico_shapeit_multialelico_EDITADO7.vcf.gz" > \
+    "${samples_list}"
 
 for name in "${names[@]}"; do
-    
-    #grep "${name}"
+
+    if ! grep -Fxq "${name}" "${samples_list}"; then
+        echo "'${name}' is missing!" >> "${log}"
+    fi
 
 done
+# cat /home/jennifer/02_datas/04_data_processing_trios/01_intermediate/01.log
+    # 'HG002' is missing!
+    # 'HG005' is missing!
+    # 'HG02109' is missing!
+    # 'NA21309' is missing!
+
 
 
 
 # HPRC vcfs
 
 # create folder to VCFs with the MHC region, one by sample (HPRC)
-mkdir -p "${path_int}/mhc.hprc"
+mkdir -p "${path_hprc}"
 
 for name in "${names[@]}"; do
     
@@ -66,7 +84,7 @@ for name in "${names[@]}"; do
         -r chr6:29700000-33149972 \
         "/home/DATA/HPRC_PLUS/${name}.f1_assembly_v2.dip.vcf.gz" \
         -Oz \
-        -o "${path_int}/${name}.dip.vcf.gz"
+        -o "${path_hprc}/${name}.dip.vcf.gz"
 
 done
 
@@ -75,16 +93,11 @@ done
 # HLA-MAPPER vcfs
 
 # create folder to VCFs with the MHC region, one by sample (HPRC)
-mkdir -p "${path_int}/mhc.hlamapper"
+mkdir -p "${path_hlamapper}"
 
 # selecting MHC from the populational (SABE_1KGEN_HGDP) phased VCFs (hla-mapper), one VCF by sample.
 
 for name in "${names[@]}"; do
-    
-    # checking name
-    bcftools query \
-        -l "/dados/home/DATA/HLAcalls_1kgenHGDP_2024/SABE_1KGEN_HGDP/vcf_nay/whatshap/whatshap_bialelico_shapeit_multialelico_EDITADO7.vcf.gz" | \
-    grep "${name}"
 
     # selecting chr6 from the phased VCFs
     bcftools view \
@@ -92,7 +105,7 @@ for name in "${names[@]}"; do
         -r chr6:29700000-33149972 \
         "/dados/home/DATA/HLAcalls_1kgenHGDP_2024/SABE_1KGEN_HGDP/vcf_nay/whatshap/whatshap_bialelico_shapeit_multialelico_EDITADO7.vcf.gz" \
         -Oz \
-        -o "${path_int}/${name}.mapper.vcf.gz"
+        -o "${path_hlamapper}/${name}.mapper.vcf.gz"
 
 done
 
