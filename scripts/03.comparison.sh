@@ -25,22 +25,23 @@ n17="NA20129"
 #n18="NA21309"
 names=(${n3} ${n4} ${n5} ${n6} ${n7} ${n9} ${n10} ${n11} ${n12} ${n13} ${n14} ${n15} ${n16} ${n17})
 
-conda activate whatshap_env
+#conda activate whatshap_env
 
 for name in "${names[@]}"; do
 
-    to.tsv.pairwise="/home/jennifer/02_datas/04_data_processing_trios/01_intermediate/to_tsv_pairwse.txt"
-    truth.vcf="/home/jennifer/02_datas/04_data_processing_trios/01_intermediate/hprc.mhc/${name}.dip.vcf.gz"
-    phased.vcf="/home/jennifer/02_datas/04_data_processing_trios/01_intermediate/hlamapper.mhc/${name}.mapper.vcf.gz""
+    tsvpairwise="/home/jennifer/02_datas/04_data_processing_trios/01_intermediate/${name}.tsv.pairwse.txt"
+    truthvcf="/home/jennifer/02_datas/04_data_processing_trios/01_intermediate/hprc.mhc/${name}.dip.vcf.gz"
+    phasedvcf="/home/jennifer/02_datas/04_data_processing_trios/01_intermediate/hlamapper.mhc/${name}.mapper.vcf.gz"
 
-    #echo -e "${name}\tchr6\ttruth\twhatshap\t${name}.dip.vcf.gz\t${name}.mapper.vcf.gz" > "${to.tsv.pairwise}"
+    echo -e "${name}\tchr6\ttruth\twhatshap\t${name}.dip.vcf.gz\t${name}.mapper.vcf.gz" > "${tsvpairwise}"
+    #> "${tsvpairwise}"
 
     # comparison hla.mapper vs trios
     whatshap compare \
-        --names truth,whatshap \
-        --tsv-pairwise "${to.tsv.pairwise}" \
-        "${truth.vcf}" \
-        "${phased.vcf}"
+        --names truth,phased \
+        --tsv-pairwise "${tsvpairwise}" \
+        "${truthvcf}" \
+        "${phasedvcf}"
 
 done
 

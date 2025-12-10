@@ -85,6 +85,8 @@ for name in "${names[@]}"; do
         "/home/DATA/HPRC_PLUS/${name}.f1_assembly_v2.dip.vcf.gz" \
         -Oz \
         -o "${path_hprc}/${name}.dip.vcf.gz"
+    
+    bcftools index "${path_hprc}/${name}.dip.vcf.gz"
 
 done
 
@@ -106,6 +108,8 @@ for name in "${names[@]}"; do
         "/dados/home/DATA/HLAcalls_1kgenHGDP_2024/SABE_1KGEN_HGDP/vcf_nay/whatshap/whatshap_bialelico_shapeit_multialelico_EDITADO7.vcf.gz" \
         -Oz \
         -o "${path_hlamapper}/${name}.mapper.vcf.gz"
+    
+    bcftools index "${path_hlamapper}/${name}.mapper.vcf.gz"
 
 done
 
