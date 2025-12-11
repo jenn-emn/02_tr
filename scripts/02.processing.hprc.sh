@@ -86,17 +86,18 @@ for name in "${names[@]}"; do
         -Oz \
         -o "${path_hprc}/${name}.dip.vcf.gz"
     
-    #bcftools index "${path_hprc}/${name}.dip.vcf.gz"
+    # name.txt
+    echo "${name}" > "${path_hprc}/${name}.to.reheader.txt"
     
     bcftools reheader \
-        "${path_hprc}/${name}.dip.vcf.gz"
-        -n "${name}"
-        -o "${path_hlamapper}/${name}.dip.reheaded.vcf.gz"
+        "${path_hprc}/${name}.dip.vcf.gz" \
+        -s "${path_hprc}/${name}.to.reheader.txt" \
+        -o "${path_hprc}/${name}.dip.reheaded.vcf.gz"
 
-    bcftools index "${path_hlamapper}/${name}.dip.reheaded.vcf.gz"
+    bcftools index "${path_hprc}/${name}.dip.reheaded.vcf.gz"
 
-    if [ -s "${path_hlamapper}/${name}.dip.reheaded.vcf.gz.csi" ]; then
-        rm "${path_hlamapper}/${name}.dip.vcf.gz"
+    if [ -s "${path_hprc}/${name}.dip.reheaded.vcf.gz.csi" ]; then
+        rm "${path_hprc}/${name}.dip.vcf.gz"
     fi
 
 done
