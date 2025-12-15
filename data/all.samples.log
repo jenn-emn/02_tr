@@ -1,0 +1,616 @@
+
+SAMPLE: HG00733 ------------------------------------------------
+Reading phasing from '/home/jennifer/02_datas/04_data_processing_trios/01_intermediate/hprc.mhc/HG00733.dip.reheaded.vcf.gz'
+Reading phasing from '/home/jennifer/02_datas/04_data_processing_trios/01_intermediate/hlamapper.mhc/HG00733.mapper.vcf.gz'
+Chromosomes present in all VCFs: chr6
+Comparing phasings for sample HG00733
+FILENAMES
+   truth = /home/jennifer/02_datas/04_data_processing_trios/01_intermediate/hprc.mhc/HG00733.dip.reheaded.vcf.gz
+  phased = /home/jennifer/02_datas/04_data_processing_trios/01_intermediate/hlamapper.mhc/HG00733.mapper.vcf.gz
+---------------- Chromosome chr6 ----------------
+VARIANT COUNTS (heterozygous / all): 
+              truth:     11694 /     16728
+             phased:      9581 /    124529
+              UNION:     12886 /    128872
+       INTERSECTION:      8389 /     12385
+PAIRWISE COMPARISON: truth <--> phased:
+         common heterozygous variants:      8389
+         (restricting to these below)
+        non-singleton blocks in truth:         1
+                 --> covered variants:      8324
+       non-singleton blocks in phased:         1
+                 --> covered variants:      8389
+    non-singleton intersection blocks:         1
+                 --> covered variants:      8324
+              ALL INTERSECTION BLOCKS: ---------
+    phased pairs of variants assessed:      8323
+                        switch errors:         0
+                    switch error rate:     0.00%
+            switch/flip decomposition:       0/0
+                     switch/flip rate:     0.00%
+          Block-wise Hamming distance:         0
+      Block-wise Hamming distance [%]:     0.00%
+                  Different genotypes:         0
+              Different genotypes [%]:     0.00%
+           LARGEST INTERSECTION BLOCK: ---------
+    phased pairs of variants assessed:      8323
+                        switch errors:         0
+                    switch error rate:     0.00%
+            switch/flip decomposition:       0/0
+                     switch/flip rate:     0.00%
+                     Hamming distance:         0
+                 Hamming distance [%]:     0.00%
+                  Different genotypes:         0
+              Different genotypes [%]:     0.00%
+
+SAMPLE: HG01109 ------------------------------------------------
+Reading phasing from '/home/jennifer/02_datas/04_data_processing_trios/01_intermediate/hprc.mhc/HG01109.dip.reheaded.vcf.gz'
+Reading phasing from '/home/jennifer/02_datas/04_data_processing_trios/01_intermediate/hlamapper.mhc/HG01109.mapper.vcf.gz'
+Chromosomes present in all VCFs: chr6
+Comparing phasings for sample HG01109
+FILENAMES
+   truth = /home/jennifer/02_datas/04_data_processing_trios/01_intermediate/hprc.mhc/HG01109.dip.reheaded.vcf.gz
+  phased = /home/jennifer/02_datas/04_data_processing_trios/01_intermediate/hlamapper.mhc/HG01109.mapper.vcf.gz
+---------------- Chromosome chr6 ----------------
+VARIANT COUNTS (heterozygous / all): 
+              truth:     15753 /     21738
+             phased:     12589 /    124529
+              UNION:     18423 /    131836
+       INTERSECTION:      9919 /     14431
+PAIRWISE COMPARISON: truth <--> phased:
+         common heterozygous variants:      9919
+         (restricting to these below)
+        non-singleton blocks in truth:         1
+                 --> covered variants:      9503
+       non-singleton blocks in phased:         1
+                 --> covered variants:      9919
+    non-singleton intersection blocks:         1
+                 --> covered variants:      9503
+              ALL INTERSECTION BLOCKS: ---------
+    phased pairs of variants assessed:      9502
+                        switch errors:         2
+                    switch error rate:     0.02%
+            switch/flip decomposition:       0/1
+                     switch/flip rate:     0.01%
+          Block-wise Hamming distance:         1
+      Block-wise Hamming distance [%]:     0.01%
+                  Different genotypes:         0
+              Different genotypes [%]:     0.00%
+           LARGEST INTERSECTION BLOCK: ---------
+    phased pairs of variants assessed:      9502
+                        switch errors:         2
+                    switch error rate:     0.02%
+            switch/flip decomposition:       0/1
+                     switch/flip rate:     0.01%
+                     Hamming distance:         1
+                 Hamming distance [%]:     0.01%
+                  Different genotypes:         0
+              Different genotypes [%]:     0.00%
+
+SAMPLE: HG01243 ------------------------------------------------
+Reading phasing from '/home/jennifer/02_datas/04_data_processing_trios/01_intermediate/hprc.mhc/HG01243.dip.reheaded.vcf.gz'
+Reading phasing from '/home/jennifer/02_datas/04_data_processing_trios/01_intermediate/hlamapper.mhc/HG01243.mapper.vcf.gz'
+Chromosomes present in all VCFs: chr6
+Comparing phasings for sample HG01243
+FILENAMES
+   truth = /home/jennifer/02_datas/04_data_processing_trios/01_intermediate/hprc.mhc/HG01243.dip.reheaded.vcf.gz
+  phased = /home/jennifer/02_datas/04_data_processing_trios/01_intermediate/hlamapper.mhc/HG01243.mapper.vcf.gz
+---------------- Chromosome chr6 ----------------
+VARIANT COUNTS (heterozygous / all): 
+              truth:     11208 /     17438
+             phased:      8484 /    124529
+              UNION:     11755 /    130078
+       INTERSECTION:      7937 /     11889
+PAIRWISE COMPARISON: truth <--> phased:
+         common heterozygous variants:      7937
+         (restricting to these below)
+        non-singleton blocks in truth:         1
+                 --> covered variants:      7932
+       non-singleton blocks in phased:         1
+                 --> covered variants:      7937
+    non-singleton intersection blocks:         1
+                 --> covered variants:      7932
+              ALL INTERSECTION BLOCKS: ---------
+    phased pairs of variants assessed:      7931
+                        switch errors:         0
+                    switch error rate:     0.00%
+            switch/flip decomposition:       0/0
+                     switch/flip rate:     0.00%
+          Block-wise Hamming distance:         0
+      Block-wise Hamming distance [%]:     0.00%
+                  Different genotypes:         0
+              Different genotypes [%]:     0.00%
+           LARGEST INTERSECTION BLOCK: ---------
+    phased pairs of variants assessed:      7931
+                        switch errors:         0
+                    switch error rate:     0.00%
+            switch/flip decomposition:       0/0
+                     switch/flip rate:     0.00%
+                     Hamming distance:         0
+                 Hamming distance [%]:     0.00%
+                  Different genotypes:         0
+              Different genotypes [%]:     0.00%
+
+SAMPLE: HG02055 ------------------------------------------------
+Reading phasing from '/home/jennifer/02_datas/04_data_processing_trios/01_intermediate/hprc.mhc/HG02055.dip.reheaded.vcf.gz'
+Reading phasing from '/home/jennifer/02_datas/04_data_processing_trios/01_intermediate/hlamapper.mhc/HG02055.mapper.vcf.gz'
+Chromosomes present in all VCFs: chr6
+Comparing phasings for sample HG02055
+FILENAMES
+   truth = /home/jennifer/02_datas/04_data_processing_trios/01_intermediate/hprc.mhc/HG02055.dip.reheaded.vcf.gz
+  phased = /home/jennifer/02_datas/04_data_processing_trios/01_intermediate/hlamapper.mhc/HG02055.mapper.vcf.gz
+---------------- Chromosome chr6 ----------------
+VARIANT COUNTS (heterozygous / all): 
+              truth:     11309 /     15633
+             phased:      9116 /    124529
+              UNION:     12250 /    128484
+       INTERSECTION:      8175 /     11678
+PAIRWISE COMPARISON: truth <--> phased:
+         common heterozygous variants:      8175
+         (restricting to these below)
+        non-singleton blocks in truth:         1
+                 --> covered variants:      8175
+       non-singleton blocks in phased:         1
+                 --> covered variants:      8175
+    non-singleton intersection blocks:         1
+                 --> covered variants:      8175
+              ALL INTERSECTION BLOCKS: ---------
+    phased pairs of variants assessed:      8174
+                        switch errors:         3
+                    switch error rate:     0.04%
+            switch/flip decomposition:       1/1
+                     switch/flip rate:     0.02%
+          Block-wise Hamming distance:      1233
+      Block-wise Hamming distance [%]:    15.08%
+                  Different genotypes:         0
+              Different genotypes [%]:     0.00%
+           LARGEST INTERSECTION BLOCK: ---------
+    phased pairs of variants assessed:      8174
+                        switch errors:         3
+                    switch error rate:     0.04%
+            switch/flip decomposition:       1/1
+                     switch/flip rate:     0.02%
+                     Hamming distance:      1233
+                 Hamming distance [%]:    15.08%
+                  Different genotypes:         0
+              Different genotypes [%]:     0.00%
+
+SAMPLE: HG02080 ------------------------------------------------
+Reading phasing from '/home/jennifer/02_datas/04_data_processing_trios/01_intermediate/hprc.mhc/HG02080.dip.reheaded.vcf.gz'
+Reading phasing from '/home/jennifer/02_datas/04_data_processing_trios/01_intermediate/hlamapper.mhc/HG02080.mapper.vcf.gz'
+Chromosomes present in all VCFs: chr6
+Comparing phasings for sample HG02080
+FILENAMES
+   truth = /home/jennifer/02_datas/04_data_processing_trios/01_intermediate/hprc.mhc/HG02080.dip.reheaded.vcf.gz
+  phased = /home/jennifer/02_datas/04_data_processing_trios/01_intermediate/hlamapper.mhc/HG02080.mapper.vcf.gz
+---------------- Chromosome chr6 ----------------
+VARIANT COUNTS (heterozygous / all): 
+              truth:     14752 /     20808
+             phased:     11703 /    124529
+              UNION:     17233 /    130871
+       INTERSECTION:      9222 /     14466
+PAIRWISE COMPARISON: truth <--> phased:
+         common heterozygous variants:      9222
+         (restricting to these below)
+        non-singleton blocks in truth:         1
+                 --> covered variants:      8738
+       non-singleton blocks in phased:         1
+                 --> covered variants:      9222
+    non-singleton intersection blocks:         1
+                 --> covered variants:      8738
+              ALL INTERSECTION BLOCKS: ---------
+    phased pairs of variants assessed:      8737
+                        switch errors:         2
+                    switch error rate:     0.02%
+            switch/flip decomposition:       2/0
+                     switch/flip rate:     0.02%
+          Block-wise Hamming distance:      2118
+      Block-wise Hamming distance [%]:    24.24%
+                  Different genotypes:         0
+              Different genotypes [%]:     0.00%
+           LARGEST INTERSECTION BLOCK: ---------
+    phased pairs of variants assessed:      8737
+                        switch errors:         2
+                    switch error rate:     0.02%
+            switch/flip decomposition:       2/0
+                     switch/flip rate:     0.02%
+                     Hamming distance:      2118
+                 Hamming distance [%]:    24.24%
+                  Different genotypes:         0
+              Different genotypes [%]:     0.00%
+
+SAMPLE: HG02145 ------------------------------------------------
+Reading phasing from '/home/jennifer/02_datas/04_data_processing_trios/01_intermediate/hprc.mhc/HG02145.dip.reheaded.vcf.gz'
+Reading phasing from '/home/jennifer/02_datas/04_data_processing_trios/01_intermediate/hlamapper.mhc/HG02145.mapper.vcf.gz'
+Chromosomes present in all VCFs: chr6
+Comparing phasings for sample HG02145
+FILENAMES
+   truth = /home/jennifer/02_datas/04_data_processing_trios/01_intermediate/hprc.mhc/HG02145.dip.reheaded.vcf.gz
+  phased = /home/jennifer/02_datas/04_data_processing_trios/01_intermediate/hlamapper.mhc/HG02145.mapper.vcf.gz
+---------------- Chromosome chr6 ----------------
+VARIANT COUNTS (heterozygous / all): 
+              truth:     12861 /     17758
+             phased:     10913 /    124529
+              UNION:     14851 /    129687
+       INTERSECTION:      8923 /     12600
+PAIRWISE COMPARISON: truth <--> phased:
+         common heterozygous variants:      8923
+         (restricting to these below)
+        non-singleton blocks in truth:         1
+                 --> covered variants:      8897
+       non-singleton blocks in phased:         1
+                 --> covered variants:      8923
+    non-singleton intersection blocks:         1
+                 --> covered variants:      8897
+              ALL INTERSECTION BLOCKS: ---------
+    phased pairs of variants assessed:      8896
+                        switch errors:         2
+                    switch error rate:     0.02%
+            switch/flip decomposition:       0/1
+                     switch/flip rate:     0.01%
+          Block-wise Hamming distance:         1
+      Block-wise Hamming distance [%]:     0.01%
+                  Different genotypes:         0
+              Different genotypes [%]:     0.00%
+           LARGEST INTERSECTION BLOCK: ---------
+    phased pairs of variants assessed:      8896
+                        switch errors:         2
+                    switch error rate:     0.02%
+            switch/flip decomposition:       0/1
+                     switch/flip rate:     0.01%
+                     Hamming distance:         1
+                 Hamming distance [%]:     0.01%
+                  Different genotypes:         0
+              Different genotypes [%]:     0.00%
+
+SAMPLE: HG02723 ------------------------------------------------
+Reading phasing from '/home/jennifer/02_datas/04_data_processing_trios/01_intermediate/hprc.mhc/HG02723.dip.reheaded.vcf.gz'
+Reading phasing from '/home/jennifer/02_datas/04_data_processing_trios/01_intermediate/hlamapper.mhc/HG02723.mapper.vcf.gz'
+Chromosomes present in all VCFs: chr6
+Comparing phasings for sample HG02723
+FILENAMES
+   truth = /home/jennifer/02_datas/04_data_processing_trios/01_intermediate/hprc.mhc/HG02723.dip.reheaded.vcf.gz
+  phased = /home/jennifer/02_datas/04_data_processing_trios/01_intermediate/hlamapper.mhc/HG02723.mapper.vcf.gz
+---------------- Chromosome chr6 ----------------
+VARIANT COUNTS (heterozygous / all): 
+              truth:     15273 /     21163
+             phased:     11575 /    124529
+              UNION:     17558 /    131297
+       INTERSECTION:      9290 /     14395
+PAIRWISE COMPARISON: truth <--> phased:
+         common heterozygous variants:      9290
+         (restricting to these below)
+        non-singleton blocks in truth:         1
+                 --> covered variants:      8828
+       non-singleton blocks in phased:         1
+                 --> covered variants:      9290
+    non-singleton intersection blocks:         1
+                 --> covered variants:      8828
+              ALL INTERSECTION BLOCKS: ---------
+    phased pairs of variants assessed:      8827
+                        switch errors:         8
+                    switch error rate:     0.09%
+            switch/flip decomposition:       0/4
+                     switch/flip rate:     0.05%
+          Block-wise Hamming distance:         4
+      Block-wise Hamming distance [%]:     0.05%
+                  Different genotypes:         0
+              Different genotypes [%]:     0.00%
+           LARGEST INTERSECTION BLOCK: ---------
+    phased pairs of variants assessed:      8827
+                        switch errors:         8
+                    switch error rate:     0.09%
+            switch/flip decomposition:       0/4
+                     switch/flip rate:     0.05%
+                     Hamming distance:         4
+                 Hamming distance [%]:     0.05%
+                  Different genotypes:         0
+              Different genotypes [%]:     0.00%
+
+SAMPLE: HG02818 ------------------------------------------------
+Reading phasing from '/home/jennifer/02_datas/04_data_processing_trios/01_intermediate/hprc.mhc/HG02818.dip.reheaded.vcf.gz'
+Reading phasing from '/home/jennifer/02_datas/04_data_processing_trios/01_intermediate/hlamapper.mhc/HG02818.mapper.vcf.gz'
+Chromosomes present in all VCFs: chr6
+Comparing phasings for sample HG02818
+FILENAMES
+   truth = /home/jennifer/02_datas/04_data_processing_trios/01_intermediate/hprc.mhc/HG02818.dip.reheaded.vcf.gz
+  phased = /home/jennifer/02_datas/04_data_processing_trios/01_intermediate/hlamapper.mhc/HG02818.mapper.vcf.gz
+---------------- Chromosome chr6 ----------------
+VARIANT COUNTS (heterozygous / all): 
+              truth:     13461 /     18539
+             phased:     11807 /    124529
+              UNION:     16114 /    130369
+       INTERSECTION:      9154 /     12699
+PAIRWISE COMPARISON: truth <--> phased:
+         common heterozygous variants:      9154
+         (restricting to these below)
+        non-singleton blocks in truth:         1
+                 --> covered variants:      9049
+       non-singleton blocks in phased:         1
+                 --> covered variants:      9154
+    non-singleton intersection blocks:         1
+                 --> covered variants:      9049
+              ALL INTERSECTION BLOCKS: ---------
+    phased pairs of variants assessed:      9048
+                        switch errors:         2
+                    switch error rate:     0.02%
+            switch/flip decomposition:       0/1
+                     switch/flip rate:     0.01%
+          Block-wise Hamming distance:         1
+      Block-wise Hamming distance [%]:     0.01%
+                  Different genotypes:         0
+              Different genotypes [%]:     0.00%
+           LARGEST INTERSECTION BLOCK: ---------
+    phased pairs of variants assessed:      9048
+                        switch errors:         2
+                    switch error rate:     0.02%
+            switch/flip decomposition:       0/1
+                     switch/flip rate:     0.01%
+                     Hamming distance:         1
+                 Hamming distance [%]:     0.01%
+                  Different genotypes:         0
+              Different genotypes [%]:     0.00%
+
+SAMPLE: HG03098 ------------------------------------------------
+Reading phasing from '/home/jennifer/02_datas/04_data_processing_trios/01_intermediate/hprc.mhc/HG03098.dip.reheaded.vcf.gz'
+Reading phasing from '/home/jennifer/02_datas/04_data_processing_trios/01_intermediate/hlamapper.mhc/HG03098.mapper.vcf.gz'
+Chromosomes present in all VCFs: chr6
+Comparing phasings for sample HG03098
+FILENAMES
+   truth = /home/jennifer/02_datas/04_data_processing_trios/01_intermediate/hprc.mhc/HG03098.dip.reheaded.vcf.gz
+  phased = /home/jennifer/02_datas/04_data_processing_trios/01_intermediate/hlamapper.mhc/HG03098.mapper.vcf.gz
+---------------- Chromosome chr6 ----------------
+VARIANT COUNTS (heterozygous / all): 
+              truth:     12050 /     18543
+             phased:     10484 /    124529
+              UNION:     13632 /    129927
+       INTERSECTION:      8902 /     13145
+PAIRWISE COMPARISON: truth <--> phased:
+         common heterozygous variants:      8902
+         (restricting to these below)
+        non-singleton blocks in truth:         1
+                 --> covered variants:      8902
+       non-singleton blocks in phased:         1
+                 --> covered variants:      8902
+    non-singleton intersection blocks:         1
+                 --> covered variants:      8902
+              ALL INTERSECTION BLOCKS: ---------
+    phased pairs of variants assessed:      8901
+                        switch errors:        14
+                    switch error rate:     0.16%
+            switch/flip decomposition:       4/5
+                     switch/flip rate:     0.10%
+          Block-wise Hamming distance:        12
+      Block-wise Hamming distance [%]:     0.13%
+                  Different genotypes:         0
+              Different genotypes [%]:     0.00%
+           LARGEST INTERSECTION BLOCK: ---------
+    phased pairs of variants assessed:      8901
+                        switch errors:        14
+                    switch error rate:     0.16%
+            switch/flip decomposition:       4/5
+                     switch/flip rate:     0.10%
+                     Hamming distance:        12
+                 Hamming distance [%]:     0.13%
+                  Different genotypes:         0
+              Different genotypes [%]:     0.00%
+
+SAMPLE: HG03486 ------------------------------------------------
+Reading phasing from '/home/jennifer/02_datas/04_data_processing_trios/01_intermediate/hprc.mhc/HG03486.dip.reheaded.vcf.gz'
+Reading phasing from '/home/jennifer/02_datas/04_data_processing_trios/01_intermediate/hlamapper.mhc/HG03486.mapper.vcf.gz'
+Chromosomes present in all VCFs: chr6
+Comparing phasings for sample HG03486
+FILENAMES
+   truth = /home/jennifer/02_datas/04_data_processing_trios/01_intermediate/hprc.mhc/HG03486.dip.reheaded.vcf.gz
+  phased = /home/jennifer/02_datas/04_data_processing_trios/01_intermediate/hlamapper.mhc/HG03486.mapper.vcf.gz
+---------------- Chromosome chr6 ----------------
+VARIANT COUNTS (heterozygous / all): 
+              truth:     10707 /     16684
+             phased:      9489 /    124529
+              UNION:     12604 /    129841
+       INTERSECTION:      7592 /     11372
+PAIRWISE COMPARISON: truth <--> phased:
+         common heterozygous variants:      7592
+         (restricting to these below)
+        non-singleton blocks in truth:         1
+                 --> covered variants:      7490
+       non-singleton blocks in phased:         1
+                 --> covered variants:      7592
+    non-singleton intersection blocks:         1
+                 --> covered variants:      7490
+              ALL INTERSECTION BLOCKS: ---------
+    phased pairs of variants assessed:      7489
+                        switch errors:         2
+                    switch error rate:     0.03%
+            switch/flip decomposition:       0/1
+                     switch/flip rate:     0.01%
+          Block-wise Hamming distance:         1
+      Block-wise Hamming distance [%]:     0.01%
+                  Different genotypes:         0
+              Different genotypes [%]:     0.00%
+           LARGEST INTERSECTION BLOCK: ---------
+    phased pairs of variants assessed:      7489
+                        switch errors:         2
+                    switch error rate:     0.03%
+            switch/flip decomposition:       0/1
+                     switch/flip rate:     0.01%
+                     Hamming distance:         1
+                 Hamming distance [%]:     0.01%
+                  Different genotypes:         0
+              Different genotypes [%]:     0.00%
+
+SAMPLE: HG03492 ------------------------------------------------
+Reading phasing from '/home/jennifer/02_datas/04_data_processing_trios/01_intermediate/hprc.mhc/HG03492.dip.reheaded.vcf.gz'
+Reading phasing from '/home/jennifer/02_datas/04_data_processing_trios/01_intermediate/hlamapper.mhc/HG03492.mapper.vcf.gz'
+Chromosomes present in all VCFs: chr6
+Comparing phasings for sample HG03492
+FILENAMES
+   truth = /home/jennifer/02_datas/04_data_processing_trios/01_intermediate/hprc.mhc/HG03492.dip.reheaded.vcf.gz
+  phased = /home/jennifer/02_datas/04_data_processing_trios/01_intermediate/hlamapper.mhc/HG03492.mapper.vcf.gz
+---------------- Chromosome chr6 ----------------
+VARIANT COUNTS (heterozygous / all): 
+              truth:     13088 /     18416
+             phased:     11244 /    124529
+              UNION:     15572 /    130381
+       INTERSECTION:      8760 /     12564
+PAIRWISE COMPARISON: truth <--> phased:
+         common heterozygous variants:      8760
+         (restricting to these below)
+        non-singleton blocks in truth:         1
+                 --> covered variants:      8622
+       non-singleton blocks in phased:         1
+                 --> covered variants:      8760
+    non-singleton intersection blocks:         1
+                 --> covered variants:      8622
+              ALL INTERSECTION BLOCKS: ---------
+    phased pairs of variants assessed:      8621
+                        switch errors:         4
+                    switch error rate:     0.05%
+            switch/flip decomposition:       0/2
+                     switch/flip rate:     0.02%
+          Block-wise Hamming distance:         2
+      Block-wise Hamming distance [%]:     0.02%
+                  Different genotypes:         0
+              Different genotypes [%]:     0.00%
+           LARGEST INTERSECTION BLOCK: ---------
+    phased pairs of variants assessed:      8621
+                        switch errors:         4
+                    switch error rate:     0.05%
+            switch/flip decomposition:       0/2
+                     switch/flip rate:     0.02%
+                     Hamming distance:         2
+                 Hamming distance [%]:     0.02%
+                  Different genotypes:         0
+              Different genotypes [%]:     0.00%
+
+SAMPLE: NA18906 ------------------------------------------------
+Reading phasing from '/home/jennifer/02_datas/04_data_processing_trios/01_intermediate/hprc.mhc/NA18906.dip.reheaded.vcf.gz'
+Reading phasing from '/home/jennifer/02_datas/04_data_processing_trios/01_intermediate/hlamapper.mhc/NA18906.mapper.vcf.gz'
+Chromosomes present in all VCFs: chr6
+Comparing phasings for sample NA18906
+FILENAMES
+   truth = /home/jennifer/02_datas/04_data_processing_trios/01_intermediate/hprc.mhc/NA18906.dip.reheaded.vcf.gz
+  phased = /home/jennifer/02_datas/04_data_processing_trios/01_intermediate/hlamapper.mhc/NA18906.mapper.vcf.gz
+---------------- Chromosome chr6 ----------------
+VARIANT COUNTS (heterozygous / all): 
+              truth:     14003 /     19879
+             phased:      9747 /    124529
+              UNION:     14763 /    130693
+       INTERSECTION:      8987 /     13715
+PAIRWISE COMPARISON: truth <--> phased:
+         common heterozygous variants:      8987
+         (restricting to these below)
+        non-singleton blocks in truth:         1
+                 --> covered variants:      8767
+       non-singleton blocks in phased:         1
+                 --> covered variants:      8987
+    non-singleton intersection blocks:         1
+                 --> covered variants:      8767
+              ALL INTERSECTION BLOCKS: ---------
+    phased pairs of variants assessed:      8766
+                        switch errors:         2
+                    switch error rate:     0.02%
+            switch/flip decomposition:       0/1
+                     switch/flip rate:     0.01%
+          Block-wise Hamming distance:         1
+      Block-wise Hamming distance [%]:     0.01%
+                  Different genotypes:         0
+              Different genotypes [%]:     0.00%
+           LARGEST INTERSECTION BLOCK: ---------
+    phased pairs of variants assessed:      8766
+                        switch errors:         2
+                    switch error rate:     0.02%
+            switch/flip decomposition:       0/1
+                     switch/flip rate:     0.01%
+                     Hamming distance:         1
+                 Hamming distance [%]:     0.01%
+                  Different genotypes:         0
+              Different genotypes [%]:     0.00%
+
+SAMPLE: NA19240 ------------------------------------------------
+Reading phasing from '/home/jennifer/02_datas/04_data_processing_trios/01_intermediate/hprc.mhc/NA19240.dip.reheaded.vcf.gz'
+Reading phasing from '/home/jennifer/02_datas/04_data_processing_trios/01_intermediate/hlamapper.mhc/NA19240.mapper.vcf.gz'
+Chromosomes present in all VCFs: chr6
+Comparing phasings for sample NA19240
+FILENAMES
+   truth = /home/jennifer/02_datas/04_data_processing_trios/01_intermediate/hprc.mhc/NA19240.dip.reheaded.vcf.gz
+  phased = /home/jennifer/02_datas/04_data_processing_trios/01_intermediate/hlamapper.mhc/NA19240.mapper.vcf.gz
+---------------- Chromosome chr6 ----------------
+VARIANT COUNTS (heterozygous / all): 
+              truth:     10424 /     18301
+             phased:      9659 /    124529
+              UNION:     13579 /    130663
+       INTERSECTION:      6504 /     12167
+PAIRWISE COMPARISON: truth <--> phased:
+         common heterozygous variants:      6504
+         (restricting to these below)
+        non-singleton blocks in truth:         1
+                 --> covered variants:      6312
+       non-singleton blocks in phased:         1
+                 --> covered variants:      6504
+    non-singleton intersection blocks:         1
+                 --> covered variants:      6312
+              ALL INTERSECTION BLOCKS: ---------
+    phased pairs of variants assessed:      6311
+                        switch errors:         3
+                    switch error rate:     0.05%
+            switch/flip decomposition:       1/1
+                     switch/flip rate:     0.03%
+          Block-wise Hamming distance:      1222
+      Block-wise Hamming distance [%]:    19.36%
+                  Different genotypes:         0
+              Different genotypes [%]:     0.00%
+           LARGEST INTERSECTION BLOCK: ---------
+    phased pairs of variants assessed:      6311
+                        switch errors:         3
+                    switch error rate:     0.05%
+            switch/flip decomposition:       1/1
+                     switch/flip rate:     0.03%
+                     Hamming distance:      1222
+                 Hamming distance [%]:    19.36%
+                  Different genotypes:         0
+              Different genotypes [%]:     0.00%
+
+SAMPLE: NA20129 ------------------------------------------------
+Reading phasing from '/home/jennifer/02_datas/04_data_processing_trios/01_intermediate/hprc.mhc/NA20129.dip.reheaded.vcf.gz'
+Reading phasing from '/home/jennifer/02_datas/04_data_processing_trios/01_intermediate/hlamapper.mhc/NA20129.mapper.vcf.gz'
+Chromosomes present in all VCFs: chr6
+Comparing phasings for sample NA20129
+FILENAMES
+   truth = /home/jennifer/02_datas/04_data_processing_trios/01_intermediate/hprc.mhc/NA20129.dip.reheaded.vcf.gz
+  phased = /home/jennifer/02_datas/04_data_processing_trios/01_intermediate/hlamapper.mhc/NA20129.mapper.vcf.gz
+---------------- Chromosome chr6 ----------------
+VARIANT COUNTS (heterozygous / all): 
+              truth:     13865 /     17395
+             phased:     10443 /    124529
+              UNION:     15522 /    130150
+       INTERSECTION:      8786 /     11774
+PAIRWISE COMPARISON: truth <--> phased:
+         common heterozygous variants:      8786
+         (restricting to these below)
+        non-singleton blocks in truth:         1
+                 --> covered variants:      8354
+       non-singleton blocks in phased:         1
+                 --> covered variants:      8786
+    non-singleton intersection blocks:         1
+                 --> covered variants:      8354
+              ALL INTERSECTION BLOCKS: ---------
+    phased pairs of variants assessed:      8353
+                        switch errors:         3
+                    switch error rate:     0.04%
+            switch/flip decomposition:       3/0
+                     switch/flip rate:     0.04%
+          Block-wise Hamming distance:      1191
+      Block-wise Hamming distance [%]:    14.26%
+                  Different genotypes:         0
+              Different genotypes [%]:     0.00%
+           LARGEST INTERSECTION BLOCK: ---------
+    phased pairs of variants assessed:      8353
+                        switch errors:         3
+                    switch error rate:     0.04%
+            switch/flip decomposition:       3/0
+                     switch/flip rate:     0.04%
+                     Hamming distance:      1191
+                 Hamming distance [%]:    14.26%
+                  Different genotypes:         0
+              Different genotypes [%]:     0.00%
