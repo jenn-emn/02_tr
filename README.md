@@ -11,8 +11,8 @@ The Human Pangenome Reference Consortium was launched in May 2025 ([HPRC Release
 - Several sequencing technologies were used: PacBio HiFi, ONT Ultralong, Dovetail/Illumina Hi-C, PacBio Kinnex RNA, and Illumina WGS. High coverage: 60X PacBio HiFi and 30X Oxford Nanopore in 100 kb.
 
 There are [234 samples](https://github.com/human-pangenomics/hprc_intermediate_assembly/tree/main/data_tables/sample) in total [metadata](https://github.com/human-pangenomics/hprc_intermediate_assembly/blob/main/data_tables/sample/hprc_release2_sample_metadata.csv):
-- 216 from HPRC: 126 phased with parental information seq by Illumina and 90 unrelated phased with Hi-C),
-- 14 from HPP (phased with Hi-C)
+- 216 from HPRC: 126 phased with parental information seq by Illumina and 90 unrelated phased with hifiasm-hic),
+- 14 from HPP (phased with hifiasm)
 - 4 are the gold-standard samples from the community (they are reference assemblies), sequenced and assembled by other projects: CHM13 is the first (haploid) telomere-to-telomere (T2T) assembly of the human genome, GRCh38 is a current "classic" reference. HG002 is a sample (trio) from Genome in a Bottle (GIAB) used for benchmarking.
 
 - The [year1_freeze_assembly_v2](https://s3-us-west-2.amazonaws.com/human-pangenomics/index.html?prefix=working/HPRC_PLUS/HG01109/assemblies/year1_freeze_assembly_v2/) is the curated and polished version. The consortium took the [raw data](https://github.com/human-pangenomics/HPP_Year1_Assemblies), cleaned it, checked the quality, and standardized it. This is the "Gold Standard" published in the Year 1 paper. They used dipcall ([dipcall github](https://github.com/lh3/dipcall/tree/master)) to convert the fasta files to vcf, writing each line perfectly phased (1|0 or 0|1).
