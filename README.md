@@ -19,8 +19,6 @@ There are [234 samples](https://github.com/human-pangenomics/hprc_intermediate_a
 
 - The [S3 root of HPRC_PLUS](https://s3-us-west-2.amazonaws.com/human-pangenomics/index.html?prefix=working/HPRC_PLUS/) have 18 samples from the offspring, originating from the trios.
 
-- Samples (13) into HLA-MAPPER vcf: HG00733, HG01109, HG01243, HG02055, HG02080, HG02723, HG02818, HG03098, HG03486, HG03492, NA18906, NA19240 and NA20129.
+- Samples (14) into HLA-MAPPER vcf: HG00733, HG01109, HG01243, HG02055, HG02080, HG02145, HG02723, HG02818, HG03098, HG03486, HG03492, NA18906, NA19240 and NA20129.
 
 - Samples (4) out HLA-MAPPER vcf: HG002, HG005, HG02109 and NA21309.
-
-end
