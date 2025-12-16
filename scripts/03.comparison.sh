@@ -39,7 +39,6 @@ for name in "${names[@]}"; do
     phasedvcf="/home/jennifer/02_datas/04_data_processing_trios/01_intermediate/hlamapper.mhc/${name}.mapper.vcf.gz"
 
     echo -e "${name}\tchr6\ttruth\twhatshap\t${name}.dip.vcf.gz\t${name}.mapper.vcf.gz" > "${tsvpairwise}"
-    #> "${tsvpairwise}"
 
     # comparison hla.mapper vs trios
     whatshap compare \
