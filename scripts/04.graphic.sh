@@ -28,12 +28,12 @@ names=(${n3} ${n4} ${n5} ${n6} ${n7} ${n9} ${n10} ${n11} ${n12} ${n13} ${n14} ${
 mkdir -p "/home/jennifer/02_datas/04_data_processing_trios/01_intermediate/graphic"
 pathgraph="/home/jennifer/02_datas/04_data_processing_trios/01_intermediate/graphic"
 
-#log="${pathgraph}/graph.log"
-#> "${log}"
+log="${pathgraph}/graph.log"
+> "${log}"
 
 for name in "${names[@]}"; do
 
-    echo -e "\nSAMPLE: ${name} ------------------------------------------------" >> "${log}"
+    echo -e "SAMPLE: ${name} ------------------------------------------------"
 
     hrpcvcf="/home/jennifer/02_datas/04_data_processing_trios/01_intermediate/hprc.mhc/${name}.dip.reheaded.vcf.gz"
     hlamvcf="/home/jennifer/02_datas/04_data_processing_trios/01_intermediate/hlamapper.mhc/${name}.mapper.vcf.gz"
@@ -46,11 +46,12 @@ for name in "${names[@]}"; do
     # HRPC
 
     bcftools \
-        query -f "%CHROM:%POS:%REF:%ALT\n" \
+        annotate --set-id '%CHROM:%POS:%REF:%ALT' \
         "${hrpcvcf}" \
-        -o s"${pathisec}/${name}.hrpc.idcomp.vcf"
+        -Oz \
+        -o "${pathisec}/${name}.hrpc.idcomp.vcf.gz"
     
-    hrpcvcfcomp="${pathisec}/${name}.hrpc.idcomp.vcf"
+    hrpcvcfcomp="${pathisec}/${name}.hrpc.idcomp.vcf.gz"
     
     bcftools index "${hrpcvcfcomp}"
 
@@ -59,24 +60,65 @@ for name in "${names[@]}"; do
     # HLA-mapper
     
     bcftools \
-        query -f "%CHROM:%POS:%REF:%ALT\n" \
+        annotate --set-id '%CHROM:%POS:%REF:%ALT' \
         "${hlamvcf}" \
-        -o s"${pathisec}/${name}.hlamapper.idcomp.vcf"
+        -Oz \
+        -o "${pathisec}/${name}.hlamapper.idcomp.vcf.gz"
     
-    hlamvcfcomp="${pathisec}/${name}.hlamapper.idcomp.vcf"
+    hlamvcfcomp="${pathisec}/${name}.hlamapper.idcomp.vcf.gz"
     
     bcftools index "${hlamvcfcomp}"
 
 
-    # isec; equivalent expressions -n=2, -n~11, -n+2
+
+    # ISEC
+    # equivalent expressions: -n=2, -n~11, -n+2
     bcftools \
         isec -n+2  \
         "${hrpcvcfcomp}" \
         "${hlamvcfcomp}" \
         -Oz \
-        -p ${pathisec}
+        -p "${pathisec}"
     
-    # &>> "${log}"
+
+
+    # Extract ID.comp, GT with the name of the sample
+    bcftools \
+        query -f "%ID[\t%SAMPLE=%GT]\n" \
+        "${pathisec}/0000.vcf.gz" > \
+        "${pathisec}/${name}.hrpc.tsv"
+
+    bcftools \
+        query -f "%ID[\t%SAMPLE=%GT]\n" \
+        "${pathisec}/0001.vcf.gz" > \
+        "${pathisec}/${name}.hlamapper.tsv"
+
+
+    
+    # merge by ID.comp
+    awk '
+        BEGIN {
+            OFS="\t"
+            print "idcomp", "hrpc.haplo", "hlam.haplo"
+        }
+
+        NR == FNR { hrpcidc[$1]=$2 ; next ; }
+
+        {
+            if ($1 in hrpcidc) {
+                print $1, hrpcidc[$1], $2, (hrpcidc[$1]==$2 ? "MATCH" : "DIFF")
+            }
+        }' \
+        "${pathisec}/${name}.hrpc.tsv" \
+        "${pathisec}/${name}.hlamapper.tsv" > \
+        "${pathisec}/${name}.hrpc.hlamapper.tsv"
+    
+    # WHATSHAP: common heterozygous variants
+    grep -v "1|1" -v "." "${pathisec}/${name}.hrpc.hlamapper.tsv" > "${pathisec}/${name}.hrpc.hlamapper.heterozigous.tsv"
+
+    inte_count=$(cat "${pathisec}/${name}.hrpc.hlamapper.heterozigous.tsv" | wc -l)
+    diff_count=$(grep -c "DIFF" "${pathisec}/${name}.hrpc.hlamapper.heterozigous.tsv")
+    echo -e "- sample: ${name} ; intersection variants: ${inte_count} ; diff count: ${diff_count} ; " >> "${log}"
 
 done
 
