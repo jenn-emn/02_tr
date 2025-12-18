@@ -45,6 +45,24 @@ pathgraph="/home/jennifer/02_datas/04_data_processing_trios/01_intermediate/grap
 log="${pathgraph}/graph.log"
 > "${log}"
 
+
+
+# observations
+echo -e "---------- OBSERVATIONS ----------"
+echo -e "- Truth genotypes: HRPC, column 2."
+echo -e "- Phased genotypes: HLA-mapper, column 3 (and column 5 in swapped)."
+echo -e "- Unmatched tags in relation with the swapped HLA-mapper are in the column 4 (and column 6 in swapped)."
+echo -e "- Phasing Error: When the first allele of HRPC is equals to the second allele of the swapped HLA-mapped allele, and 2º hrpc == 1º hlam."
+echo -e "- Genotyping Error: When the phase is not inverted between HRPC and HLA-mapper, it is an error because is different by state."
+echo -e "                 - When the phase (HLA-mapper) is homozigous for one of the truth alleles or for a third extra allele."
+echo -e "                 - when the phase (HLA-mapper) is heterozygous and contains a different allele (by state) from the two truth alleles."
+echo -e "- Obs.: The allele 2 (2) represented by the asterisk in the ALT column of the HRPC vcf indicates a spanning deletion."
+echo -e "                 - It is when the physical position does not exist in this haplotype because it was removed by a larger structural deletion in this region.\n"
+
+
+
+# iterating between samples
+
 for name in "${names[@]}"; do
 
     echo -e "SAMPLE: ${name} ------------------------------------------------"
@@ -100,42 +118,53 @@ for name in "${names[@]}"; do
     path_hrpc_hla="${pathindiv}/${name}.hrpc.hlamapper.tsv"
     
     
-    # WHATSHAP just analyse common heterozygous variants
 
+    # Checking numbers
     echo -e "\nSAMPLE: ${name} ------------------------------------------------" >> "${log}"
     
+    # Intersection by compoused ID variant in the "chr:pos:ref:alt" format
+    # counting intersected variants
     n_total_var=$(cat "${path_hrpc_hla}" | wc -l)
     echo -e "- Number of intersected variants (including missing genotypes): ${n_total_var} " >> "${log}"
 
 
-    # OBS 1
-    # the hrpc haplotypes have missing genotypes
-    # we need to exclude them
+    
+    # Before cleaning
+    # The hrpc haplotypes have missing genotypes, we need to exclude them
 
+    # counting hrpc
     n_missing_var_truth=$(cut -f2 "${path_hrpc_hla}" | grep -e "\." | wc -l)
     echo -e "- Number of missing variants in HRPC: ${n_missing_var_truth} " >> "${log}"
-
-    n_missing_var_phased=$(cut -f2 "${path_hrpc_hla}" | grep -e "\." | wc -l)
+    # counting  hla-mapper
+    n_missing_var_phased=$(cut -f3 "${path_hrpc_hla}" | grep -e "\." | wc -l)
     echo -e "- Number of missing variants in HLA-mapper: ${n_missing_var_phased} " >> "${log}"
 
-    # cleaning    
-    grep -v -e "\." "${path_hrpc_hla}" > "${pathindiv}/${name}.hrpc.hlamapper.clean.tsv"
+    # cleaning
     path_hrpc_hla_clean="${pathindiv}/${name}.hrpc.hlamapper.clean.tsv"
+    grep -v -e "\." "${path_hrpc_hla}" > "${path_hrpc_hla_clean}"
+    
+    
+    
+    # After cleaning
 
+    # counting intersected variants
     n_total_var=$(cat "${path_hrpc_hla_clean}" | wc -l)
     echo -e "- Number of intersected variants (without missing genotypes): ${n_total_var} " >> "${log}"
 
 
-    # OBS 2
-    # the unmatched ("DIFF") phased genotypes can not be excessive
-    # if the proportion of "DIFF" > 5%
-    # then we need to pair the first genotypes of HRPC with the second genotypes of the HLA-mapper
+    # Checking unmatched genotypes (tag = "DIFF")
+    # If the proportion of "DIFF" > 3%, we need to invert the genotypes of the HLA-mapper
+    
+    # counting unmatched genotypes
     n_diff=$(cut -f4 "${path_hrpc_hla_clean}" | grep "DIFF" | wc -l)
 
-
-    # If the mismatch rate is greather than 0.05 (5%) the variable is equal 1
+    # calculating mismatch rate
     is_high_diff=$(awk -v diff="$n_diff" -v total="$n_total_var" 'BEGIN { print ( (diff/total) > 0.3 ? 1 : 0 ) }')
-    echo -e "Mismatch rate: ${is_high_diff}"
+    echo -e "- Mismatch rate: ${is_high_diff}" >> "${log}"
+
+
+
+    # Run taging
 
     if [ "$is_high_diff" -eq 1 ]; then
 
@@ -203,17 +232,6 @@ for name in "${names[@]}"; do
                 
                 total_err = geno_err + phase_err
 
-                print "---------- OBSERVATIONS ----------"
-                print "- Truth genotypes: HRPC, column 2."
-                print "- Swapped phased genotypes: HLA-mapper, column 5."
-                print "- Unmatched tags in relation with the swapped HLA-mapper are in the column 6."
-                print "- Phasing Error: When the first allele of HRPC is equals to the second allele of the swapped HLA-mapped allele, and 2º hrpc == 1º hlam."
-                print "                 - HRPC is 0|1, 1|0, 0|2 or 2|0 and HLa-mapper is 1|0, 0|1, 2|0 or 0|2, respectly."
-                print "- Genotyping Error: When the phase (HLA-mapper) is not inverted between HRPC and HLA-mapper, it is an error because is different by state."
-                print "                 - When the swapped phase (HLA-mapper) is homozigous for one of the truth alleles or for a third extra allele."
-                print "                 - when the swapped phase (HLA-mapper) is heterozygous and contains a different allele (by state) from the two truth alleles."
-                print "- Obs.: The allele 2 (2) represented by the asterisk in the ALT column of the HRPC vcf indicates a spanning deletion."
-                print "                 - When the physical position does not exist in this haplotype because it was removed by a larger structural deletion in this region."
                 print "---------- AFTER SWAP ----------"
                 print "- Total variants: " NR
                 print "- Total unmatched variants (DIFF): " total_err
@@ -266,17 +284,7 @@ for name in "${names[@]}"; do
                 
                 total_err = geno_err + phase_err
 
-                print "---------- OBSERVATIONS ----------"
-                print "- Truth genotypes: HRPC, column 2."
-                print "- Phased genotypes: HLA-mapper, column 3."
-                print "- Unmatched tags in relation with the swapped HLA-mapper are in the column 4."
-                print "- Phasing Error: When the first allele of HRPC is equals to the second allele of the swapped HLA-mapped allele, and 2º hrpc == 1º hlam."
-                print "- Genotyping Error: When the phase is not inverted between HRPC and HLA-mapper, it is an error because is different by state."
-                print "                 - When the phase (HLA-mapper) is homozigous for one of the truth alleles or for a third extra allele."
-                print "                 - when the phase (HLA-mapper) is heterozygous and contains a different allele (by state) from the two truth alleles."
-                print "- Obs.: The allele 2 (2) represented by the asterisk in the ALT column of the HRPC vcf indicates a spanning deletion."
-                print "                 - When the physical position does not exist in this haplotype because it was removed by a larger structural deletion in this region."
-                print "----------------------------------"
+                print "---------- WHITOUT SWAP ----------"
                 print "- Total variants: " NR
                 print "- Total unmatched variants (DIFF): " total_err
                 print "- Switch (Phasing) Errors: " phase_err
@@ -287,14 +295,9 @@ for name in "${names[@]}"; do
                 print "- Genotyping Error Rate: " (geno_err * 100 / NR) "%"
                 print "- Switch (Phasing) Error Rate: " (phase_err * 100 / NR) "%"
             }
-            ' "${path_swapped}" &>> "${log}"
+            ' "${path_hrpc_hla_clean}" &>> "${log}"
 
     fi
-
-    #grep -v "1|1" -v -e "\." "${pathindiv}/${name}.hrpc.hlamapper.tsv" > "${pathindiv}/${name}.hrpc.hlamapper.heterozigous.tsv"
-    #inte_count=$(cat "${pathindiv}/${name}.hrpc.hlamapper.heterozigous.tsv" | wc -l)
-    #diff_count=$(grep -c "DIFF" "${pathindiv}/${name}.hrpc.hlamapper.heterozigous.tsv")
-    #echo -e "- sample: ${name} ; intersection variants: ${inte_count} ; diff count: ${diff_count} ; " >> "${log}"
 
 done
 
