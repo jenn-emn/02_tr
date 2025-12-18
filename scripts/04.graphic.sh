@@ -170,7 +170,7 @@ for name in "${names[@]}"; do
 
         # switch error rate before swap
         mismatch_rate=$((100 * "${n_diff}" / "${n_total_var}"))
-        echo "- High mismatch rate (before swap): ${mismatch_rate}" >> "${log}"
+        echo "- Mismatch rate before swap (> 30%)): ${mismatch_rate}%" >> "${log}"
 
         # creating a unswapped column
         path_swapped="${pathindiv}/${name}.hrpc.hlamapper.clean.swapped.tsv"
