@@ -160,7 +160,7 @@ for name in "${names[@]}"; do
 
     # calculating mismatch rate
     is_high_diff=$(awk -v diff="$n_diff" -v total="$n_total_var" 'BEGIN { print ( (diff/total) > 0.3 ? 1 : 0 ) }')
-    echo -e "- Mismatch rate: ${is_high_diff}" >> "${log}"
+    echo -e "- Mismatch rate > 0.3 (yes=1): ${is_high_diff}" >> "${log}"
 
 
 
