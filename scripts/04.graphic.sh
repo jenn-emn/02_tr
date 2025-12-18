@@ -167,7 +167,7 @@ for name in "${names[@]}"; do
         echo "- Error due to reference homozigous '0\|0': ${n_homozigous_ref}" >> "${log}"
 
         n_heterozigous=$(cut -f5,6 "${path_swapped}" | grep "DIFF" | grep -F -v -e "0|0" -v -e "1|1" | wc -l)
-        echo "- Error due to switch, i.e., '0\|1' instead '1\|0': ${n_heterozigous  }" >> "${log}"
+        echo "- Error due to switch, i.e., '0\|1' instead '1\|0': ${n_heterozigous}" >> "${log}"
 
     else
 
@@ -178,7 +178,7 @@ for name in "${names[@]}"; do
         echo "- Error due to reference homozigous '0\|0': ${n_homozigous_ref}" >> "${log}"
 
         n_heterozigous=$(cut -f5,6 "${path_swapped}" | grep "DIFF" | grep -F -v -e "0|0" -v -e "1|1" | wc -l)
-        echo "- Error due to switch, i.e., '0\|1' instead '1\|0': ${n_heterozigous  }" >> "${log}"
+        echo "- Error due to switch, i.e., '0\|1' instead '1\|0': ${n_heterozigous}" >> "${log}"
 
     fi
 
