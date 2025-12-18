@@ -48,16 +48,16 @@ log="${pathgraph}/graph.log"
 
 
 # observations
-echo -e "---------- OBSERVATIONS ----------"
-echo -e "- Truth genotypes: HRPC, column 2."
-echo -e "- Phased genotypes: HLA-mapper, column 3 (and column 5 in swapped)."
-echo -e "- Unmatched tags in relation with the swapped HLA-mapper are in the column 4 (and column 6 in swapped)."
-echo -e "- Phasing Error: When the first allele of HRPC is equals to the second allele of the swapped HLA-mapped allele, and 2º hrpc == 1º hlam."
-echo -e "- Genotyping Error: When the phase is not inverted between HRPC and HLA-mapper, it is an error because is different by state."
-echo -e "                 - When the phase (HLA-mapper) is homozigous for one of the truth alleles or for a third extra allele."
-echo -e "                 - when the phase (HLA-mapper) is heterozygous and contains a different allele (by state) from the two truth alleles."
-echo -e "- Obs.: The allele 2 (2) represented by the asterisk in the ALT column of the HRPC vcf indicates a spanning deletion."
-echo -e "                 - It is when the physical position does not exist in this haplotype because it was removed by a larger structural deletion in this region.\n"
+echo -e "-------------------------- OBSERVATIONS --------------------------" >> "${log}"
+echo -e "- Truth genotypes: HRPC, column 2." >> "${log}"
+echo -e "- Phased genotypes: HLA-mapper, column 3 (and column 5 in swapped)." >> "${log}"
+echo -e "- Unmatched tags in relation with the swapped HLA-mapper are in the column 4 (and column 6 in swapped)." >> "${log}"
+echo -e "- Phasing Error: When the first allele of HRPC is equals to the second allele of the swapped HLA-mapped allele, and 2º hrpc == 1º hlam." >> "${log}"
+echo -e "- Genotyping Error: When the phase is not inverted between HRPC and HLA-mapper, it is an error because is different by state." >> "${log}"
+echo -e "                 - When the phase (HLA-mapper) is homozigous for one of the truth alleles or for a third extra allele." >> "${log}"
+echo -e "                 - when the phase (HLA-mapper) is heterozygous and contains a different allele (by state) from the two truth alleles." >> "${log}"
+echo -e "- Obs.: The allele 2 (2) represented by the asterisk in the ALT column of the HRPC vcf indicates a spanning deletion." >> "${log}"
+echo -e "                 - It is when the physical position does not exist in this haplotype because it was removed by a larger structural deletion in this region.\n" >> "${log}"
 
 
 
