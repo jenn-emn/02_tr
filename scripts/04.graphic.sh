@@ -135,6 +135,7 @@ for name in "${names[@]}"; do
 
     # If the mismatch rate is greather than 0.05 (5%) the variable is equal 1
     is_high_diff=$(awk -v diff="$n_diff" -v total="$n_total_var" 'BEGIN { print ( (diff/total) > 0.3 ? 1 : 0 ) }')
+    echo -e "Mismatch rate: ${is_high_diff}"
 
     if [ "$is_high_diff" -eq 1 ]; then
 
