@@ -17,11 +17,11 @@
 
 # paths
 path_int="/home/jennifer/02_datas/04_data_processing_trios/01_intermediate"
-path_hprc="${path_int}/hprc.mhc"
+path_hrpc="${path_int}/hrpc.mhc"
 path_hlamapper="${path_int}/hlamapper.mhc"
 
 # to check names
-samples_list="${path_int}/mapper.samples.in.hprc.txt"
+samples_list="${path_int}/mapper.samples.in.hrpc.txt"
 
 # to .log
 log="${path_int}/01.log"
@@ -72,32 +72,32 @@ done
 
 
 
-# HPRC vcfs
+# HRPC vcfs
 
-# create folder to VCFs with the MHC region, one by sample (HPRC)
-mkdir -p "${path_hprc}"
+# create folder to VCFs with the MHC region, one by sample (HRPC)
+mkdir -p "${path_hrpc}"
 
 for name in "${names[@]}"; do
     
     # selecting chr6 from the phased VCFs
     bcftools view \
         -r chr6:29700000-33149972 \
-        "/home/DATA/HPRC_PLUS/${name}.f1_assembly_v2.dip.vcf.gz" \
+        "/home/DATA/HRPC_PLUS/${name}.f1_assembly_v2.dip.vcf.gz" \
         -Oz \
-        -o "${path_hprc}/${name}.dip.vcf.gz"
+        -o "${path_hrpc}/${name}.dip.vcf.gz"
     
     # name.txt
-    echo "${name}" > "${path_hprc}/${name}.to.reheader.txt"
+    echo "${name}" > "${path_hrpc}/${name}.to.reheader.txt"
     
     bcftools reheader \
-        "${path_hprc}/${name}.dip.vcf.gz" \
-        -s "${path_hprc}/${name}.to.reheader.txt" \
-        -o "${path_hprc}/${name}.dip.reheaded.vcf.gz"
+        "${path_hrpc}/${name}.dip.vcf.gz" \
+        -s "${path_hrpc}/${name}.to.reheader.txt" \
+        -o "${path_hrpc}/${name}.dip.reheaded.vcf.gz"
 
-    bcftools index "${path_hprc}/${name}.dip.reheaded.vcf.gz"
+    bcftools index "${path_hrpc}/${name}.dip.reheaded.vcf.gz"
 
-    if [ -s "${path_hprc}/${name}.dip.reheaded.vcf.gz.csi" ]; then
-        rm "${path_hprc}/${name}.dip.vcf.gz"
+    if [ -s "${path_hrpc}/${name}.dip.reheaded.vcf.gz.csi" ]; then
+        rm "${path_hrpc}/${name}.dip.vcf.gz"
     fi
 
 done
@@ -106,7 +106,7 @@ done
 
 # HLA-MAPPER vcfs
 
-# create folder to VCFs with the MHC region, one by sample (HPRC)
+# create folder to VCFs with the MHC region, one by sample (HRPC)
 mkdir -p "${path_hlamapper}"
 
 # selecting MHC from the populational (SABE_1KGEN_HGDP) phased VCFs (hla-mapper), one VCF by sample.

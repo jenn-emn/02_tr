@@ -35,7 +35,7 @@ for name in "${names[@]}"; do
     echo -e "\nSAMPLE: ${name} ------------------------------------------------" >> "${log}"
 
     tsvpairwise="/home/jennifer/02_datas/04_data_processing_trios/01_intermediate/${name}.tsv.pairwse.txt"
-    truthvcf="/home/jennifer/02_datas/04_data_processing_trios/01_intermediate/hprc.mhc/${name}.dip.reheaded.vcf.gz"
+    truthvcf="/home/jennifer/02_datas/04_data_processing_trios/01_intermediate/hrpc.mhc/${name}.dip.reheaded.vcf.gz"
     phasedvcf="/home/jennifer/02_datas/04_data_processing_trios/01_intermediate/hlamapper.mhc/${name}.mapper.vcf.gz"
 
     echo -e "${name}\tchr6\ttruth\twhatshap\t${name}.dip.vcf.gz\t${name}.mapper.vcf.gz" > "${tsvpairwise}"

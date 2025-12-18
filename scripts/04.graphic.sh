@@ -2,6 +2,20 @@
 
 
 
+# OBSERVATION: there are missing genotypes in the original HRPC vcfs
+
+# zgrep -w "31427785" /home/DATA/HRPC_PLUS/HG01109.f1_assembly_v2.dip.vcf.gz
+# chr6	31427785	.	C	CTATATATATATTCTA	30	GAP1	.	GT:AD	.|1:0,1
+
+# zgrep -w "31427785" /home/jennifer/02_datas/04_data_processing_trios/01_intermediate/hlamapper.mhc/HG01109.mapper.vcf.gz
+# chr6	31427785	.	C	CTATATATATATTCTA	30	GAP1	.	GT:AD	.|1:0,1
+
+# zgrep -w "31427785" /home/jennifer/02_datas/04_data_processing_trios/01_intermediate/graphic/isecHG01109/HG01109.hrpc.idcomp.vcf.gz | grep -e "\.|"
+# chr6	31427785	chr6:31427785:C:CTATATATATATTCTA	C	CTATATATATATTCTA	30	GAP1	.	GT:AD	.|1:0,1
+
+
+
+
 # SAMPLES
 
 # sample names
@@ -35,63 +49,33 @@ for name in "${names[@]}"; do
 
     echo -e "SAMPLE: ${name} ------------------------------------------------"
 
-    hrpcvcf="/home/jennifer/02_datas/04_data_processing_trios/01_intermediate/hprc.mhc/${name}.dip.reheaded.vcf.gz"
+    hrpcvcf="/home/jennifer/02_datas/04_data_processing_trios/01_intermediate/hrpc.mhc/${name}.dip.reheaded.vcf.gz"
     hlamvcf="/home/jennifer/02_datas/04_data_processing_trios/01_intermediate/hlamapper.mhc/${name}.mapper.vcf.gz"
-    pathisec="${pathgraph}/isec${name}"
-
-    mkdir -p "${pathisec}"
+    
+    pathindiv="${pathgraph}/${name}"
+    mkdir -p "${pathindiv}"
 
 
     
     # HRPC
 
     bcftools \
-        annotate --set-id '%CHROM:%POS:%REF:%ALT' \
-        "${hrpcvcf}" \
-        -Oz \
-        -o "${pathisec}/${name}.hrpc.idcomp.vcf.gz"
+        query -f '%CHROM:%POS:%REF:%ALT[\t%SAMPLE=%GT]' \
+        "${hrpcvcf}" > \
+        "${pathindiv}/${name}.hrpc.txt"
     
-    hrpcvcfcomp="${pathisec}/${name}.hrpc.idcomp.vcf.gz"
-    
-    bcftools index "${hrpcvcfcomp}"
+    hrpccomp="${pathindiv}/${name}.hrpc.txt"
 
 
     
     # HLA-mapper
     
     bcftools \
-        annotate --set-id '%CHROM:%POS:%REF:%ALT' \
+        query -f '%CHROM:%POS:%REF:%ALT\t%GT' \
         "${hlamvcf}" \
-        -Oz \
-        -o "${pathisec}/${name}.hlamapper.idcomp.vcf.gz"
+        -o "${pathindiv}/${name}.hlamapper.txt"
     
-    hlamvcfcomp="${pathisec}/${name}.hlamapper.idcomp.vcf.gz"
-    
-    bcftools index "${hlamvcfcomp}"
-
-
-
-    # ISEC
-    # equivalent expressions: -n=2, -n~11, -n+2
-    bcftools \
-        isec -n+2  \
-        "${hrpcvcfcomp}" \
-        "${hlamvcfcomp}" \
-        -Oz \
-        -p "${pathisec}"
-    
-
-
-    # Extract ID.comp, GT with the name of the sample
-    bcftools \
-        query -f "%ID[\t%SAMPLE=%GT]\n" \
-        "${pathisec}/0000.vcf.gz" > \
-        "${pathisec}/${name}.hrpc.tsv"
-
-    bcftools \
-        query -f "%ID[\t%SAMPLE=%GT]\n" \
-        "${pathisec}/0001.vcf.gz" > \
-        "${pathisec}/${name}.hlamapper.tsv"
+    hlamcomp="${pathindiv}/${name}.hlamapper.txt"
 
 
     
@@ -99,7 +83,7 @@ for name in "${names[@]}"; do
     awk '
         BEGIN {
             OFS="\t"
-            print "idcomp", "hrpc.haplo", "hlam.haplo"
+            print "idcomp", "hrpc", "hlam", "status"
         }
 
         NR == FNR { hrpcidc[$1]=$2 ; next ; }
@@ -109,16 +93,103 @@ for name in "${names[@]}"; do
                 print $1, hrpcidc[$1], $2, (hrpcidc[$1]==$2 ? "MATCH" : "DIFF")
             }
         }' \
-        "${pathisec}/${name}.hrpc.tsv" \
-        "${pathisec}/${name}.hlamapper.tsv" > \
-        "${pathisec}/${name}.hrpc.hlamapper.tsv"
-    
-    # WHATSHAP: common heterozygous variants
-    grep -v "1|1" -v "." "${pathisec}/${name}.hrpc.hlamapper.tsv" > "${pathisec}/${name}.hrpc.hlamapper.heterozigous.tsv"
+        "${hrpccomp}" \
+        "${hlamcomp}" > \
+        "${pathindiv}/${name}.hrpc.hlamapper.tsv"
 
-    inte_count=$(cat "${pathisec}/${name}.hrpc.hlamapper.heterozigous.tsv" | wc -l)
-    diff_count=$(grep -c "DIFF" "${pathisec}/${name}.hrpc.hlamapper.heterozigous.tsv")
-    echo -e "- sample: ${name} ; intersection variants: ${inte_count} ; diff count: ${diff_count} ; " >> "${log}"
+    path_hrpc_hla="${pathindiv}/${name}.hrpc.hlamapper.tsv"
+    
+    
+    # WHATSHAP just analyse common heterozygous variants
+
+    echo -e "\nSAMPLE: ${name} ------------------------------------------------" >> "${log}"
+    
+    n_total_var=$(cat "${path_hrpc_hla}" | wc -l)
+    echo -e "- Number of intersected variants (including missing genotypes): ${n_total_var} " >> "${log}"
+
+
+    # OBS 1
+    # the hrpc haplotypes have missing genotypes
+    # we need to exclude them
+
+    n_missing_var_truth=$(cut -f2 "${path_hrpc_hla}" | grep -e "\." | wc -l)
+    echo -e "- Number of missing variants in HRPC: ${n_missing_var_truth} " >> "${log}"
+
+    n_missing_var_phased=$(cut -f2 "${path_hrpc_hla}" | grep -e "\." | wc -l)
+    echo -e "- Number of missing variants in HLA-mapper: ${n_missing_var_phased} " >> "${log}"
+
+    # cleaning    
+    grep -v -e "\." "${path_hrpc_hla}" > "${pathindiv}/${name}.hrpc.hlamapper.clean.tsv"
+    path_hrpc_hla_clean="${pathindiv}/${name}.hrpc.hlamapper.clean.tsv"
+
+    n_total_var=$(cat "${path_hrpc_hla_clean}" | wc -l)
+    echo -e "- Number of intersected variants (without missing genotypes): ${n_total_var} " >> "${log}"
+
+
+    # OBS 2
+    # the unmatched ("DIFF") phased genotypes can not be excessive
+    # if the proportion of "DIFF" > 5%
+    # then we need to pair the first genotypes of HRPC with the second genotypes of the HLA-mapper
+    n_diff=$(cut -f4 "${path_hrpc_hla_clean}" | grep "DIFF" | wc -l)
+
+
+    # If the mismatch rate is greather than 0.05 (5%) the variable is equal 1
+    is_high_diff=$(awk -v diff="$n_diff" -v total="$n_total_var" 'BEGIN { print ( (diff/total) > 0.05 ? 1 : 0 ) }')
+
+    if [ "$is_high_diff" -eq 1 ]; then
+
+        echo "- High mismatch rate: ($n_diff / $n_total_var)" >> "${log}"
+
+        path_swapped="${pathindiv}/${name}.hrpc.hlamapper.clean.swapped.tsv"
+
+        awk '
+            BEGIN{
+                OFS="\t"
+                print "idcomp", "hrpc", "hlam", "status", "hlam_swapped", "status_swapped"
+            }
+            NR>1 {
+                # Split HLAM ($3) by the pipe; "0|1": a[1]=0 e a[2]=1
+                split($3, a, "|")
+                swapped_gt = a[2]"|"a[1]
+                
+                # Comparing HRPC ($2) with HLAM_swapped
+                if ($2 == swapped_gt) {
+                    print $1, $2, $3, $4, swapped_gt, "MATCH"
+                } else {
+                    print $1, $2, $3, $4, swapped_gt, "DIFF"
+                }
+            }' "${path_hrpc_hla_clean}" > "${path_swapped}"
+        
+        n_diff_swapped=$(cut -f6 "${path_swapped}" | grep -c "DIFF")
+        echo "- Number of unmatched genotypes with SWAPPED alleles: ${n_diff_swapped}" >> "${log}"
+
+        n_homozigous_ref=$(cut -f5,6 "${path_swapped}" | grep "DIFF" | grep -F -c "0|0")
+        echo "- Error due to reference homozigous '0\|0': ${n_homozigous_ref}" >> "${log}"
+
+        n_heterozigous=$(cut -f5,6 "${path_swapped}" | grep "DIFF" | grep -F -v -e "0|0" -v -e "1|1" | wc -l)
+        echo "- Error due to switch, i.e., '0\|1' instead '1\|0': ${n_heterozigous  }" >> "${log}"
+
+    else
+
+        echo "- Low mismatch rate: ($n_diff / $n_total_var)" >> "${log}"
+        echo "- Number of unmatched genotypes: ${n_diff}" >> "${log}"
+
+        n_homozigous_ref=$(cut -f5 "${path_swapped}" | grep -c -e "0|0")
+        echo "- Error due to reference homozigous '0\|0': ${n_homozigous_ref}" >> "${log}"
+
+        n_heterozigous=$(cut -f5,6 "${path_swapped}" | grep "DIFF" | grep -F -v -e "0|0" -v -e "1|1" | wc -l)
+        echo "- Error due to switch, i.e., '0\|1' instead '1\|0': ${n_heterozigous  }" >> "${log}"
+
+    fi
+
+
+    
+
+
+    #grep -v "1|1" -v -e "\." "${pathindiv}/${name}.hrpc.hlamapper.tsv" > "${pathindiv}/${name}.hrpc.hlamapper.heterozigous.tsv"
+    #inte_count=$(cat "${pathindiv}/${name}.hrpc.hlamapper.heterozigous.tsv" | wc -l)
+    #diff_count=$(grep -c "DIFF" "${pathindiv}/${name}.hrpc.hlamapper.heterozigous.tsv")
+    #echo -e "- sample: ${name} ; intersection variants: ${inte_count} ; diff count: ${diff_count} ; " >> "${log}"
 
 done
 
