@@ -60,7 +60,7 @@ for name in "${names[@]}"; do
     # HRPC
 
     bcftools \
-        query -f '%CHROM:%POS:%REF:%ALT[\t%SAMPLE=%GT]' \
+        query -f '%CHROM:%POS:%REF:%ALT[\t%GT]' \
         "${hrpcvcf}" > \
         "${pathindiv}/${name}.hrpc.txt"
     
@@ -71,7 +71,7 @@ for name in "${names[@]}"; do
     # HLA-mapper
     
     bcftools \
-        query -f '%CHROM:%POS:%REF:%ALT\t%GT' \
+        query -f '%CHROM:%POS:%REF:%ALT[\t%GT]' \
         "${hlamvcf}" \
         -o "${pathindiv}/${name}.hlamapper.txt"
     
@@ -134,14 +134,16 @@ for name in "${names[@]}"; do
 
 
     # If the mismatch rate is greather than 0.05 (5%) the variable is equal 1
-    is_high_diff=$(awk -v diff="$n_diff" -v total="$n_total_var" 'BEGIN { print ( (diff/total) > 0.05 ? 1 : 0 ) }')
+    is_high_diff=$(awk -v diff="$n_diff" -v total="$n_total_var" 'BEGIN { print ( (diff/total) > 0.3 ? 1 : 0 ) }')
 
     if [ "$is_high_diff" -eq 1 ]; then
 
-        echo "- High mismatch rate: ($n_diff / $n_total_var)" >> "${log}"
+        # switch error rate before swap
+        mismatch_rate=$((100 * "${n_diff}" / "${n_total_var}"))
+        echo "- High mismatch rate (before swap): ${mismatch_rate}" >> "${log}"
 
+        # creating a unswapped column
         path_swapped="${pathindiv}/${name}.hrpc.hlamapper.clean.swapped.tsv"
-
         awk '
             BEGIN{
                 OFS="\t"
@@ -160,31 +162,133 @@ for name in "${names[@]}"; do
                 }
             }' "${path_hrpc_hla_clean}" > "${path_swapped}"
         
-        n_diff_swapped=$(cut -f6 "${path_swapped}" | grep -c "DIFF")
-        echo "- Number of unmatched genotypes with SWAPPED alleles: ${n_diff_swapped}" >> "${log}"
+        # calculate the new Switch Eror Rate (and the subtype error)
+        awk '
+            $6 == "DIFF" {
 
-        n_homozigous_ref=$(cut -f5,6 "${path_swapped}" | grep "DIFF" | grep -F -c "0|0")
-        echo "- Error due to reference homozigous '0\|0': ${n_homozigous_ref}" >> "${log}"
+                # split hrpc ($2) and swapped hla-mapper (%5)
+                split($2, hrpc, "|")
+                split($5, hlam, "|")
+                
+                # -- Phasing Error
+                # The allele 1 of hrpc have to be equals to allele 2 of hlam, and the 2 of hrpc == 1 of hlam
+                # HRPC is 0|1, 1|0, 0|2, 2|0
+                # and HLa-mapper is 1|0, 0|1, 2|0, 0|2, respectly.
 
-        n_heterozigous=$(cut -f5,6 "${path_swapped}" | grep "DIFF" | grep -F -v -e "0|0" -v -e "1|1" | wc -l)
-        echo "- Error due to switch, i.e., '0\|1' instead '1\|0': ${n_heterozigous}" >> "${log}"
+                if (hrpc[1] == hlam[2] && hrpc[2] == hlam[1]) {
+                    phase_err++
+                }
+                
+                # -- Genotyping Error
+                # The alleles are not inverted, they are differents by status
+                else {
+                    geno_err++
+
+                    # -- Genotyping Error: discrepant homozigous in the swapped HLA-mapper
+                    #    when the swapped phase is homozigous for one of the truth alleles or for a third extra allele.
+                    if (hlam[1] == hlam[2]) {
+                        geno_hom_qry++
+                    }
+
+                    # -- Genotyping Error: discrepant heterozigous in the swapped HLA-mapper
+                    #    when the swapped phase is heterozygous and contains a different allele (by state) from the two truth alleles
+                    else {
+                        geno_het_qry++
+                    }
+                }
+            }
+
+            END {
+                
+                total_err = geno_err + phase_err
+
+                print "---------- OBSERVATIONS ----------"
+                print "- Truth genotypes: HRPC, column 2."
+                print "- Swapped phased genotypes: HLA-mapper, column 5."
+                print "- Unmatched tags in relation with the swapped HLA-mapper are in the column 6."
+                print "- Phasing Error: When the first allele of HRPC is equals to the second allele of the swapped HLA-mapped allele, and 2º hrpc == 1º hlam."
+                print "                 - HRPC is 0|1, 1|0, 0|2 or 2|0 and HLa-mapper is 1|0, 0|1, 2|0 or 0|2, respectly."
+                print "- Genotyping Error: When the phase (HLA-mapper) is not inverted between HRPC and HLA-mapper, it is an error because is different by state."
+                print "                 - When the swapped phase (HLA-mapper) is homozigous for one of the truth alleles or for a third extra allele."
+                print "                 - when the swapped phase (HLA-mapper) is heterozygous and contains a different allele (by state) from the two truth alleles."
+                print "- Obs.: The allele 2 (2) represented by the asterisk in the ALT column of the HRPC vcf indicates a spanning deletion."
+                print "                 - When the physical position does not exist in this haplotype because it was removed by a larger structural deletion in this region."
+                print "---------- AFTER SWAP ----------"
+                print "- Total variants: " NR
+                print "- Total unmatched variants (DIFF): " total_err
+                print "- Switch (Phasing) Errors: " phase_err
+                print "- Genotyping Errors: " geno_err
+                print "- Genotyping Error by homozigous in phased: " geno_hom_qry
+                print "- Genotyping Error by heterozigous in phased: " geno_het_qry
+                print "- Total Error Rate: " (total_err * 100 / NR) "%"
+                print "- Genotyping Error Rate: " (geno_err * 100 / NR) "%"
+                print "- Switch (Phasing) Error Rate: " (phase_err * 100 / NR) "%"
+            }
+            ' "${path_swapped}" &>> "${log}"
 
     else
 
-        echo "- Low mismatch rate: ($n_diff / $n_total_var)" >> "${log}"
-        echo "- Number of unmatched genotypes: ${n_diff}" >> "${log}"
+        # calculate the new Switch Eror Rate (and the subtype error)
+        awk '
+            $4 == "DIFF" {
 
-        n_homozigous_ref=$(cut -f5 "${path_swapped}" | grep -c -e "0|0")
-        echo "- Error due to reference homozigous '0\|0': ${n_homozigous_ref}" >> "${log}"
+                # split hrpc ($2) and swapped hla-mapper ($3)
+                split($2, hrpc, "|")
+                split($3, hlam, "|")
+                
+                # -- Phasing Error
+                # The alleles in HLA-mapper are inverted
+                if (hrpc[1] == hlam[2] && hrpc[2] == hlam[1]) {
+                    phase_err++
+                }
+                
+                # -- Genotyping Error
+                # The alleles are not inverted, they are differents by status
+                else {
+                    geno_err++
 
-        n_heterozigous=$(cut -f5,6 "${path_swapped}" | grep "DIFF" | grep -F -v -e "0|0" -v -e "1|1" | wc -l)
-        echo "- Error due to switch, i.e., '0\|1' instead '1\|0': ${n_heterozigous}" >> "${log}"
+                    # -- Genotyping Error: discrepant homozigous in the swapped HLA-mapper
+                    #    when the swapped phase is homozigous for one of the truth alleles or for a third extra allele.
+                    if (hlam[1] == hlam[2]) {
+                        geno_hom_qry++
+                    }
+
+                    # -- Genotyping Error: discrepant heterozigous in the swapped HLA-mapper
+                    #    when the swapped phase is heterozygous and contains a different allele (by state) from the two truth alleles
+                    else {
+                        geno_het_qry++
+                    }
+                }
+            }
+
+            END {
+                
+                total_err = geno_err + phase_err
+
+                print "---------- OBSERVATIONS ----------"
+                print "- Truth genotypes: HRPC, column 2."
+                print "- Phased genotypes: HLA-mapper, column 3."
+                print "- Unmatched tags in relation with the swapped HLA-mapper are in the column 4."
+                print "- Phasing Error: When the first allele of HRPC is equals to the second allele of the swapped HLA-mapped allele, and 2º hrpc == 1º hlam."
+                print "- Genotyping Error: When the phase is not inverted between HRPC and HLA-mapper, it is an error because is different by state."
+                print "                 - When the phase (HLA-mapper) is homozigous for one of the truth alleles or for a third extra allele."
+                print "                 - when the phase (HLA-mapper) is heterozygous and contains a different allele (by state) from the two truth alleles."
+                print "- Obs.: The allele 2 (2) represented by the asterisk in the ALT column of the HRPC vcf indicates a spanning deletion."
+                print "                 - When the physical position does not exist in this haplotype because it was removed by a larger structural deletion in this region."
+                print "----------------------------------"
+                print "- Total variants: " NR
+                print "- Total unmatched variants (DIFF): " total_err
+                print "- Switch (Phasing) Errors: " phase_err
+                print "- Genotyping Errors: " geno_err
+                print "- Genotyping Error by homozigous in phased: " geno_hom_qry
+                print "- Genotyping Error by heterozigous in phased: " geno_het_qry
+                print "- Total Error Rate: " (total_err * 100 / NR) "%"
+                print "- Genotyping Error Rate: " (geno_err * 100 / NR) "%"
+                print "- Switch (Phasing) Error Rate: " (phase_err * 100 / NR) "%"
+            }
+            ' "${path_swapped}" &>> "${log}"
 
     fi
-
-
-    
-
 
     #grep -v "1|1" -v -e "\." "${pathindiv}/${name}.hrpc.hlamapper.tsv" > "${pathindiv}/${name}.hrpc.hlamapper.heterozigous.tsv"
     #inte_count=$(cat "${pathindiv}/${name}.hrpc.hlamapper.heterozigous.tsv" | wc -l)
