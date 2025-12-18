@@ -284,7 +284,7 @@ for name in "${names[@]}"; do
                 
                 total_err = geno_err + phase_err
 
-                print "---------- WHITOUT SWAP ----------"
+                print "------------ NO SWAP ------------"
                 print "- Total variants: " NR
                 print "- Total unmatched variants (DIFF): " total_err
                 print "- Switch (Phasing) Errors: " phase_err
