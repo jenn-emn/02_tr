@@ -1,0 +1,255 @@
+-------------------------- OBSERVATIONS --------------------------
+- Truth genotypes: HRPC, column 2.
+- Phased genotypes: HLA-mapper, column 3 (and column 5 in swapped).
+- Unmatched tags (DIFF) in relation with the HLA-mapper phase are in the column 4 (and column 6 in swapped).
+- Phasing Error: When the first allele of HRPC is equals to the second allele of the swapped HLA-mapped allele, and 2º hrpc == 1º hlam.
+- Genotyping Error: When the phase is not inverted between HRPC and HLA-mapper, it is an error because is different by state.
+                 - When the phase (HLA-mapper) is homozigous for one of the truth alleles or for a third extra allele.
+                 - when the phase (HLA-mapper) is heterozygous and contains a different allele (by state) from the two truth alleles.
+- Obs.: The allele 2 (2) represented by the asterisk in the ALT column of the HRPC vcf indicates a spanning deletion.
+                 - It is when the physical position does not exist in this haplotype because it was removed by a larger structural deletion in this region.
+
+
+SAMPLE: HG00733 ------------------------------------------------
+- Number of intersected variants (including missing genotypes): 12402 
+- Number of missing variants in HRPC: 188 
+- Number of missing variants in HLA-mapper: 0 
+- Number of intersected variants (without missing genotypes): 12214 
+- Mismatch rate > 0.3 (yes=1): 0
+------------ NO SWAP ------------
+- Total variants: 12214
+- Total unmatched variants (DIFF): 26
+- Switch (Phasing) Errors: 
+- Genotyping Errors: 26
+- Genotyping Error by homozigous in phased: 15
+- Genotyping Error by heterozigous in phased: 11
+- Total Error Rate: 0.21287%
+- Genotyping Error Rate: 0.21287%
+- Switch (Phasing) Error Rate: 0%
+
+SAMPLE: HG01109 ------------------------------------------------
+- Number of intersected variants (including missing genotypes): 14462 
+- Number of missing variants in HRPC: 803 
+- Number of missing variants in HLA-mapper: 0 
+- Number of intersected variants (without missing genotypes): 13659 
+- Mismatch rate > 0.3 (yes=1): 1
+- Mismatch rate before swap (> 30%)): 70%
+---------- AFTER SWAP ----------
+- Total variants: 13659
+- Total unmatched variants (DIFF): 62
+- Switch (Phasing) Errors: 1
+- Genotyping Errors: 61
+- Genotyping Error by homozigous in phased: 32
+- Genotyping Error by heterozigous in phased: 29
+- Total Error Rate: 0.453913%
+- Genotyping Error Rate: 0.446592%
+- Switch (Phasing) Error Rate: 0.00732118%
+
+SAMPLE: HG01243 ------------------------------------------------
+- Number of intersected variants (including missing genotypes): 11913 
+- Number of missing variants in HRPC: 54 
+- Number of missing variants in HLA-mapper: 0 
+- Number of intersected variants (without missing genotypes): 11859 
+- Mismatch rate > 0.3 (yes=1): 0
+------------ NO SWAP ------------
+- Total variants: 11859
+- Total unmatched variants (DIFF): 37
+- Switch (Phasing) Errors: 
+- Genotyping Errors: 37
+- Genotyping Error by homozigous in phased: 29
+- Genotyping Error by heterozigous in phased: 8
+- Total Error Rate: 0.311999%
+- Genotyping Error Rate: 0.311999%
+- Switch (Phasing) Error Rate: 0%
+
+SAMPLE: HG02055 ------------------------------------------------
+- Number of intersected variants (including missing genotypes): 11697 
+- Number of missing variants in HRPC: 0 
+- Number of missing variants in HLA-mapper: 0 
+- Number of intersected variants (without missing genotypes): 11697 
+- Mismatch rate > 0.3 (yes=1): 1
+- Mismatch rate before swap (> 30%)): 59%
+---------- AFTER SWAP ----------
+- Total variants: 11697
+- Total unmatched variants (DIFF): 1275
+- Switch (Phasing) Errors: 1240
+- Genotyping Errors: 35
+- Genotyping Error by homozigous in phased: 19
+- Genotyping Error by heterozigous in phased: 16
+- Total Error Rate: 10.9002%
+- Genotyping Error Rate: 0.299222%
+- Switch (Phasing) Error Rate: 10.601%
+
+SAMPLE: HG02080 ------------------------------------------------
+- Number of intersected variants (including missing genotypes): 14503 
+- Number of missing variants in HRPC: 1278 
+- Number of missing variants in HLA-mapper: 0 
+- Number of intersected variants (without missing genotypes): 13225 
+- Mismatch rate > 0.3 (yes=1): 0
+------------ NO SWAP ------------
+- Total variants: 13225
+- Total unmatched variants (DIFF): 2171
+- Switch (Phasing) Errors: 2128
+- Genotyping Errors: 43
+- Genotyping Error by homozigous in phased: 8
+- Genotyping Error by heterozigous in phased: 35
+- Total Error Rate: 16.4159%
+- Genotyping Error Rate: 0.325142%
+- Switch (Phasing) Error Rate: 16.0907%
+
+SAMPLE: HG02145 ------------------------------------------------
+- Number of intersected variants (including missing genotypes): 12623 
+- Number of missing variants in HRPC: 43 
+- Number of missing variants in HLA-mapper: 0 
+- Number of intersected variants (without missing genotypes): 12580 
+- Mismatch rate > 0.3 (yes=1): 0
+------------ NO SWAP ------------
+- Total variants: 12580
+- Total unmatched variants (DIFF): 41
+- Switch (Phasing) Errors: 1
+- Genotyping Errors: 40
+- Genotyping Error by homozigous in phased: 24
+- Genotyping Error by heterozigous in phased: 16
+- Total Error Rate: 0.325914%
+- Genotyping Error Rate: 0.317965%
+- Switch (Phasing) Error Rate: 0.00794913%
+
+SAMPLE: HG02723 ------------------------------------------------
+- Number of intersected variants (including missing genotypes): 14434 
+- Number of missing variants in HRPC: 1129 
+- Number of missing variants in HLA-mapper: 0 
+- Number of intersected variants (without missing genotypes): 13305 
+- Mismatch rate > 0.3 (yes=1): 0
+------------ NO SWAP ------------
+- Total variants: 13305
+- Total unmatched variants (DIFF): 82
+- Switch (Phasing) Errors: 4
+- Genotyping Errors: 78
+- Genotyping Error by homozigous in phased: 27
+- Genotyping Error by heterozigous in phased: 51
+- Total Error Rate: 0.61631%
+- Genotyping Error Rate: 0.586246%
+- Switch (Phasing) Error Rate: 0.0300639%
+
+SAMPLE: HG02818 ------------------------------------------------
+- Number of intersected variants (including missing genotypes): 12722 
+- Number of missing variants in HRPC: 277 
+- Number of missing variants in HLA-mapper: 0 
+- Number of intersected variants (without missing genotypes): 12445 
+- Mismatch rate > 0.3 (yes=1): 1
+- Mismatch rate before swap (> 30%)): 73%
+---------- AFTER SWAP ----------
+- Total variants: 12445
+- Total unmatched variants (DIFF): 49
+- Switch (Phasing) Errors: 1
+- Genotyping Errors: 48
+- Genotyping Error by homozigous in phased: 26
+- Genotyping Error by heterozigous in phased: 22
+- Total Error Rate: 0.393732%
+- Genotyping Error Rate: 0.385697%
+- Switch (Phasing) Error Rate: 0.00803536%
+
+SAMPLE: HG03098 ------------------------------------------------
+- Number of intersected variants (including missing genotypes): 13171 
+- Number of missing variants in HRPC: 0 
+- Number of missing variants in HLA-mapper: 0 
+- Number of intersected variants (without missing genotypes): 13171 
+- Mismatch rate > 0.3 (yes=1): 1
+- Mismatch rate before swap (> 30%)): 68%
+---------- AFTER SWAP ----------
+- Total variants: 13171
+- Total unmatched variants (DIFF): 83
+- Switch (Phasing) Errors: 12
+- Genotyping Errors: 71
+- Genotyping Error by homozigous in phased: 25
+- Genotyping Error by heterozigous in phased: 46
+- Total Error Rate: 0.630172%
+- Genotyping Error Rate: 0.539063%
+- Switch (Phasing) Error Rate: 0.0911093%
+
+SAMPLE: HG03486 ------------------------------------------------
+- Number of intersected variants (including missing genotypes): 11390 
+- Number of missing variants in HRPC: 176 
+- Number of missing variants in HLA-mapper: 0 
+- Number of intersected variants (without missing genotypes): 11214 
+- Mismatch rate > 0.3 (yes=1): 1
+- Mismatch rate before swap (> 30%)): 67%
+---------- AFTER SWAP ----------
+- Total variants: 11214
+- Total unmatched variants (DIFF): 29
+- Switch (Phasing) Errors: 1
+- Genotyping Errors: 28
+- Genotyping Error by homozigous in phased: 21
+- Genotyping Error by heterozigous in phased: 7
+- Total Error Rate: 0.258605%
+- Genotyping Error Rate: 0.249688%
+- Switch (Phasing) Error Rate: 0.00891742%
+
+SAMPLE: HG03492 ------------------------------------------------
+- Number of intersected variants (including missing genotypes): 12588 
+- Number of missing variants in HRPC: 232 
+- Number of missing variants in HLA-mapper: 0 
+- Number of intersected variants (without missing genotypes): 12356 
+- Mismatch rate > 0.3 (yes=1): 0
+------------ NO SWAP ------------
+- Total variants: 12356
+- Total unmatched variants (DIFF): 44
+- Switch (Phasing) Errors: 2
+- Genotyping Errors: 42
+- Genotyping Error by homozigous in phased: 34
+- Genotyping Error by heterozigous in phased: 8
+- Total Error Rate: 0.356102%
+- Genotyping Error Rate: 0.339916%
+- Switch (Phasing) Error Rate: 0.0161865%
+
+SAMPLE: NA18906 ------------------------------------------------
+- Number of intersected variants (including missing genotypes): 13735 
+- Number of missing variants in HRPC: 687 
+- Number of missing variants in HLA-mapper: 0 
+- Number of intersected variants (without missing genotypes): 13048 
+- Mismatch rate > 0.3 (yes=1): 0
+------------ NO SWAP ------------
+- Total variants: 13048
+- Total unmatched variants (DIFF): 42
+- Switch (Phasing) Errors: 1
+- Genotyping Errors: 41
+- Genotyping Error by homozigous in phased: 38
+- Genotyping Error by heterozigous in phased: 3
+- Total Error Rate: 0.321888%
+- Genotyping Error Rate: 0.314224%
+- Switch (Phasing) Error Rate: 0.00766401%
+
+SAMPLE: NA19240 ------------------------------------------------
+- Number of intersected variants (including missing genotypes): 12190 
+- Number of missing variants in HRPC: 296 
+- Number of missing variants in HLA-mapper: 0 
+- Number of intersected variants (without missing genotypes): 11894 
+- Mismatch rate > 0.3 (yes=1): 0
+------------ NO SWAP ------------
+- Total variants: 11894
+- Total unmatched variants (DIFF): 1416
+- Switch (Phasing) Errors: 1231
+- Genotyping Errors: 185
+- Genotyping Error by homozigous in phased: 23
+- Genotyping Error by heterozigous in phased: 162
+- Total Error Rate: 11.9052%
+- Genotyping Error Rate: 1.55541%
+- Switch (Phasing) Error Rate: 10.3498%
+
+SAMPLE: NA20129 ------------------------------------------------
+- Number of intersected variants (including missing genotypes): 11786 
+- Number of missing variants in HRPC: 1067 
+- Number of missing variants in HLA-mapper: 0 
+- Number of intersected variants (without missing genotypes): 10719 
+- Mismatch rate > 0.3 (yes=1): 1
+- Mismatch rate before swap (> 30%)): 67%
+---------- AFTER SWAP ----------
+- Total variants: 10719
+- Total unmatched variants (DIFF): 1248
+- Switch (Phasing) Errors: 1193
+- Genotyping Errors: 55
+- Genotyping Error by homozigous in phased: 32
+- Genotyping Error by heterozigous in phased: 23
+- Total Error Rate: 11.6429%
+- Genotyping Error Rate: 0.513108%
+- Switch (Phasing) Error Rate: 11.1298%
