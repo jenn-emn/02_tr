@@ -342,7 +342,7 @@ for name in "${names[@]}"; do
                 # -- Genotyping Error
                 else { print $0 }
             }
-            ' "${path_swapped}" > "${path_geno_errors}"
+            ' "${path_hrpc_hla_clean}" > "${path_geno_errors}"
 
     fi
 
