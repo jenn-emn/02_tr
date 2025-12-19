@@ -328,13 +328,13 @@ for name in "${names[@]}"; do
         awk '
             BEGIN{
                 OFS="\t"
-                print "idcomp", "hrpc", "hlam", "status", "hlam_swapped", "status_swapped"
+                print "idcomp", "hrpc", "hlam", "status"
             }
-            NR>1 && $6 == "DIFF" {
+            NR>1 && $4 == "DIFF" {
 
-                # split hrpc ($2) and swapped hla-mapper (%5)
+                # split hrpc ($2) and hla-mapper ($3)
                 split($2, hrpc, "|")
-                split($5, hlam, "|")
+                split($3, hlam, "|")
 
                 # -- Phasing Error
                 if (hrpc[1] == hlam[2] && hrpc[2] == hlam[1]) { next }
