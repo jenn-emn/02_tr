@@ -248,7 +248,7 @@ for name in "${names[@]}"; do
             ' "${path_swapped}" &>> "${log}"
         
         # write genotyping errors
-        path_geno_errors="${pathindiv}/${name}.hrpc.hlamapper.clean.swapped.tsv"
+        path_geno_errors="${pathindiv}/${name}.geno.errors.tsv"
         awk '
             BEGIN{
                 OFS="\t"
@@ -322,6 +322,27 @@ for name in "${names[@]}"; do
                 print "- Switch (Phasing) Error Rate: " (phase_err * 100 / NR) "%"
             }
             ' "${path_hrpc_hla_clean}" &>> "${log}"
+        
+        # write genotyping errors
+        path_geno_errors="${pathindiv}/${name}.geno.errors.tsv"
+        awk '
+            BEGIN{
+                OFS="\t"
+                print "idcomp", "hrpc", "hlam", "status", "hlam_swapped", "status_swapped"
+            }
+            NR>1 && $6 == "DIFF" {
+
+                # split hrpc ($2) and swapped hla-mapper (%5)
+                split($2, hrpc, "|")
+                split($5, hlam, "|")
+
+                # -- Phasing Error
+                if (hrpc[1] == hlam[2] && hrpc[2] == hlam[1]) { next }
+                
+                # -- Genotyping Error
+                else { print $0 }
+            }
+            ' "${path_swapped}" > "${path_geno_errors}"
 
     fi
 
