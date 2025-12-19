@@ -164,7 +164,9 @@ for name in "${names[@]}"; do
 
 
 
-    # Run taging
+    # Run
+
+    # If needs swapping
 
     if [ "$is_high_diff" -eq 1 ]; then
 
@@ -244,6 +246,30 @@ for name in "${names[@]}"; do
                 print "- Switch (Phasing) Error Rate: " (phase_err * 100 / NR) "%"
             }
             ' "${path_swapped}" &>> "${log}"
+        
+        # write genotyping errors
+        path_geno_errors="${pathindiv}/${name}.hrpc.hlamapper.clean.swapped.tsv"
+        awk '
+            BEGIN{
+                OFS="\t"
+                print "idcomp", "hrpc", "hlam", "status", "hlam_swapped", "status_swapped"
+            }
+            NR>1 && $6 == "DIFF" {
+
+                # split hrpc ($2) and swapped hla-mapper (%5)
+                split($2, hrpc, "|")
+                split($5, hlam, "|")
+
+                # -- Phasing Error
+                if (hrpc[1] == hlam[2] && hrpc[2] == hlam[1]) { next }
+                
+                # -- Genotyping Error
+                else { print $0 }
+            }
+            ' "${path_swapped}" > "${path_geno_errors}"
+
+
+    # If it's doesn't need
 
     else
 
