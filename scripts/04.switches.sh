@@ -10,7 +10,7 @@
 # zgrep -w "31427785" /home/jennifer/02_datas/04_data_processing_trios/01_intermediate/hlamapper.mhc/HG01109.mapper.vcf.gz
 # chr6	31427785	.	C	CTATATATATATTCTA	30	GAP1	.	GT:AD	.|1:0,1
 
-# zgrep -w "31427785" /home/jennifer/02_datas/04_data_processing_trios/01_intermediate/graphic/isecHG01109/HG01109.hrpc.idcomp.vcf.gz | grep -e "\.|"
+# zgrep -w "31427785" /home/jennifer/02_datas/04_data_processing_trios/01_intermediate/switch/isecHG01109/HG01109.hrpc.idcomp.vcf.gz | grep -e "\.|"
 # chr6	31427785	chr6:31427785:C:CTATATATATATTCTA	C	CTATATATATATTCTA	30	GAP1	.	GT:AD	.|1:0,1
 
 
@@ -39,10 +39,10 @@ n17="NA20129"
 #n18="NA21309"
 names=(${n3} ${n4} ${n5} ${n6} ${n7} ${n9} ${n10} ${n11} ${n12} ${n13} ${n14} ${n15} ${n16} ${n17})
 
-mkdir -p "/home/jennifer/02_datas/04_data_processing_trios/01_intermediate/graphic"
-pathgraph="/home/jennifer/02_datas/04_data_processing_trios/01_intermediate/graphic"
+mkdir -p "/home/jennifer/02_datas/04_data_processing_trios/01_intermediate/switch"
+pathswitch="/home/jennifer/02_datas/04_data_processing_trios/01_intermediate/switch"
 
-log="${pathgraph}/switches.log"
+log="${pathswitch}/switches.log"
 > "${log}"
 
 
@@ -70,7 +70,7 @@ for name in "${names[@]}"; do
     hrpcvcf="/home/jennifer/02_datas/04_data_processing_trios/01_intermediate/hrpc.mhc/${name}.dip.reheaded.vcf.gz"
     hlamvcf="/home/jennifer/02_datas/04_data_processing_trios/01_intermediate/hlamapper.mhc/${name}.mapper.vcf.gz"
     
-    pathindiv="${pathgraph}/${name}"
+    pathindiv="${pathswitch}/${name}"
     mkdir -p "${pathindiv}"
 
 
