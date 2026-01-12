@@ -27,7 +27,7 @@ names=(${n3} ${n4} ${n5} ${n6} ${n7} ${n9} ${n10} ${n11} ${n12} ${n13} ${n14} ${
 
 #conda activate whatshap_env
 
-log="/home/jennifer/02_datas/04_data_processing_trios/01_intermediate/hlamapper.mhc/all.samples.log"
+log="/home/jennifer/02_datas/04_data_processing_trios/01_intermediate/hlamapper.mhc/whatshap.all.samples.log"
 > "${log}"
 
 for name in "${names[@]}"; do
