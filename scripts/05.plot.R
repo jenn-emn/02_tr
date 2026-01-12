@@ -51,14 +51,14 @@ for (i in seq(1,length(names))) {
                         ymin = y_pos - 0.1, ymax = y_pos + 0.1), 
                     fill = "red", color = "darkred") +
         geom_text(aes(x = (pos_start + pos_end)/2, 
-                        y = y_pos + 0.2, 
-                        label = paste0("Block", block_id, ":", block_size, " switches")), 
+                        y = y_pos + 0.3, 
+                        label = paste0(block_id, ":", block_size)), 
                     size = 3, vjust = 0, angle = 45) +
         scale_x_continuous(labels = scales::comma_format(), name = "Posição no Chr6 (bp)") +
-        scale_y_continuous(limits = c(0.5, 2)) +
-        labs(title = "Localization of switched blocks in the Chromosome 6",
-            subtitle = names[i],
-            #caption = "Nota: Largura dos blocos aumentada visualmente para facilitar a visualização"
+        scale_y_continuous(limits = c(0.5, 2), name = "Block: switches") +
+        labs(title = paste0("Localization of switched blocks in the Chromosome 6 (",names[i],")"),
+            #subtitle = names[i],
+            #caption = "Note"
             ) +
         theme_minimal() +
         theme(axis.text.y = element_blank(),
@@ -67,7 +67,8 @@ for (i in seq(1,length(names))) {
                 panel.grid.minor.y = element_blank())
 
     ggsave(path_plot, width = 12, height = 4, dpi = 300)
-    #
+    
+    # scp -P 2205  jennifer@143.107.244.187:/home/jennifer/02_datas/04_data_processing_trios/01_intermediate/switch/HG*/*.plot.png
 }
 
 
