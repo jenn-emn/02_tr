@@ -139,7 +139,7 @@ for name in "${names[@]}"; do
     n_missing_var_phased=$(cut -f3 "${path_hrpc_hla}" | grep -e "\." | wc -l)
     echo -e "- Number of missing variants in HLA-mapper: ${n_missing_var_phased} " >> "${log}"
 
-    # cleaning
+    # cleaning missing genotypes
     path_hrpc_hla_clean="${pathindiv}/${name}.hrpc.hlamapper.clean.tsv"
     grep -v -e "\." "${path_hrpc_hla}" > "${path_hrpc_hla_clean}"
     
@@ -159,6 +159,7 @@ for name in "${names[@]}"; do
     n_diff=$(cut -f4 "${path_hrpc_hla_clean}" | grep "DIFF" | wc -l)
 
     # calculating mismatch rate
+    # Perform a floating-point calculation to determine if a mismatch rate exceeds a threshold of 30% (0.3).
     is_high_diff=$(awk -v diff="$n_diff" -v total="$n_total_var" 'BEGIN { print ( (diff/total) > 0.3 ? 1 : 0 ) }')
     echo -e "- Mismatch rate > 0.3 (yes=1): ${is_high_diff}" >> "${log}"
 
@@ -173,6 +174,8 @@ for name in "${names[@]}"; do
         # switch error rate before swap
         mismatch_rate=$((100 * "${n_diff}" / "${n_total_var}"))
         echo "- Mismatch rate before swap (> 30%)): ${mismatch_rate}%" >> "${log}"
+        
+        echo "- unswapped ${name}"
 
         # creating a unswapped column
         path_swapped="${pathindiv}/${name}.hrpc.hlamapper.clean.swapped.tsv"
@@ -194,6 +197,8 @@ for name in "${names[@]}"; do
                 }
             }' "${path_hrpc_hla_clean}" > "${path_swapped}"
         
+        path_diff="${path_swapped}"
+
         # calculate the new Switch Eror Rate (and the subtype error)
         awk '
             $6 == "DIFF" {
@@ -246,6 +251,7 @@ for name in "${names[@]}"; do
                 print "- Switch (Phasing) Error Rate: " (phase_err * 100 / NR) "%"
             }
             ' "${path_swapped}" &>> "${log}"
+
         
         # write genotyping errors
         path_geno_errors="${pathindiv}/${name}.geno.errors.tsv"
@@ -267,6 +273,29 @@ for name in "${names[@]}"; do
                 else { print $0 }
             }
             ' "${path_swapped}" > "${path_geno_errors}"
+
+        
+        # tag genotyping errors
+        path_diff_err="${pathindiv}/${name}.hrpc.hlamapper.switch.errors.tsv"
+        awk '
+            BEGIN{
+                OFS="\t"
+                print "idcomp", "hrpc", "hlam", "status", "hlam_swapped", "status_swapped", "status_error"
+            }
+            NR>1 {
+
+                # split hrpc ($2) and swapped hla-mapper ($5)
+                split($2, hrpc, "|")
+                split($5, hlam, "|")
+
+                # -- Genotyping Error
+                if ($6 == "DIFF" && (hrpc[1] != hlam[2] || hrpc[2] != hlam[1])) { print $1, $2, $3, $4, $5, $6, "ERROR" }
+                
+                # -- Others
+                else { print $1, $2, $3, $4, $5, $6, $6 }
+            }
+            ' "${path_diff}" > "${path_diff_err}"
+        
 
 
     # If it's doesn't need
@@ -322,6 +351,7 @@ for name in "${names[@]}"; do
                 print "- Switch (Phasing) Error Rate: " (phase_err * 100 / NR) "%"
             }
             ' "${path_hrpc_hla_clean}" &>> "${log}"
+
         
         # write genotyping errors
         path_geno_errors="${pathindiv}/${name}.geno.errors.tsv"
@@ -343,8 +373,61 @@ for name in "${names[@]}"; do
                 else { print $0 }
             }
             ' "${path_hrpc_hla_clean}" > "${path_geno_errors}"
+        
+        path_diff="${path_hrpc_hla_clean}"
+
+        
+        # tag genotyping errors
+        path_diff_err="${pathindiv}/${name}.hrpc.hlamapper.switch.errors.tsv"
+        awk '
+            BEGIN{
+                OFS="\t"
+                print "idcomp", "hrpc", "hlam", "status", "status_error"
+            }
+            NR>1 {
+
+                # split hrpc ($2) and swapped hla-mapper ($3)
+                split($2, hrpc, "|")
+                split($3, hlam, "|")
+
+                # -- Genotyping Error
+                if ($4 == "DIFF" && (hrpc[1] != hlam[2] || hrpc[2] != hlam[1])) { print $1, $2, $3, $4, "ERROR" }
+                
+                # -- Others
+                else { print $1, $2, $3, $4, $4 }
+            }
+            ' "${path_diff}" > "${path_diff_err}"
 
     fi
+
+    # calculate switch sizes
+    path_switch_sizes="${pathindiv}/${name}.switch.sizes.tsv"
+    cut -f1,4 "${path_diff_err}" | \
+    awk '
+        BEGIN { 
+            OFS="\t"
+            print "start", "end", "block_id", "block_size" 
+        }
+        $2 == "DIFF" {
+            if (!in_block) {
+                start = $1;
+                in_block = 1;
+                block_id++;
+                count = 0;
+            }
+            end = $1;
+            count++;
+            next;
+        }
+        {
+            if (in_block) {
+                print start, end, block_id, count;
+                in_block = 0;
+            }
+        }
+        END {
+            if (in_block) print start, end, block_id, count;
+        }' > "${path_switch_sizes}"
 
 done
 
