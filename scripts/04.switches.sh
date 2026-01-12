@@ -42,7 +42,7 @@ names=(${n3} ${n4} ${n5} ${n6} ${n7} ${n9} ${n10} ${n11} ${n12} ${n13} ${n14} ${
 mkdir -p "/home/jennifer/02_datas/04_data_processing_trios/01_intermediate/graphic"
 pathgraph="/home/jennifer/02_datas/04_data_processing_trios/01_intermediate/graphic"
 
-log="${pathgraph}/graph.log"
+log="${pathgraph}/switches.log"
 > "${log}"
 
 
