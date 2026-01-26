@@ -42,7 +42,7 @@ names=(${n3} ${n4} ${n5} ${n6} ${n7} ${n9} ${n10} ${n11} ${n12} ${n13} ${n14} ${
 mkdir -p "/home/jennifer/02_datas/04_data_processing_trios/01_intermediate/switch"
 pathswitch="/home/jennifer/02_datas/04_data_processing_trios/01_intermediate/switch"
 
-log="${pathswitch}/switches.log"
+log="${pathswitch}/switches.inhouse.log"
 > "${log}"
 
 
@@ -50,8 +50,9 @@ log="${pathswitch}/switches.log"
 # observations
 echo -e "-------------------------- OBSERVATIONS --------------------------" >> "${log}"
 echo -e "- Truth genotypes: HRPC, column 2." >> "${log}"
+echo -e "                 - Cleaning: exclusion of missingness genotypes and homozigous from HRPC." >> "${log}"
 echo -e "- Phased genotypes: HLA-mapper, column 3 (and column 5 in swapped)." >> "${log}"
-echo -e "- Unmatched tags (DIFF) in relation with the HLA-mapper phase are in the column 4 (and column 6 in swapped)." >> "${log}"
+echo -e "- Tags: 'DIFF' to unmatched phases between HRPC and HLA-mapper phase." >> "${log}"
 echo -e "- Phasing Error: When the first allele of HRPC is equals to the second allele of the swapped HLA-mapped allele, and 2º hrpc == 1º hlam." >> "${log}"
 echo -e "- Genotyping Error: When the phase is not inverted between HRPC and HLA-mapper, it is an error because is different by state." >> "${log}"
 echo -e "                 - When the phase (HLA-mapper) is homozigous for one of the truth alleles or for a third extra allele." >> "${log}"
@@ -125,31 +126,40 @@ for name in "${names[@]}"; do
     # Intersection by compoused ID variant in the "chr:pos:ref:alt" format
     # counting intersected variants
     n_total_var=$(cat "${path_hrpc_hla}" | wc -l)
-    echo -e "- Number of intersected variants (including missing genotypes): ${n_total_var} " >> "${log}"
+    echo -e "- Number of intersected variants (pre-cleaning): ${n_total_var} " >> "${log}"
 
 
     
     # Before cleaning
     # The hrpc haplotypes have missing genotypes, we need to exclude them
 
-    # counting hrpc
+    # counting missingness in hrpc
     n_missing_var_truth=$(cut -f2 "${path_hrpc_hla}" | grep -e "\." | wc -l)
-    echo -e "- Number of missing variants in HRPC: ${n_missing_var_truth} " >> "${log}"
+    echo -e "    - Number of missing variants in HRPC: ${n_missing_var_truth} " >> "${log}"
+    
+    # counting homozygous in hrpc
+    n_homozygous_var_truth=$(cut -f2 "${path_hrpc_hla}" | grep -F "1|1" | wc -l)
+    echo -e "    - Number of homozygous variants in HRPC: ${n_homozygous_var_truth} " >> "${log}"
+    
     # counting  hla-mapper
     n_missing_var_phased=$(cut -f3 "${path_hrpc_hla}" | grep -e "\." | wc -l)
-    echo -e "- Number of missing variants in HLA-mapper: ${n_missing_var_phased} " >> "${log}"
+    echo -e "    - Number of missing variants in HLA-mapper: ${n_missing_var_phased} " >> "${log}"
 
-    # cleaning missing genotypes
+
+
+    # Cleaning missing genotypes and heterozygous
     path_hrpc_hla_clean="${pathindiv}/${name}.hrpc.hlamapper.clean.tsv"
-    grep -v -e "\." "${path_hrpc_hla}" > "${path_hrpc_hla_clean}"
+    grep -v -e "\." "${path_hrpc_hla}" | \
+        grep -v -F "1|1" > \
+        "${path_hrpc_hla_clean}"
     
     
     
     # After cleaning
 
     # counting intersected variants
-    n_total_var=$(cat "${path_hrpc_hla_clean}" | wc -l)
-    echo -e "- Number of intersected variants (without missing genotypes): ${n_total_var} " >> "${log}"
+    n_total_var=$(( $(wc -l < "${path_hrpc_hla_clean}") - 1 ))
+    echo -e "- Number of common heterozygous variants (pos-cleaning): ${n_total_var} " >> "${log}"
 
 
     # Checking unmatched genotypes (tag = "DIFF")
