@@ -22,7 +22,7 @@ outpath="/home/jennifer/02_datas/04_data_processing_trios/01_intermediate/switch
 
 # names lists
 names=c("HG00733", "HG01109", "HG01243", "HG02055", "HG02080", "HG02145", "HG02723", "HG02818", "HG03098", "HG03486", "HG03492", "NA18906", "NA19240", "NA20129")
-names=c("HG00733")
+#names=c("HG00733")
 
 for (i in seq(1,length(names))) {
 
@@ -71,6 +71,7 @@ for (i in seq(1,length(names))) {
     ggsave(path_plot, width = 12, height = 4, dpi = 300)
     
     # scp -P 2205  jennifer@143.107.244.187:/home/jennifer/02_datas/04_data_processing_trios/01_intermediate/switch/HG*/*.plot.png
+    # View /home/jennifer/02_datas/04_data_processing_trios/01_intermediate/switch/HG00733/HG00733.plot.png
 }
 
 
