@@ -143,7 +143,7 @@ for name in "${names[@]}"; do
     
     # counting  hla-mapper
     n_missing_var_phased=$(cut -f3 "${path_hrpc_hla}" | grep -e "\." | wc -l)
-    echo -e "    - Number of missing variants in HLA-mapper: ${n_missing_var_phased} " >> "${log}"
+    #echo -e "    - Number of missing variants in HLA-mapper: ${n_missing_var_phased} " >> "${log}"
 
 
 
@@ -171,7 +171,7 @@ for name in "${names[@]}"; do
     # calculating mismatch rate
     # Perform a floating-point calculation to determine if a mismatch rate exceeds a threshold of 30% (0.3).
     is_high_diff=$(awk -v diff="$n_diff" -v total="$n_total_var" 'BEGIN { print ( (diff/total) > 0.3 ? 1 : 0 ) }')
-    echo -e "- Mismatch rate > 0.3 (yes=1): ${is_high_diff}" >> "${log}"
+    echo -e "    - Mismatch rate > 0.3 (yes=1, no=0): ${is_high_diff}" >> "${log}"
 
 
 
@@ -183,7 +183,7 @@ for name in "${names[@]}"; do
 
         # switch error rate before swap
         mismatch_rate=$((100 * "${n_diff}" / "${n_total_var}"))
-        echo "- Mismatch rate before swap (> 30%)): ${mismatch_rate}%" >> "${log}"
+        echo "    - Mismatch rate before swap (> 30%)): ${mismatch_rate}%" >> "${log}"
         
         echo "- unswapped ${name}"
 
@@ -249,16 +249,20 @@ for name in "${names[@]}"; do
                 
                 total_err = geno_err + phase_err
 
-                print "---------- AFTER SWAP ----------"
-                print "- Total variants: " NR
-                print "- Total unmatched variants (DIFF): " total_err
-                print "- Switch (Phasing) Errors: " phase_err
-                print "- Genotyping Errors: " geno_err
-                print "- Genotyping Error by homozigous in phased: " geno_hom_qry
-                print "- Genotyping Error by heterozigous in phased: " geno_het_qry
-                print "- Total Error Rate: " (total_err * 100 / NR) "%"
-                print "- Genotyping Error Rate: " (geno_err * 100 / NR) "%"
-                print "- Switch (Phasing) Error Rate: " (phase_err * 100 / NR) "%"
+                print "    ---------- after swap ----------"
+                print "    - Genotyping Errors: " geno_err " (" (geno_err * 100 / ( NR - 1)) "%)"
+                print "    - Final common heterozygous variants: " (NR - 1 - geno_err)
+                print "    - Switch (Phasing) Errors: " phase_err " (" (phase_err * 100 / ( NR - 1 - geno_err)) "%)"
+
+                #print "- Total variants: " NR
+                #print "- Total unmatched variants (DIFF): " total_err
+                #print "- Switch (Phasing) Errors: " phase_err
+                #print "- Genotyping Errors: " geno_err
+                #print "- Genotyping Error by homozigous in phased: " geno_hom_qry
+                #print "- Genotyping Error by heterozigous in phased: " geno_het_qry
+                #print "- Total Error Rate: " (total_err * 100 / NR) "%"
+                #print "- Genotyping Error Rate: " (geno_err * 100 / NR) "%"
+                #print "- Switch (Phasing) Error Rate: " (phase_err * 100 / NR) "%"
             }
             ' "${path_swapped}" &>> "${log}"
 
@@ -349,16 +353,18 @@ for name in "${names[@]}"; do
                 
                 total_err = geno_err + phase_err
 
-                print "------------ NO SWAP ------------"
-                print "- Total variants: " NR
-                print "- Total unmatched variants (DIFF): " total_err
-                print "- Switch (Phasing) Errors: " phase_err
-                print "- Genotyping Errors: " geno_err
-                print "- Genotyping Error by homozigous in phased: " geno_hom_qry
-                print "- Genotyping Error by heterozigous in phased: " geno_het_qry
-                print "- Total Error Rate: " (total_err * 100 / NR) "%"
-                print "- Genotyping Error Rate: " (geno_err * 100 / NR) "%"
-                print "- Switch (Phasing) Error Rate: " (phase_err * 100 / NR) "%"
+                #print "------------ NO SWAP ------------"
+                print "    - Genotyping Errors: " geno_err " (" (geno_err * 100 / ( NR - 1)) "%)"
+                print "    - Final common heterozygous variants: " (NR - 1 - geno_err)
+                print "    - Switch (Phasing) Errors: " phase_err " (" (phase_err * 100 / ( NR - 1 - geno_err)) "%)"
+
+                #print "    - Total variants: " (NR - 1)
+                #print "    - Number unmatched genotypes between HRPC and HLA-mapper: " total_err
+                #print "    - Switch (Phasing) Errors: " phase_err " (" (phase_err * 100 / ( NR - 1)) "%)"
+                #print "    - Genotyping Error by homozigous in phased: " geno_hom_qry
+                #print "    - Genotyping Error by heterozigous in phased: " geno_het_qry
+                #print "    - Total Error Rate: " (total_err * 100 / ( NR - 1)) "%"
+                #print "    - Genotyping Error Rate: " (geno_err * 100 / ( NR - 1)) "%"
             }
             ' "${path_hrpc_hla_clean}" &>> "${log}"
 
@@ -412,7 +418,8 @@ for name in "${names[@]}"; do
 
     # calculate switch sizes
     path_switch_sizes="${pathindiv}/${name}.switch.sizes.tsv"
-    cut -f1,4 "${path_diff_err}" | \
+    grep -v "ERROR" "${path_diff_err}" | \
+    cut -f1,4 | \
     awk '
         BEGIN { 
             OFS="\t"
@@ -438,6 +445,10 @@ for name in "${names[@]}"; do
         END {
             if (in_block) print start, end, block_id, count;
         }' > "${path_switch_sizes}"
+
+echo "- File with tags ${path_diff_err}" >> "${log}"
+
+echo "- File with switch blocks ${path_switch_sizes}" >> "${log}"
 
 done
 
