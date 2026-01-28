@@ -254,15 +254,8 @@ for name in "${names[@]}"; do
                 print "    - Final common heterozygous variants: " (NR - 1 - geno_err)
                 print "    - Switch (Phasing) Errors: " phase_err " (" (phase_err * 100 / ( NR - 1 - geno_err)) "%)"
 
-                #print "- Total variants: " NR
-                #print "- Total unmatched variants (DIFF): " total_err
-                #print "- Switch (Phasing) Errors: " phase_err
-                #print "- Genotyping Errors: " geno_err
                 #print "- Genotyping Error by homozigous in phased: " geno_hom_qry
                 #print "- Genotyping Error by heterozigous in phased: " geno_het_qry
-                #print "- Total Error Rate: " (total_err * 100 / NR) "%"
-                #print "- Genotyping Error Rate: " (geno_err * 100 / NR) "%"
-                #print "- Switch (Phasing) Error Rate: " (phase_err * 100 / NR) "%"
             }
             ' "${path_swapped}" &>> "${log}"
 
@@ -357,14 +350,9 @@ for name in "${names[@]}"; do
                 print "    - Genotyping Errors: " geno_err " (" (geno_err * 100 / ( NR - 1)) "%)"
                 print "    - Final common heterozygous variants: " (NR - 1 - geno_err)
                 print "    - Switch (Phasing) Errors: " phase_err " (" (phase_err * 100 / ( NR - 1 - geno_err)) "%)"
-
-                #print "    - Total variants: " (NR - 1)
-                #print "    - Number unmatched genotypes between HRPC and HLA-mapper: " total_err
-                #print "    - Switch (Phasing) Errors: " phase_err " (" (phase_err * 100 / ( NR - 1)) "%)"
+                
                 #print "    - Genotyping Error by homozigous in phased: " geno_hom_qry
                 #print "    - Genotyping Error by heterozigous in phased: " geno_het_qry
-                #print "    - Total Error Rate: " (total_err * 100 / ( NR - 1)) "%"
-                #print "    - Genotyping Error Rate: " (geno_err * 100 / ( NR - 1)) "%"
             }
             ' "${path_hrpc_hla_clean}" &>> "${log}"
 
