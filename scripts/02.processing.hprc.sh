@@ -17,11 +17,11 @@
 
 # paths
 path_int="/home/jennifer/02_datas/04_data_processing_trios/01_intermediate"
-path_hrpc="${path_int}/hrpc.mhc"
+path_hprc="${path_int}/hprc.mhc"
 path_hlamapper="${path_int}/hlamapper.mhc"
 
 # to check names
-samples_list="${path_int}/mapper.samples.in.hrpc.txt"
+samples_list="${path_int}/mapper.samples.in.hprc.txt"
 
 # to .log
 log="${path_int}/01.log"
