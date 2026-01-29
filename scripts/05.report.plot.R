@@ -12,7 +12,7 @@ library(scales)
 
 # 1. Path Settings
 parent_dir <- "/home/jennifer/02_datas/04_data_processing_trios/01_intermediate/switch"
-out_dir <- file.path(parent_dir, "test")
+out_dir <- file.path(parent_dir, "report")
 html_path <- file.path(out_dir, "phasing_report.html")
 combined_plot_name <- "combined_phasing_plot.png"
 
@@ -134,7 +134,7 @@ p_combined <- ggplot(master_df, aes(x = pos, y = 1)) +
 # Ajuste de altura baseado no número de amostras
 plot_height <- max(4, length(unique(master_df$Sample)) * 1)
 ggsave(filename = combined_plot_name, path = out_dir, plot = p_combined, 
-       width = 12, height = plot_height, dpi = 300)
+       width = 12, height = plot_height, dpi = 300, bg = "white")
 
 # 7. Finalize HTML
 html_lines <- c(html_lines, 
