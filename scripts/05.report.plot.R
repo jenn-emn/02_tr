@@ -75,9 +75,9 @@ html_lines <- c(
   "<h1>Phasing Accuracy Analysis: MHC region, chromosome 6</h1>",
   "<h3>Compartive table</h3>",
   "<div class='description-box'>",
-  "<strong>Hamming Distance:</strong> Is the number of heterozygous positions where the phase orientation differs between the predicted (HLA-mapper) and the truth (HRPC) dataset.<br>",
-  "<strong>HLA genomic region:</strong> corresponds to the genomic coordinates of 29700000 to 33149972.<br>",
-  "<strong>Switch error:</strong> is an incorrect phase relationship between two adjacent heterozygous sites.",
+  "<strong>HLA genomic region:</strong> corresponds to the genomic coordinates from 29700000 to 33149972.<br>",
+  "<strong>Switch error:</strong> is an incorrect phase relationship between two adjacent heterozygous sites.<br>",
+  "<strong>Hamming Distance:</strong> is the number of heterozygous positions where the phase orientation differs between the predicted (HLA-mapper) and the truth (HPRC) dataset.",
   "</div>"
 )
 
@@ -101,7 +101,7 @@ html_lines <- c(html_lines, "</tbody></table><hr>")
 # 5. Load and Combine Data
 data_list <- list()
 for(sample_id in metrics_df$Sample) {
-  sample_file <- file.path(parent_dir, sample_id, paste0(sample_id, ".hrpc.hlamapper.switch.errors.tsv"))
+  sample_file <- file.path(parent_dir, sample_id, paste0(sample_id, ".hprc.hlamapper.switch.errors.tsv"))
   
   if (file.exists(sample_file)) {
     current_label <- metrics_df$Pct_Label[metrics_df$Sample == sample_id]

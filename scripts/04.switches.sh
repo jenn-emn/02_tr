@@ -2,15 +2,15 @@
 
 
 
-# OBSERVATION: there are missing genotypes in the original HRPC vcfs
+# OBSERVATION: there are missing genotypes in the original HPRC vcfs
 
-# zgrep -w "31427785" /home/DATA/HRPC_PLUS/HG01109.f1_assembly_v2.dip.vcf.gz
+# zgrep -w "31427785" /home/DATA/HPRC_PLUS/HG01109.f1_assembly_v2.dip.vcf.gz
 # chr6	31427785	.	C	CTATATATATATTCTA	30	GAP1	.	GT:AD	.|1:0,1
 
 # zgrep -w "31427785" /home/jennifer/02_datas/04_data_processing_trios/01_intermediate/hlamapper.mhc/HG01109.mapper.vcf.gz
 # chr6	31427785	.	C	CTATATATATATTCTA	30	GAP1	.	GT:AD	.|1:0,1
 
-# zgrep -w "31427785" /home/jennifer/02_datas/04_data_processing_trios/01_intermediate/switch/isecHG01109/HG01109.hrpc.idcomp.vcf.gz | grep -e "\.|"
+# zgrep -w "31427785" /home/jennifer/02_datas/04_data_processing_trios/01_intermediate/switch/isecHG01109/HG01109.hprc.idcomp.vcf.gz | grep -e "\.|"
 # chr6	31427785	chr6:31427785:C:CTATATATATATTCTA	C	CTATATATATATTCTA	30	GAP1	.	GT:AD	.|1:0,1
 
 
@@ -49,15 +49,15 @@ log="${pathswitch}/switches.inhouse.log"
 
 # observations
 echo -e "-------------------------- OBSERVATIONS --------------------------" >> "${log}"
-echo -e "- Truth genotypes: HRPC, column 2." >> "${log}"
-echo -e "                 - Cleaning: exclusion of missingness genotypes and homozigous from HRPC." >> "${log}"
+echo -e "- Truth genotypes: HPRC, column 2." >> "${log}"
+echo -e "                 - Cleaning: exclusion of missingness genotypes and homozigous from HPRC." >> "${log}"
 echo -e "- Phased genotypes: HLA-mapper, column 3 (and column 5 in swapped)." >> "${log}"
-echo -e "- Tags: 'DIFF' to unmatched phases between HRPC and HLA-mapper phase." >> "${log}"
-echo -e "- Phasing Error: When the first allele of HRPC is equals to the second allele of the swapped HLA-mapped allele, and 2º hrpc == 1º hlam." >> "${log}"
-echo -e "- Genotyping Error: When the phase is not inverted between HRPC and HLA-mapper, it is an error because is different by state." >> "${log}"
+echo -e "- Tags: 'DIFF' to unmatched phases between HPRC and HLA-mapper phase." >> "${log}"
+echo -e "- Phasing Error: When the first allele of HPRC is equals to the second allele of the swapped HLA-mapped allele, and 2º hprc == 1º hlam." >> "${log}"
+echo -e "- Genotyping Error: When the phase is not inverted between HPRC and HLA-mapper, it is an error because is different by state." >> "${log}"
 echo -e "                 - When the phase (HLA-mapper) is homozigous for one of the truth alleles or for a third extra allele." >> "${log}"
 echo -e "                 - when the phase (HLA-mapper) is heterozygous and contains a different allele (by state) from the two truth alleles." >> "${log}"
-echo -e "- Obs.: The allele 2 (2) represented by the asterisk in the ALT column of the HRPC vcf indicates a spanning deletion." >> "${log}"
+echo -e "- Obs.: The allele 2 (2) represented by the asterisk in the ALT column of the HPRC vcf indicates a spanning deletion." >> "${log}"
 echo -e "                 - It is when the physical position does not exist in this haplotype because it was removed by a larger structural deletion in this region.\n" >> "${log}"
 
 
@@ -68,7 +68,7 @@ for name in "${names[@]}"; do
 
     echo -e "SAMPLE: ${name} ------------------------------------------------"
 
-    hrpcvcf="/home/jennifer/02_datas/04_data_processing_trios/01_intermediate/hrpc.mhc/${name}.dip.reheaded.vcf.gz"
+    hprcvcf="/home/jennifer/02_datas/04_data_processing_trios/01_intermediate/hprc.mhc/${name}.dip.reheaded.vcf.gz"
     hlamvcf="/home/jennifer/02_datas/04_data_processing_trios/01_intermediate/hlamapper.mhc/${name}.mapper.vcf.gz"
     
     pathindiv="${pathswitch}/${name}"
@@ -76,14 +76,14 @@ for name in "${names[@]}"; do
 
 
     
-    # HRPC
+    # HPRC
 
     bcftools \
         query -f '%CHROM:%POS:%REF:%ALT[\t%GT]' \
-        "${hrpcvcf}" > \
-        "${pathindiv}/${name}.hrpc.txt"
+        "${hprcvcf}" > \
+        "${pathindiv}/${name}.hprc.txt"
     
-    hrpccomp="${pathindiv}/${name}.hrpc.txt"
+    hprccomp="${pathindiv}/${name}.hprc.txt"
 
 
     
@@ -102,21 +102,21 @@ for name in "${names[@]}"; do
     awk '
         BEGIN {
             OFS="\t"
-            print "idcomp", "hrpc", "hlam", "status"
+            print "idcomp", "hprc", "hlam", "status"
         }
 
-        NR == FNR { hrpcidc[$1]=$2 ; next ; }
+        NR == FNR { hprcidc[$1]=$2 ; next ; }
 
         {
-            if ($1 in hrpcidc) {
-                print $1, hrpcidc[$1], $2, (hrpcidc[$1]==$2 ? "MATCH" : "DIFF")
+            if ($1 in hprcidc) {
+                print $1, hprcidc[$1], $2, (hprcidc[$1]==$2 ? "MATCH" : "DIFF")
             }
         }' \
-        "${hrpccomp}" \
+        "${hprccomp}" \
         "${hlamcomp}" > \
-        "${pathindiv}/${name}.hrpc.hlamapper.tsv"
+        "${pathindiv}/${name}.hprc.hlamapper.tsv"
 
-    path_hrpc_hla="${pathindiv}/${name}.hrpc.hlamapper.tsv"
+    path_hprc_hla="${pathindiv}/${name}.hprc.hlamapper.tsv"
     
     
 
@@ -125,33 +125,33 @@ for name in "${names[@]}"; do
     
     # Intersection by compoused ID variant in the "chr:pos:ref:alt" format
     # counting intersected variants
-    n_total_var=$(cat "${path_hrpc_hla}" | wc -l)
+    n_total_var=$(cat "${path_hprc_hla}" | wc -l)
     echo -e "- Number of intersected variants (pre-cleaning): ${n_total_var} " >> "${log}"
 
 
     
     # Before cleaning
-    # The hrpc haplotypes have missing genotypes, we need to exclude them
+    # The hprc haplotypes have missing genotypes, we need to exclude them
 
-    # counting missingness in hrpc
-    n_missing_var_truth=$(cut -f2 "${path_hrpc_hla}" | grep -e "\." | wc -l)
-    echo -e "    - Number of missing variants in HRPC: ${n_missing_var_truth} " >> "${log}"
+    # counting missingness in hprc
+    n_missing_var_truth=$(cut -f2 "${path_hprc_hla}" | grep -e "\." | wc -l)
+    echo -e "    - Number of missing variants in HPRC: ${n_missing_var_truth} " >> "${log}"
     
-    # counting homozygous in hrpc
-    n_homozygous_var_truth=$(cut -f2 "${path_hrpc_hla}" | grep -F "1|1" | wc -l)
-    echo -e "    - Number of homozygous variants in HRPC: ${n_homozygous_var_truth} " >> "${log}"
+    # counting homozygous in hprc
+    n_homozygous_var_truth=$(cut -f2 "${path_hprc_hla}" | grep -F "1|1" | wc -l)
+    echo -e "    - Number of homozygous variants in HPRC: ${n_homozygous_var_truth} " >> "${log}"
     
     # counting  hla-mapper
-    n_missing_var_phased=$(cut -f3 "${path_hrpc_hla}" | grep -e "\." | wc -l)
+    n_missing_var_phased=$(cut -f3 "${path_hprc_hla}" | grep -e "\." | wc -l)
     #echo -e "    - Number of missing variants in HLA-mapper: ${n_missing_var_phased} " >> "${log}"
 
 
 
     # Cleaning missing genotypes and heterozygous
-    path_hrpc_hla_clean="${pathindiv}/${name}.hrpc.hlamapper.clean.tsv"
-    grep -v -e "\." "${path_hrpc_hla}" | \
+    path_hprc_hla_clean="${pathindiv}/${name}.hprc.hlamapper.clean.tsv"
+    grep -v -e "\." "${path_hprc_hla}" | \
         grep -v -F "1|1" > \
-        "${path_hrpc_hla_clean}"
+        "${path_hprc_hla_clean}"
     
     
     
