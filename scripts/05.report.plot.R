@@ -23,25 +23,32 @@ if (!dir.exists(out_dir)) {
 
 # 2. Table Data (with Standardized Labels)
 metrics_df <- data.frame(
-  Sample = c("HG00733", "HG01109", "HG01243", "HG02055", "HG02080", "HG02145", 
-             "HG02723", "HG02818", "HG03098", "HG03486", "HG03492", "NA18906", 
-             "NA19240", "NA20129"),
-  WhatsHap = c("0/8323 (0%)", "0/9502 (0%)", "0/7931 (0%)", "1233/8174 (15.08%)", 
-               "2118/8737 (24.24%)", "1/8896 (0.01%)", "4/8827 (0.05%)", 
-               "1/9048 (0.01%)", "12/8990 (0.13%)", "1/7489 (0.01%)", 
-               "2/8621 (0.02%)", "1/8766 (0.01%)", "1222/6311 (13.36%)", 
-               "1191/8353 (14.26%)"),
-  InHouse = c("0/8340 (0%)", "0/9533 (0%)", "0/7953 (0%)", "1240/8193 (15%)", 
-              "2128/8773 (24.25%)", "1/8918 (0.01%)", "4/8866 (0.045%)", 
-              "1/9069 (0.011%)", "12/8926 (0.134%)", "1/7507 (0.013%)", 
-              "2/8645 (0.02%)", "1/8786 (0.01%)", "1231/6334 (19.43%)", 
-              "1193/8363 (14.26%)")
+  Sample = c("HG00733", "HG01109", "HG01243",
+            "HG02055", "HG02080", "HG02145",
+            "HG02723", "HG02818", "HG03098",
+            "HG03486", "HG03492", "NA18906",
+            "NA19240", "NA20129"),
+  WHswitchrate = c("0/8323 (0%)", "2/9502 (0.02%)", "0/7931 (0%)",
+            "3/8174 (0.04%)", "2/8737 (0.02%)", "2/8896 (0.02%)",
+            "8/8827 (0.09%)", "2/9048 (0.02%)", "14/8990 (0.16%)",
+            "2/7489 (0.03%)", "4/8621 (0.05%)", "2/8766 (0.02%)",
+            "3/6311 (0.05%)", "3/8353 (0.04%)"),
+  WhatsHap = c("0/8323 (0%)", "0/9502 (0%)", "0/7931 (0%)",
+            "1233/8174 (15.08%)", "2118/8737 (24.24%)", "1/8896 (0.01%)",
+            "4/8827 (0.05%)", "1/9048 (0.01%)", "12/8990 (0.13%)",
+            "1/7489 (0.01%)", "2/8621 (0.02%)", "1/8766 (0.01%)",
+            "1222/6311 (13.36%)", "1191/8353 (14.26%)"),
+  InHouse = c("0/8340 (0%)", "0/9533 (0%)", "0/7953 (0%)",
+            "1240/8193 (15%)", "2128/8773 (24.25%)", "1/8918 (0.01%)",
+            "4/8866 (0.045%)", "1/9069 (0.011%)", "12/8926 (0.134%)",
+            "1/7507 (0.013%)", "2/8645 (0.02%)", "1/8786 (0.01%)",
+            "1231/6334 (19.43%)", "1193/8363 (14.26%)")
   ) %>%
   mutate(
-    # Extrai a porcentagem do WhatsHap para sorting
+    # Extract the %
     sort_key = as.numeric(str_extract(WhatsHap, "[0-9.]+(?=%)")),
     
-    # Extrai o número do InHouse, formata para 2 decimais e cria o Label
+    # Extract the number of the %
     inhouse_val = as.numeric(str_extract(InHouse, "[0-9.]+(?=%)")),
     Pct_Label = paste0(Sample, " (", sprintf("%.2f", inhouse_val), "%)")
   ) %>%
@@ -75,12 +82,14 @@ html_lines <- c(
 # 4. Add the Table
 html_lines <- c(html_lines,
                 "<table><thead><tr><th>Sample</th>",
+                "<th>WhatsHap (Switch error/common heterozygous variants, %)</th>",
                 "<th>WhatsHap (Hamming distance/common heterozygous variants, %)</th>",
                 "<th>InHouse (Hamming distance/common heterozygous variants, %)</th>",
                 "</tr></thead><tbody>")
 
 for(i in 1:nrow(metrics_df)) {
   row_html <- paste0("<tr><td><strong>", metrics_df$Sample[i], "</strong></td>",
+                     "<td>", metrics_df$WHswitchrate[i], "</td>",
                      "<td>", metrics_df$WhatsHap[i], "</td>",
                      "<td>", metrics_df$InHouse[i], "</td></tr>")
   html_lines <- c(html_lines, row_html)
