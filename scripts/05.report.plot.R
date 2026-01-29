@@ -75,8 +75,9 @@ html_lines <- c(
   "<h1>Phasing Accuracy Analysis: MHC region, chromosome 6</h1>",
   "<h3>Compartive table</h3>",
   "<div class='description-box'>",
-  "<strong>Hamming Distance:</strong> Is the number of heterozygous positions where the phase orientation differs between the predicted (HLA-mapper) and the truth (HRPC) dataset.",
-  "<strong>HLA genomic region:</strong> corresponds to the genomic coordinates of 29700000 to 33149972.",
+  "<strong>Hamming Distance:</strong> Is the number of heterozygous positions where the phase orientation differs between the predicted (HLA-mapper) and the truth (HRPC) dataset.<br>",
+  "<strong>HLA genomic region:</strong> corresponds to the genomic coordinates of 29700000 to 33149972.<br>",
+  "<strong>Switch error:</strong> is an incorrect phase relationship between two adjacent heterozygous sites.",
   "</div>"
 )
 
