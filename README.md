@@ -11,7 +11,7 @@ The Human Pangenome Reference Consortium was launched in May 2025 ([HPRC Release
 - Several sequencing technologies were used: PacBio HiFi, ONT Ultralong, Dovetail/Illumina Hi-C, PacBio Kinnex RNA, and Illumina WGS. High coverage: 60X PacBio HiFi and 30X Oxford Nanopore in 100 kb.
 
 There are [234 samples](https://github.com/human-pangenomics/hprc_intermediate_assembly/tree/main/data_tables/sample) in total [metadata](https://github.com/human-pangenomics/hprc_intermediate_assembly/blob/main/data_tables/sample/hprc_release2_sample_metadata.csv):
-- 216 from HPRC: 126 phased with parental information seq by Illumina and 90 unrelated phased with hifiasm-hic),
+- 216 from HPRC: 126 phased with parental information seq by Illumina and 90 unrelated phased with hifiasm-hic,
 - 14 from HPP (phased with hifiasm)
 - 4 are the gold-standard samples from the community (they are reference assemblies), sequenced and assembled by other projects: CHM13 is the first (haploid) telomere-to-telomere (T2T) assembly of the human genome, GRCh38 is a current "classic" reference. HG002 is a sample (trio) from Genome in a Bottle (GIAB) used for benchmarking.
 
@@ -22,3 +22,8 @@ There are [234 samples](https://github.com/human-pangenomics/hprc_intermediate_a
 - Samples (14) into HLA-MAPPER vcf: HG00733, HG01109, HG01243, HG02055, HG02080, HG02145, HG02723, HG02818, HG03098, HG03486, HG03492, NA18906, NA19240 and NA20129.
 
 - Samples (4) out HLA-MAPPER vcf: HG002, HG005, HG02109 and NA21309.
+
+#
+## Report
+
+- [Report of mapping phasing errors](data/report/report.html)
