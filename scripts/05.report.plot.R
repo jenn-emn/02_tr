@@ -15,6 +15,7 @@ parent_dir <- "/home/jennifer/02_datas/04_data_processing_trios/01_intermediate/
 out_dir <- file.path(parent_dir, "report")
 html_path <- file.path(out_dir, "phasing_report.html")
 combined_plot_name <- "combined_phasing_plot.png"
+combined_plot_name2 <- "combined_phasing_plot2.png"
 
 if (!dir.exists(out_dir)) {
     dir.create(out_dir, recursive = TRUE, showWarnings = FALSE)
@@ -123,7 +124,7 @@ p_combined <- ggplot(master_df, aes(x = pos, y = 1)) +
       axis.ticks.y = element_blank(),
       panel.grid.major.y = element_blank(),
       panel.grid.minor = element_blank(),
-      # O uso de family='mono' garante que os números ocupem o mesmo espaço (alinhamento ok)
+      # O uso de family='mono' garante que os números ocupem o mesmo espaço
       strip.text.y.left = element_text(angle = 0, hjust = 1, vjust = 0.5, 
                                        face = "bold", size = 9, family = "mono"),
       strip.background = element_rect(fill = "white", color = NA),
@@ -131,16 +132,44 @@ p_combined <- ggplot(master_df, aes(x = pos, y = 1)) +
       panel.spacing = unit(0.1, "lines")
   )
 
-# Ajuste de altura baseado no número de amostras
 plot_height <- max(4, length(unique(master_df$Sample)) * 1)
 ggsave(filename = combined_plot_name, path = out_dir, plot = p_combined, 
        width = 12, height = plot_height, dpi = 300, bg = "white")
 
-# 7. Finalize HTML
+# 7. Generate Plot with genotyping errors
+global_min_pos <- min(master_df$pos, na.rm = TRUE)
+global_max_pos <- max(master_df$pos, na.rm = TRUE)
+
+p_combined <- ggplot(master_df, aes(x = pos, y = 1)) +
+  annotate("segment", x = global_min_pos, xend = global_max_pos, y = 1, yend = 1, 
+           color = "grey90", linewidth = 0.5) +
+  geom_point(aes(color = status_error), size = 2, alpha = 0.8, shape = 19) + 
+  facet_grid(PlotLabel ~ ., switch = "y") + 
+  scale_color_manual(values = c("MATCH" = "#27ae60", "DIFF" = "#e74c3c", "ERROR" = "#000000")) +
+  scale_x_continuous(labels = label_comma(), expand = c(0.01, 0)) +
+  labs(title = "Phasing error map", x = "Position on Chromosome 6 (bp)", y = "Sample (Hamming distance %)", color = "Status") +
+  theme_minimal() +
+  theme(
+      axis.text.y = element_blank(),
+      axis.ticks.y = element_blank(),
+      panel.grid.major.y = element_blank(),
+      panel.grid.minor = element_blank(),
+      strip.text.y.left = element_text(angle = 0, hjust = 1, vjust = 0.5, 
+                                       face = "bold", size = 9, family = "mono"),
+      strip.background = element_rect(fill = "white", color = NA),
+      legend.position = "bottom",
+      panel.spacing = unit(0.1, "lines")
+  )
+
+plot_height <- max(4, length(unique(master_df$Sample)) * 1)
+ggsave(filename = combined_plot_name2, path = out_dir, plot = p_combined, 
+       width = 12, height = plot_height, dpi = 300, bg = "white")
+
+# 8. Finalize HTML
 html_lines <- c(html_lines, 
   "<h3>Comparative plot</h3>",
   "<div class='plot-container'>",
-  paste0("<img src='", combined_plot_name, "' alt='Combined Switch Error Plot'>"),
+  paste0("<img src='", combined_plot_name2, "' alt='Combined Switch Error Plot'>"),
   "</div>"
 )
 
