@@ -26,4 +26,4 @@ There are [234 samples](https://github.com/human-pangenomics/hprc_intermediate_a
 #
 ## Report
 
-- [Report of mapping phasing errors](data/report/report.html)
+- [Report of mapping phasing errors](report/report.html)
