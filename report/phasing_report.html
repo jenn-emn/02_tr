@@ -1,0 +1,47 @@
+<!DOCTYPE html><html lang='en'><head><meta charset='UTF-8'>
+<title>Phasing Accuracy Report - Chr6</title>
+<style>
+  body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 40px; background: #f8f9fa; color: #333; line-height: 1.6; }
+  .container { max-width: 1200px; margin: auto; }
+  h1 { color: #2c3e50; text-align: center; border-bottom: 2px solid #3498db; padding-bottom: 10px; }
+  table { border-collapse: collapse; width: 100%; margin: 30px 0; background: white; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+  th, td { border: 1px solid #dee2e6; padding: 12px; text-align: center; }
+  th { background-color: #34495e; color: white; font-weight: 600; }
+  tr:nth-child(even) { background-color: #f2f2f2; }
+  .description-box { background-color: #e8f4fd; border-left: 5px solid #3498db; padding: 15px; margin: 20px 0; border-radius: 0 4px 4px 0; }
+  .plot-container { background: white; padding: 25px; border: 1px solid #e1e4e8; margin-bottom: 30px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+  img { width: 100%; height: auto; border-radius: 4px; border: 1px solid #eee; }
+  .footer { text-align: center; font-size: 0.9em; color: #7f8c8d; margin-top: 50px; }
+</style></head><body><div class='container'>
+<h1>Phasing Accuracy Analysis: MHC region, chromosome 6</h1>
+<h3>Summary Metrics</h3>
+<div class='description-box'>
+<strong>Hamming Distance:</strong> Is the number of heterozygous positions where the phase orientation differs between the predicted (HLA-mapper) and the truth (HRPC) dataset.
+</div>
+<table><thead><tr><th>Sample</th>
+<th>WhatsHap (Hamming distance/common heterozygous variants, %)</th>
+<th>InHouse (Hamming distance/common heterozygous variants, %)</th>
+</tr></thead><tbody>
+<tr><td><strong>HG00733</strong></td><td>0/8323 (0%)</td><td>0/8340 (0%)</td></tr>
+<tr><td><strong>HG01109</strong></td><td>0/9502 (0%)</td><td>0/9533 (0%)</td></tr>
+<tr><td><strong>HG01243</strong></td><td>0/7931 (0%)</td><td>0/7953 (0%)</td></tr>
+<tr><td><strong>HG02145</strong></td><td>1/8896 (0.01%)</td><td>1/8918 (0.01%)</td></tr>
+<tr><td><strong>HG02818</strong></td><td>1/9048 (0.01%)</td><td>1/9069 (0.011%)</td></tr>
+<tr><td><strong>HG03486</strong></td><td>1/7489 (0.01%)</td><td>1/7507 (0.013%)</td></tr>
+<tr><td><strong>NA18906</strong></td><td>1/8766 (0.01%)</td><td>1/8786 (0.01%)</td></tr>
+<tr><td><strong>HG03492</strong></td><td>2/8621 (0.02%)</td><td>2/8645 (0.02%)</td></tr>
+<tr><td><strong>HG02723</strong></td><td>4/8827 (0.05%)</td><td>4/8866 (0.045%)</td></tr>
+<tr><td><strong>HG03098</strong></td><td>12/8990 (0.13%)</td><td>12/8926 (0.134%)</td></tr>
+<tr><td><strong>NA19240</strong></td><td>1222/6311 (13.36%)</td><td>1231/6334 (19.43%)</td></tr>
+<tr><td><strong>NA20129</strong></td><td>1191/8353 (14.26%)</td><td>1193/8363 (14.26%)</td></tr>
+<tr><td><strong>HG02055</strong></td><td>1233/8174 (15.08%)</td><td>1240/8193 (15%)</td></tr>
+<tr><td><strong>HG02080</strong></td><td>2118/8737 (24.24%)</td><td>2128/8773 (24.25%)</td></tr>
+</tbody></table><hr>
+<h3>Comparative plot</h3>
+<div class='plot-container'>
+<img src='combined_phasing_plot2.png' alt='Combined Switch Error Plot'>
+</div>
+<div class='footer'>Report generated on 
+2026-01-29
+</div>
+</div></body></html>
