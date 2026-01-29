@@ -1,0 +1,192 @@
+-------------------------- OBSERVATIONS --------------------------
+- Truth genotypes: HRPC, column 2.
+                 - Cleaning: exclusion of missingness genotypes and homozigous from HRPC.
+- Phased genotypes: HLA-mapper, column 3 (and column 5 in swapped).
+- Tags: 'DIFF' to unmatched phases between HRPC and HLA-mapper phase.
+- Phasing Error: When the first allele of HRPC is equals to the second allele of the swapped HLA-mapped allele, and 2º hrpc == 1º hlam.
+- Genotyping Error: When the phase is not inverted between HRPC and HLA-mapper, it is an error because is different by state.
+                 - When the phase (HLA-mapper) is homozigous for one of the truth alleles or for a third extra allele.
+                 - when the phase (HLA-mapper) is heterozygous and contains a different allele (by state) from the two truth alleles.
+- Obs.: The allele 2 (2) represented by the asterisk in the ALT column of the HRPC vcf indicates a spanning deletion.
+                 - It is when the physical position does not exist in this haplotype because it was removed by a larger structural deletion in this region.
+
+
+SAMPLE: HG00733 ------------------------------------------------
+- Number of intersected variants (pre-cleaning): 12402 
+    - Number of missing variants in HRPC: 188 
+    - Number of homozygous variants in HRPC: 3866 
+- Number of common heterozygous variants (pos-cleaning): 8346 
+    - Mismatch rate > 0.3 (yes=1, no=0): 0
+    - Genotyping Errors: 6 (0.0718907%)
+    - Final common heterozygous variants: 8340
+    - Switch (Phasing) Errors:  (0%)
+- File with tags /home/jennifer/02_datas/04_data_processing_trios/01_intermediate/switch/HG00733/HG00733.hrpc.hlamapper.switch.errors.tsv
+- File with switch blocks /home/jennifer/02_datas/04_data_processing_trios/01_intermediate/switch/HG00733/HG00733.switch.sizes.tsv
+
+SAMPLE: HG01109 ------------------------------------------------
+- Number of intersected variants (pre-cleaning): 14462 
+    - Number of missing variants in HRPC: 803 
+    - Number of homozygous variants in HRPC: 4104 
+- Number of common heterozygous variants (pos-cleaning): 9546 
+    - Mismatch rate > 0.3 (yes=1, no=0): 1
+    - Mismatch rate before swap (> 30%)): 99%
+    ---------- after swap ----------
+    - Genotyping Errors: 13 (0.136183%)
+    - Final common heterozygous variants: 9533
+    - Switch (Phasing) Errors: 1 (0.0104899%)
+- File with tags /home/jennifer/02_datas/04_data_processing_trios/01_intermediate/switch/HG01109/HG01109.hrpc.hlamapper.switch.errors.tsv
+- File with switch blocks /home/jennifer/02_datas/04_data_processing_trios/01_intermediate/switch/HG01109/HG01109.switch.sizes.tsv
+
+SAMPLE: HG01243 ------------------------------------------------
+- Number of intersected variants (pre-cleaning): 11913 
+    - Number of missing variants in HRPC: 54 
+    - Number of homozygous variants in HRPC: 3877 
+- Number of common heterozygous variants (pos-cleaning): 7978 
+    - Mismatch rate > 0.3 (yes=1, no=0): 0
+    - Genotyping Errors: 25 (0.313362%)
+    - Final common heterozygous variants: 7953
+    - Switch (Phasing) Errors:  (0%)
+- File with tags /home/jennifer/02_datas/04_data_processing_trios/01_intermediate/switch/HG01243/HG01243.hrpc.hlamapper.switch.errors.tsv
+- File with switch blocks /home/jennifer/02_datas/04_data_processing_trios/01_intermediate/switch/HG01243/HG01243.switch.sizes.tsv
+
+SAMPLE: HG02055 ------------------------------------------------
+- Number of intersected variants (pre-cleaning): 11697 
+    - Number of missing variants in HRPC: 0 
+    - Number of homozygous variants in HRPC: 3487 
+- Number of common heterozygous variants (pos-cleaning): 8205 
+    - Mismatch rate > 0.3 (yes=1, no=0): 1
+    - Mismatch rate before swap (> 30%)): 84%
+    ---------- after swap ----------
+    - Genotyping Errors: 12 (0.146252%)
+    - Final common heterozygous variants: 8193
+    - Switch (Phasing) Errors: 1240 (15.1349%)
+- File with tags /home/jennifer/02_datas/04_data_processing_trios/01_intermediate/switch/HG02055/HG02055.hrpc.hlamapper.switch.errors.tsv
+- File with switch blocks /home/jennifer/02_datas/04_data_processing_trios/01_intermediate/switch/HG02055/HG02055.switch.sizes.tsv
+
+SAMPLE: HG02080 ------------------------------------------------
+- Number of intersected variants (pre-cleaning): 14503 
+    - Number of missing variants in HRPC: 1278 
+    - Number of homozygous variants in HRPC: 4445 
+- Number of common heterozygous variants (pos-cleaning): 8777 
+    - Mismatch rate > 0.3 (yes=1, no=0): 0
+    - Genotyping Errors: 4 (0.0455737%)
+    - Final common heterozygous variants: 8773
+    - Switch (Phasing) Errors: 2128 (24.2562%)
+- File with tags /home/jennifer/02_datas/04_data_processing_trios/01_intermediate/switch/HG02080/HG02080.hrpc.hlamapper.switch.errors.tsv
+- File with switch blocks /home/jennifer/02_datas/04_data_processing_trios/01_intermediate/switch/HG02080/HG02080.switch.sizes.tsv
+
+SAMPLE: HG02145 ------------------------------------------------
+- Number of intersected variants (pre-cleaning): 12623 
+    - Number of missing variants in HRPC: 43 
+    - Number of homozygous variants in HRPC: 3639 
+- Number of common heterozygous variants (pos-cleaning): 8930 
+    - Mismatch rate > 0.3 (yes=1, no=0): 0
+    - Genotyping Errors: 12 (0.134378%)
+    - Final common heterozygous variants: 8918
+    - Switch (Phasing) Errors: 1 (0.0112133%)
+- File with tags /home/jennifer/02_datas/04_data_processing_trios/01_intermediate/switch/HG02145/HG02145.hrpc.hlamapper.switch.errors.tsv
+- File with switch blocks /home/jennifer/02_datas/04_data_processing_trios/01_intermediate/switch/HG02145/HG02145.switch.sizes.tsv
+
+SAMPLE: HG02723 ------------------------------------------------
+- Number of intersected variants (pre-cleaning): 14434 
+    - Number of missing variants in HRPC: 1129 
+    - Number of homozygous variants in HRPC: 4412 
+- Number of common heterozygous variants (pos-cleaning): 8891 
+    - Mismatch rate > 0.3 (yes=1, no=0): 0
+    - Genotyping Errors: 25 (0.281183%)
+    - Final common heterozygous variants: 8866
+    - Switch (Phasing) Errors: 4 (0.0451162%)
+- File with tags /home/jennifer/02_datas/04_data_processing_trios/01_intermediate/switch/HG02723/HG02723.hrpc.hlamapper.switch.errors.tsv
+- File with switch blocks /home/jennifer/02_datas/04_data_processing_trios/01_intermediate/switch/HG02723/HG02723.switch.sizes.tsv
+
+SAMPLE: HG02818 ------------------------------------------------
+- Number of intersected variants (pre-cleaning): 12722 
+    - Number of missing variants in HRPC: 277 
+    - Number of homozygous variants in HRPC: 3349 
+- Number of common heterozygous variants (pos-cleaning): 9084 
+    - Mismatch rate > 0.3 (yes=1, no=0): 1
+    - Mismatch rate before swap (> 30%)): 99%
+    ---------- after swap ----------
+    - Genotyping Errors: 15 (0.165125%)
+    - Final common heterozygous variants: 9069
+    - Switch (Phasing) Errors: 1 (0.0110266%)
+- File with tags /home/jennifer/02_datas/04_data_processing_trios/01_intermediate/switch/HG02818/HG02818.hrpc.hlamapper.switch.errors.tsv
+- File with switch blocks /home/jennifer/02_datas/04_data_processing_trios/01_intermediate/switch/HG02818/HG02818.switch.sizes.tsv
+
+SAMPLE: HG03098 ------------------------------------------------
+- Number of intersected variants (pre-cleaning): 13171 
+    - Number of missing variants in HRPC: 0 
+    - Number of homozygous variants in HRPC: 4219 
+- Number of common heterozygous variants (pos-cleaning): 8949 
+    - Mismatch rate > 0.3 (yes=1, no=0): 1
+    - Mismatch rate before swap (> 30%)): 99%
+    ---------- after swap ----------
+    - Genotyping Errors: 23 (0.257012%)
+    - Final common heterozygous variants: 8926
+    - Switch (Phasing) Errors: 12 (0.134439%)
+- File with tags /home/jennifer/02_datas/04_data_processing_trios/01_intermediate/switch/HG03098/HG03098.hrpc.hlamapper.switch.errors.tsv
+- File with switch blocks /home/jennifer/02_datas/04_data_processing_trios/01_intermediate/switch/HG03098/HG03098.switch.sizes.tsv
+
+SAMPLE: HG03486 ------------------------------------------------
+- Number of intersected variants (pre-cleaning): 11390 
+    - Number of missing variants in HRPC: 176 
+    - Number of homozygous variants in HRPC: 3689 
+- Number of common heterozygous variants (pos-cleaning): 7524 
+    - Mismatch rate > 0.3 (yes=1, no=0): 1
+    - Mismatch rate before swap (> 30%)): 99%
+    ---------- after swap ----------
+    - Genotyping Errors: 17 (0.225944%)
+    - Final common heterozygous variants: 7507
+    - Switch (Phasing) Errors: 1 (0.0133209%)
+- File with tags /home/jennifer/02_datas/04_data_processing_trios/01_intermediate/switch/HG03486/HG03486.hrpc.hlamapper.switch.errors.tsv
+- File with switch blocks /home/jennifer/02_datas/04_data_processing_trios/01_intermediate/switch/HG03486/HG03486.switch.sizes.tsv
+
+SAMPLE: HG03492 ------------------------------------------------
+- Number of intersected variants (pre-cleaning): 12588 
+    - Number of missing variants in HRPC: 232 
+    - Number of homozygous variants in HRPC: 3679 
+- Number of common heterozygous variants (pos-cleaning): 8669 
+    - Mismatch rate > 0.3 (yes=1, no=0): 0
+    - Genotyping Errors: 24 (0.276849%)
+    - Final common heterozygous variants: 8645
+    - Switch (Phasing) Errors: 2 (0.0231348%)
+- File with tags /home/jennifer/02_datas/04_data_processing_trios/01_intermediate/switch/HG03492/HG03492.hrpc.hlamapper.switch.errors.tsv
+- File with switch blocks /home/jennifer/02_datas/04_data_processing_trios/01_intermediate/switch/HG03492/HG03492.switch.sizes.tsv
+
+SAMPLE: NA18906 ------------------------------------------------
+- Number of intersected variants (pre-cleaning): 13735 
+    - Number of missing variants in HRPC: 687 
+    - Number of homozygous variants in HRPC: 4233 
+- Number of common heterozygous variants (pos-cleaning): 8801 
+    - Mismatch rate > 0.3 (yes=1, no=0): 0
+    - Genotyping Errors: 15 (0.170435%)
+    - Final common heterozygous variants: 8786
+    - Switch (Phasing) Errors: 1 (0.0113817%)
+- File with tags /home/jennifer/02_datas/04_data_processing_trios/01_intermediate/switch/NA18906/NA18906.hrpc.hlamapper.switch.errors.tsv
+- File with switch blocks /home/jennifer/02_datas/04_data_processing_trios/01_intermediate/switch/NA18906/NA18906.switch.sizes.tsv
+
+SAMPLE: NA19240 ------------------------------------------------
+- Number of intersected variants (pre-cleaning): 12190 
+    - Number of missing variants in HRPC: 296 
+    - Number of homozygous variants in HRPC: 5539 
+- Number of common heterozygous variants (pos-cleaning): 6351 
+    - Mismatch rate > 0.3 (yes=1, no=0): 0
+    - Genotyping Errors: 17 (0.267674%)
+    - Final common heterozygous variants: 6334
+    - Switch (Phasing) Errors: 1231 (19.4348%)
+- File with tags /home/jennifer/02_datas/04_data_processing_trios/01_intermediate/switch/NA19240/NA19240.hrpc.hlamapper.switch.errors.tsv
+- File with switch blocks /home/jennifer/02_datas/04_data_processing_trios/01_intermediate/switch/NA19240/NA19240.switch.sizes.tsv
+
+SAMPLE: NA20129 ------------------------------------------------
+- Number of intersected variants (pre-cleaning): 11786 
+    - Number of missing variants in HRPC: 1067 
+    - Number of homozygous variants in HRPC: 2324 
+- Number of common heterozygous variants (pos-cleaning): 8381 
+    - Mismatch rate > 0.3 (yes=1, no=0): 1
+    - Mismatch rate before swap (> 30%)): 85%
+    ---------- after swap ----------
+    - Genotyping Errors: 18 (0.214772%)
+    - Final common heterozygous variants: 8363
+    - Switch (Phasing) Errors: 1193 (14.2652%)
+- File with tags /home/jennifer/02_datas/04_data_processing_trios/01_intermediate/switch/NA20129/NA20129.hrpc.hlamapper.switch.errors.tsv
+- File with switch blocks /home/jennifer/02_datas/04_data_processing_trios/01_intermediate/switch/NA20129/NA20129.switch.sizes.tsv
