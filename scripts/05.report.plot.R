@@ -72,7 +72,7 @@ html_lines <- c(
   "  img { width: 100%; height: auto; border-radius: 4px; border: 1px solid #eee; }",
   "  .footer { text-align: center; font-size: 0.9em; color: #7f8c8d; margin-top: 50px; }",
   "</style></head><body><div class='container'>",
-  "<h1>Phasing Accuracy Analysis: MHC region, chromosome 6</h1>",
+  "<h1>Phasing Accuracy: MHC region</h1>",
   "<h3>Compartive table</h3>",
   "<div class='description-box'>",
   "<strong>HLA genomic region:</strong> corresponds to the genomic coordinates from 29700000 to 33149972.<br>",

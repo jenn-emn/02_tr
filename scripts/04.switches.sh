@@ -158,7 +158,7 @@ for name in "${names[@]}"; do
     # After cleaning
 
     # counting intersected variants
-    n_total_var=$(( $(wc -l < "${path_hrpc_hla_clean}") - 1 ))
+    n_total_var=$(( $(wc -l < "${path_hprc_hla_clean}") - 1 ))
     echo -e "- Number of common heterozygous variants (pos-cleaning): ${n_total_var} " >> "${log}"
 
 
@@ -166,7 +166,7 @@ for name in "${names[@]}"; do
     # If the proportion of "DIFF" > 3%, we need to invert the genotypes of the HLA-mapper
     
     # counting unmatched genotypes
-    n_diff=$(cut -f4 "${path_hrpc_hla_clean}" | grep "DIFF" | wc -l)
+    n_diff=$(cut -f4 "${path_hprc_hla_clean}" | grep "DIFF" | wc -l)
 
     # calculating mismatch rate
     # Perform a floating-point calculation to determine if a mismatch rate exceeds a threshold of 30% (0.3).
@@ -188,24 +188,24 @@ for name in "${names[@]}"; do
         echo "- unswapped ${name}"
 
         # creating a unswapped column
-        path_swapped="${pathindiv}/${name}.hrpc.hlamapper.clean.swapped.tsv"
+        path_swapped="${pathindiv}/${name}.hprc.hlamapper.clean.swapped.tsv"
         awk '
             BEGIN{
                 OFS="\t"
-                print "idcomp", "hrpc", "hlam", "status", "hlam_swapped", "status_swapped"
+                print "idcomp", "hprc", "hlam", "status", "hlam_swapped", "status_swapped"
             }
             NR>1 {
                 # Split HLAM ($3) by the pipe; "0|1": a[1]=0 e a[2]=1
                 split($3, a, "|")
                 swapped_gt = a[2]"|"a[1]
                 
-                # Comparing HRPC ($2) with HLAM_swapped
+                # Comparing HPRC ($2) with HLAM_swapped
                 if ($2 == swapped_gt) {
                     print $1, $2, $3, $4, swapped_gt, "MATCH"
                 } else {
                     print $1, $2, $3, $4, swapped_gt, "DIFF"
                 }
-            }' "${path_hrpc_hla_clean}" > "${path_swapped}"
+            }' "${path_hprc_hla_clean}" > "${path_swapped}"
         
         path_diff="${path_swapped}"
 
@@ -213,16 +213,16 @@ for name in "${names[@]}"; do
         awk '
             $6 == "DIFF" {
 
-                # split hrpc ($2) and swapped hla-mapper (%5)
-                split($2, hrpc, "|")
+                # split hprc ($2) and swapped hla-mapper (%5)
+                split($2, hprc, "|")
                 split($5, hlam, "|")
                 
                 # -- Phasing Error
-                # The allele 1 of hrpc have to be equals to allele 2 of hlam, and the 2 of hrpc == 1 of hlam
-                # HRPC is 0|1, 1|0, 0|2, 2|0
+                # The allele 1 of hprc have to be equals to allele 2 of hlam, and the 2 of hprc == 1 of hlam
+                # HPRC is 0|1, 1|0, 0|2, 2|0
                 # and HLa-mapper is 1|0, 0|1, 2|0, 0|2, respectly.
 
-                if (hrpc[1] == hlam[2] && hrpc[2] == hlam[1]) {
+                if (hprc[1] == hlam[2] && hprc[2] == hlam[1]) {
                     phase_err++
                 }
                 
@@ -265,16 +265,16 @@ for name in "${names[@]}"; do
         awk '
             BEGIN{
                 OFS="\t"
-                print "idcomp", "hrpc", "hlam", "status", "hlam_swapped", "status_swapped"
+                print "idcomp", "hprc", "hlam", "status", "hlam_swapped", "status_swapped"
             }
             NR>1 && $6 == "DIFF" {
 
-                # split hrpc ($2) and swapped hla-mapper (%5)
-                split($2, hrpc, "|")
+                # split hprc ($2) and swapped hla-mapper (%5)
+                split($2, hprc, "|")
                 split($5, hlam, "|")
 
                 # -- Phasing Error
-                if (hrpc[1] == hlam[2] && hrpc[2] == hlam[1]) { next }
+                if (hprc[1] == hlam[2] && hprc[2] == hlam[1]) { next }
                 
                 # -- Genotyping Error
                 else { print $0 }
@@ -283,20 +283,20 @@ for name in "${names[@]}"; do
 
         
         # tag genotyping errors
-        path_diff_err="${pathindiv}/${name}.hrpc.hlamapper.switch.errors.tsv"
+        path_diff_err="${pathindiv}/${name}.hprc.hlamapper.switch.errors.tsv"
         awk '
             BEGIN{
                 OFS="\t"
-                print "idcomp", "hrpc", "hlam", "status", "hlam_swapped", "status_swapped", "status_error"
+                print "idcomp", "hprc", "hlam", "status", "hlam_swapped", "status_swapped", "status_error"
             }
             NR>1 {
 
-                # split hrpc ($2) and swapped hla-mapper ($5)
-                split($2, hrpc, "|")
+                # split hprc ($2) and swapped hla-mapper ($5)
+                split($2, hprc, "|")
                 split($5, hlam, "|")
 
                 # -- Genotyping Error
-                if ($6 == "DIFF" && (hrpc[1] != hlam[2] || hrpc[2] != hlam[1])) { print $1, $2, $3, $4, $5, $6, "ERROR" }
+                if ($6 == "DIFF" && (hprc[1] != hlam[2] || hprc[2] != hlam[1])) { print $1, $2, $3, $4, $5, $6, "ERROR" }
                 
                 # -- Others
                 else { print $1, $2, $3, $4, $5, $6, $6 }
@@ -313,13 +313,13 @@ for name in "${names[@]}"; do
         awk '
             $4 == "DIFF" {
 
-                # split hrpc ($2) and swapped hla-mapper ($3)
-                split($2, hrpc, "|")
+                # split hprc ($2) and swapped hla-mapper ($3)
+                split($2, hprc, "|")
                 split($3, hlam, "|")
                 
                 # -- Phasing Error
                 # The alleles in HLA-mapper are inverted
-                if (hrpc[1] == hlam[2] && hrpc[2] == hlam[1]) {
+                if (hprc[1] == hlam[2] && hprc[2] == hlam[1]) {
                     phase_err++
                 }
                 
@@ -354,7 +354,7 @@ for name in "${names[@]}"; do
                 #print "    - Genotyping Error by homozigous in phased: " geno_hom_qry
                 #print "    - Genotyping Error by heterozigous in phased: " geno_het_qry
             }
-            ' "${path_hrpc_hla_clean}" &>> "${log}"
+            ' "${path_hprc_hla_clean}" &>> "${log}"
 
         
         # write genotyping errors
@@ -362,40 +362,40 @@ for name in "${names[@]}"; do
         awk '
             BEGIN{
                 OFS="\t"
-                print "idcomp", "hrpc", "hlam", "status"
+                print "idcomp", "hprc", "hlam", "status"
             }
             NR>1 && $4 == "DIFF" {
 
-                # split hrpc ($2) and hla-mapper ($3)
-                split($2, hrpc, "|")
+                # split hprc ($2) and hla-mapper ($3)
+                split($2, hprc, "|")
                 split($3, hlam, "|")
 
                 # -- Phasing Error
-                if (hrpc[1] == hlam[2] && hrpc[2] == hlam[1]) { next }
+                if (hprc[1] == hlam[2] && hprc[2] == hlam[1]) { next }
                 
                 # -- Genotyping Error
                 else { print $0 }
             }
-            ' "${path_hrpc_hla_clean}" > "${path_geno_errors}"
+            ' "${path_hprc_hla_clean}" > "${path_geno_errors}"
         
-        path_diff="${path_hrpc_hla_clean}"
+        path_diff="${path_hprc_hla_clean}"
 
         
         # tag genotyping errors
-        path_diff_err="${pathindiv}/${name}.hrpc.hlamapper.switch.errors.tsv"
+        path_diff_err="${pathindiv}/${name}.hprc.hlamapper.switch.errors.tsv"
         awk '
             BEGIN{
                 OFS="\t"
-                print "idcomp", "hrpc", "hlam", "status", "status_error"
+                print "idcomp", "hprc", "hlam", "status", "status_error"
             }
             NR>1 {
 
-                # split hrpc ($2) and swapped hla-mapper ($3)
-                split($2, hrpc, "|")
+                # split hprc ($2) and swapped hla-mapper ($3)
+                split($2, hprc, "|")
                 split($3, hlam, "|")
 
                 # -- Genotyping Error
-                if ($4 == "DIFF" && (hrpc[1] != hlam[2] || hrpc[2] != hlam[1])) { print $1, $2, $3, $4, "ERROR" }
+                if ($4 == "DIFF" && (hprc[1] != hlam[2] || hprc[2] != hlam[1])) { print $1, $2, $3, $4, "ERROR" }
                 
                 # -- Others
                 else { print $1, $2, $3, $4, $4 }
