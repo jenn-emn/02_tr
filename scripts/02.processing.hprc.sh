@@ -6,7 +6,7 @@
 # extract the MHC region (chr6:29700000-33149972)
 # from phased VCFs created by
 # the hla-mapper (populational)
-# and the HRPC (individual).
+# and the HPRC (individual).
 # ===============================================
 
 
@@ -30,7 +30,7 @@ Usage() {
     echo ""
     echo "Example:"
     echo "$(basename "$0") --true /path/to/truth_vcfs --est /path/to/estimated_population.vcf --out /path/to/output --name trios_analysis"
-    echo "02.processing.hprc.sh --true /dados/home/DATA/HRPC_PLUS --est /dados/home/DATA/HLAcalls_1kgenHGDP_2024/SABE_1KGEN_HGDP/vcf_nay/whatshap/whatshap_bialelico_shapeit_multialelico_EDITADO7.vcf.gz --out /home/jennifer/02_datas/04_data_processing_trios/01_intermediate --name test_hla-mapper"
+    echo "02.processing.hprc.sh --true /dados/home/DATA/HPRC_PLUS --est /dados/home/DATA/HLAcalls_1kgenHGDP_2024/SABE_1KGEN_HGDP/vcf_nay/whatshap/whatshap_bialelico_shapeit_multialelico_EDITADO7.vcf.gz --out /home/jennifer/02_datas/04_data_processing_trios/01_intermediate --name test_hla-mapper"
     echo ""
 }
 
@@ -110,12 +110,11 @@ fi
 path_int="${path_out}/${name_job}"
 mkdir -p "${path_int}"
 
-path_hrpc="${path_int}/hrpc.mhc"
+path_hprc="${path_int}/hprc.mhc"
 path_hlamapper="${path_int}/hlamapper.mhc"
 
 # to check names
-samples_list="${path_int}/mapper.samples.in.hrpc.txt"
-
+samples_list="${path_int}/mapper.samples.in.hprc.txt"
 # to .log
 log="${path_int}/01.log"
 
@@ -162,10 +161,10 @@ done
 
 
 
-# HRPC vcfs
+# HPRC vcfs
 
-# create folder to VCFs with the MHC region, one by sample (HRPC)
-mkdir -p "${path_hrpc}"
+# create folder to VCFs with the MHC region, one by sample (HPRC)
+mkdir -p "${path_hprc}"
 
 for name in "${names[@]}"; do
     
@@ -174,21 +173,20 @@ for name in "${names[@]}"; do
         -r chr6:29700000-33149972 \
         "${path_truth}/${name}.f1_assembly_v2.dip.vcf.gz" \
         -Oz \
-        -o "${path_hrpc}/${name}.dip.vcf.gz"
-        #"/home/DATA/HRPC_PLUS/${name}.f1_assembly_v2.dip.vcf.gz" \
+        -o "${path_hprc}/${name}.dip.vcf.gz"
+        #"/home/DATA/HPRC_PLUS/${name}.f1_assembly_v2.dip.vcf.gz" \
     
     # name.txt
-    echo "${name}" > "${path_hrpc}/${name}.to.reheader.txt"
+    echo "${name}" > "${path_hprc}/${name}.to.reheader.txt"
     
     bcftools reheader \
-        "${path_hrpc}/${name}.dip.vcf.gz" \
-        -s "${path_hrpc}/${name}.to.reheader.txt" \
-        -o "${path_hrpc}/${name}.dip.reheaded.vcf.gz"
+        "${path_hprc}/${name}.dip.vcf.gz" \
+        -s "${path_hprc}/${name}.to.reheader.txt" \
+        -o "${path_hprc}/${name}.dip.reheaded.vcf.gz"
 
-    bcftools index "${path_hrpc}/${name}.dip.reheaded.vcf.gz"
-
-    if [ -s "${path_hrpc}/${name}.dip.reheaded.vcf.gz.csi" ]; then
-        rm "${path_hrpc}/${name}.dip.vcf.gz"
+    bcftools index "${path_hprc}/${name}.dip.reheaded.vcf.gz"
+    if [ -s "${path_hprc}/${name}.dip.reheaded.vcf.gz.csi" ]; then
+        rm "${path_hprc}/${name}.dip.vcf.gz"
     fi
 
 done
@@ -197,7 +195,7 @@ done
 
 # HLA-MAPPER vcfs
 
-# create folder to VCFs with the MHC region, one by sample (HRPC)
+# create folder to VCFs with the MHC region, one by sample (HLA-MAPPER)
 mkdir -p "${path_hlamapper}"
 
 # selecting MHC from the populational (SABE_1KGEN_HGDP) phased VCFs (hla-mapper), one VCF by sample.
