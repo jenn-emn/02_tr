@@ -140,7 +140,7 @@ for name in "${names[@]}"; do
     echo -e "SAMPLE: ${name} ------------------------------------------------"
 
     hprcvcf="${path_hprc}/${name}.dip.reheaded.vcf.gz"
-    hlamvcf="${path_hlamaper}/${name}.mapper.vcf.gz"
+    hlamvcf="${path_hlamapper}/${name}.mapper.vcf.gz"
     
     pathindiv="${path_switch}/${name}"
     mkdir -p "${pathindiv}"
