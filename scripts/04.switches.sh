@@ -1,10 +1,10 @@
 #!/bin/bash
 
 # ===============================================
-# Script to compare phased haplotypes in the MHC region between
+# Script to calculate switch errors
 # the hla-mapper (populational)
 # and the HPRC (individual)
-# using Whatshap compare
+# using InHouse awk scripts
 # ===============================================
 
 
