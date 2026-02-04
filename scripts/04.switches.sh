@@ -1,6 +1,83 @@
 #!/bin/bash
 
+# ===============================================
+# Script to compare phased haplotypes in the MHC region between
+# the hla-mapper (populational)
+# and the HPRC (individual)
+# using Whatshap compare
+# ===============================================
 
+
+
+# ===============================================
+# Verifying the input call
+# ===============================================
+
+# Initialize variables for the options
+path_truth=""
+path_estimated_populational=""
+path_out=""
+name_job=""
+
+Usage() {
+    echo "Usage: $(basename "$0")"
+    echo "path_out <path to the output folder where the extracted MHC VCFs will be saved>"
+    echo "name <string to identify the job, e.g., 'trios' or 'trios_hla-mapper'>"
+    echo ""
+    echo "Example:"
+    echo "$(basename "$0") --out /path/to/output --name trios_analysis"
+    echo "04.switches.sh --out /home/jennifer/02_datas/04_data_processing_trios/01_intermediate --name test_hla-mapper"
+    echo ""
+}
+
+# Get the absolute path of the directory where the script is located.
+SCRIPT_DIR=$(dirname "$(readlink -f "$0")")
+
+# Check all arguments (flags and their values)
+while [[ "$#" -gt 0 ]]; do
+    case "$1" in
+        --out)
+            path_out="$2"
+            shift ; shift
+            ;;
+        --name)
+            name_job="$2"
+            shift ; shift
+            ;;
+        *)
+            echo "Error: Unknown option or invalid syntax: $1"
+            Usage
+            exit 1
+            ;;
+    esac
+done
+
+# Validate that all required options are provided
+if [[ -z "$path_out" || -z "$name_job" ]]; then
+    Usage
+    exit 1
+fi
+
+# Validate directories and files
+if [ ! -d "$path_out" ]; then
+    echo "The directory path ('$path_out') is not an existing directory."
+    exit 1
+fi
+
+
+
+# ===============================================
+# Starting the analysis
+# ===============================================
+
+# intermediate paths
+path_int="${path_out}/${name_job}"
+mkdir -p "${path_int}"
+
+path_hprc="${path_int}/hprc.mhc"
+path_hlamapper="${path_int}/hlamapper.mhc"
+path_switch="${path_int}/switch"
+mkdir -p "${path_switch}"
 
 # OBSERVATION: there are missing genotypes in the original HPRC vcfs
 
@@ -39,8 +116,8 @@ n17="NA20129"
 #n18="NA21309"
 names=(${n3} ${n4} ${n5} ${n6} ${n7} ${n9} ${n10} ${n11} ${n12} ${n13} ${n14} ${n15} ${n16} ${n17})
 
-mkdir -p "/home/jennifer/02_datas/04_data_processing_trios/01_intermediate/switch"
-pathswitch="/home/jennifer/02_datas/04_data_processing_trios/01_intermediate/switch"
+#mkdir -p "/home/jennifer/02_datas/04_data_processing_trios/01_intermediate/switch"
+#pathswitch="/home/jennifer/02_datas/04_data_processing_trios/01_intermediate/switch"
 
 log="${pathswitch}/switches.inhouse.log"
 > "${log}"
@@ -68,8 +145,8 @@ for name in "${names[@]}"; do
 
     echo -e "SAMPLE: ${name} ------------------------------------------------"
 
-    hprcvcf="/home/jennifer/02_datas/04_data_processing_trios/01_intermediate/hprc.mhc/${name}.dip.reheaded.vcf.gz"
-    hlamvcf="/home/jennifer/02_datas/04_data_processing_trios/01_intermediate/hlamapper.mhc/${name}.mapper.vcf.gz"
+    hprcvcf="${path_hprc}/${name}.dip.reheaded.vcf.gz"
+    hlamvcf="${path_hlamaper}/${name}.mapper.vcf.gz"
     
     pathindiv="${pathswitch}/${name}"
     mkdir -p "${pathindiv}"
