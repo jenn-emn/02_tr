@@ -158,7 +158,7 @@ p_combined <- ggplot(master_df, aes(x = pos, y = 1)) +
   facet_grid(PlotLabel ~ ., switch = "y") + 
   scale_color_manual(values = c("MATCH" = "#27ae60", "DIFF" = "#e74c3c", "ERROR" = "#000000")) +
   scale_x_continuous(labels = label_comma(), expand = c(0.01, 0)) +
-  labs(title = "Phasing error map", x = "Position on Chromosome 6 (bp)", y = "Sample (Hamming distance %)", color = "Status") +
+  labs(title = "Phasing error map (considering common heterozygous variants)", x = "Position on Chromosome 6 (bp)", y = "Sample (Hamming distance %)", color = "Status") +
   theme_minimal() +
   theme(
       axis.text.y = element_blank(),
