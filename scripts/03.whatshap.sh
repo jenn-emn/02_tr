@@ -100,7 +100,7 @@ names=(${n3} ${n4} ${n5} ${n6} ${n7} ${n9} ${n10} ${n11} ${n12} ${n13} ${n14} ${
 
 #conda activate whatshap_env
 
-log="${path_hlamapper}/whatshap.all.samples.log"
+log="${path_int}/whatshap.all.samples.log"
 > "${log}"
 
 for name in "${names[@]}"; do
