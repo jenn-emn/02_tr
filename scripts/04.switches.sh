@@ -116,13 +116,8 @@ n17="NA20129"
 #n18="NA21309"
 names=(${n3} ${n4} ${n5} ${n6} ${n7} ${n9} ${n10} ${n11} ${n12} ${n13} ${n14} ${n15} ${n16} ${n17})
 
-#mkdir -p "/home/jennifer/02_datas/04_data_processing_trios/01_intermediate/switch"
-#pathswitch="/home/jennifer/02_datas/04_data_processing_trios/01_intermediate/switch"
-
-log="${pathswitch}/switches.inhouse.log"
+log="${path_switch}/switches.inhouse.log"
 > "${log}"
-
-
 
 # observations
 echo -e "-------------------------- OBSERVATIONS --------------------------" >> "${log}"
@@ -138,7 +133,6 @@ echo -e "- Obs.: The allele 2 (2) represented by the asterisk in the ALT column 
 echo -e "                 - It is when the physical position does not exist in this haplotype because it was removed by a larger structural deletion in this region.\n" >> "${log}"
 
 
-
 # iterating between samples
 
 for name in "${names[@]}"; do
@@ -148,9 +142,8 @@ for name in "${names[@]}"; do
     hprcvcf="${path_hprc}/${name}.dip.reheaded.vcf.gz"
     hlamvcf="${path_hlamaper}/${name}.mapper.vcf.gz"
     
-    pathindiv="${pathswitch}/${name}"
+    pathindiv="${path_switch}/${name}"
     mkdir -p "${pathindiv}"
-
 
     
     # HPRC
@@ -161,7 +154,6 @@ for name in "${names[@]}"; do
         "${pathindiv}/${name}.hprc.txt"
     
     hprccomp="${pathindiv}/${name}.hprc.txt"
-
 
     
     # HLA-mapper
@@ -174,7 +166,6 @@ for name in "${names[@]}"; do
     hlamcomp="${pathindiv}/${name}.hlamapper.txt"
 
 
-    
     # merge by ID.comp
     awk '
         BEGIN {
@@ -195,7 +186,6 @@ for name in "${names[@]}"; do
 
     path_hprc_hla="${pathindiv}/${name}.hprc.hlamapper.tsv"
     
-    
 
     # Checking numbers
     echo -e "\nSAMPLE: ${name} ------------------------------------------------" >> "${log}"
@@ -204,7 +194,6 @@ for name in "${names[@]}"; do
     # counting intersected variants
     n_total_var=$(cat "${path_hprc_hla}" | wc -l)
     echo -e "- Number of intersected variants (pre-cleaning): ${n_total_var} " >> "${log}"
-
 
     
     # Before cleaning
@@ -223,13 +212,11 @@ for name in "${names[@]}"; do
     #echo -e "    - Number of missing variants in HLA-mapper: ${n_missing_var_phased} " >> "${log}"
 
 
-
     # Cleaning missing genotypes and heterozygous
     path_hprc_hla_clean="${pathindiv}/${name}.hprc.hlamapper.clean.tsv"
     grep -v -e "\." "${path_hprc_hla}" | \
         grep -v -F "1|1" > \
         "${path_hprc_hla_clean}"
-    
     
     
     # After cleaning
@@ -249,7 +236,6 @@ for name in "${names[@]}"; do
     # Perform a floating-point calculation to determine if a mismatch rate exceeds a threshold of 30% (0.3).
     is_high_diff=$(awk -v diff="$n_diff" -v total="$n_total_var" 'BEGIN { print ( (diff/total) > 0.3 ? 1 : 0 ) }')
     echo -e "    - Mismatch rate > 0.3 (yes=1, no=0): ${is_high_diff}" >> "${log}"
-
 
 
     # Run
@@ -379,7 +365,6 @@ for name in "${names[@]}"; do
                 else { print $1, $2, $3, $4, $5, $6, $6 }
             }
             ' "${path_diff}" > "${path_diff_err}"
-        
 
 
     # If it's doesn't need
