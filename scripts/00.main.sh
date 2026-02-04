@@ -97,5 +97,10 @@ bash "${path_script}/02.processing.hprc.sh" \
     --out "${path_out}" \
     --name "${name_job}"
 
+# Whatshap compare
+bash "${path_script}/03.whatshap.sh" \
+    --out "${path_out}" \
+    --name "${name_job}"
+
 # bash 00.main.sh --true /dados/home/DATA/HPRC_PLUS --est /dados/home/DATA/HLAcalls_1kgenHGDP_2024/SABE_1KGEN_HGDP/vcf_nay/whatshap/whatshap_bialelico_shapeit_multialelico_EDITADO7.vcf.gz --out /home/jennifer/02_datas/04_data_processing_trios/01_intermediate --name hla_mapper
 # end
