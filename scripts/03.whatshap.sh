@@ -53,24 +53,14 @@ while [[ "$#" -gt 0 ]]; do
 done
 
 # Validate that all required options are provided
-if [[ -z "$path_truth" || -z "$path_estimated_populational" || -z "$path_out" || -z "$name_job" ]]; then
+if [[ -z "$path_out" || -z "$name_job" ]]; then
     Usage
     exit 1
 fi
 
 # Validate directories and files
-if [ ! -d "$path_truth" ]; then
-    echo "The directory path ('$path_truth') is not an existing directory."
-    exit 1
-fi
-
 if [ ! -d "$path_out" ]; then
     echo "The directory path ('$path_out') is not an existing directory."
-    exit 1
-fi
-
-if [ ! -f "$path_estimated_populational" ]; then
-    echo "The file path ('$path_estimated_populational') is not an existing file."
     exit 1
 fi
 
