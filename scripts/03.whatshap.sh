@@ -109,7 +109,7 @@ for name in "${names[@]}"; do
 
     truthvcf="${path_hprc}/${name}.dip.reheaded.vcf.gz"
     phasedvcf="${path_hlamapper}/${name}.mapper.vcf.gz"
-    tsvpairwise="${path_int}/${name}.tsv.pairwse.txt"
+    tsvpairwise="${path_int}/${name}.pairwise.tsv"
     echo -e "${name}\tchr6\ttruth\twhatshap\t${name}.dip.vcf.gz\t${name}.mapper.vcf.gz" > "${tsvpairwise}"
 
     # comparison hla.mapper vs trios
