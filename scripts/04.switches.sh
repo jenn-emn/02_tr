@@ -147,7 +147,6 @@ for name in "${names[@]}"; do
 
     
     # HPRC
-
     bcftools \
         query -f '%CHROM:%POS:%REF:%ALT[\t%GT]' \
         "${hprcvcf}" > \
@@ -157,7 +156,6 @@ for name in "${names[@]}"; do
 
     
     # HLA-mapper
-    
     bcftools \
         query -f '%CHROM:%POS:%REF:%ALT[\t%GT]' \
         "${hlamvcf}" \
