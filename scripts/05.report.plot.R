@@ -29,7 +29,7 @@ option_list <- list(
 
 usage_msg <- "%prog --out /path/to/output --name trios_analysis\n       %prog --out /home/jennifer/02_datas/01_intermediate --name test_hla-mapper"
 opt_parser <- OptionParser(option_list = option_list, usage = usage_msg)
-opt <- parse_args(opt_parser, catch_errors = TRUE)
+opt <- parse_args(opt_parser)
 
 # Validate required arguments
 if (is.null(opt$out) || is.null(opt$name)) {
