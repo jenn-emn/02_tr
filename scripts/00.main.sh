@@ -108,7 +108,7 @@ bash "${path_script}/04.switches.sh" \
     --name "${name_job}"
 
 # report
-bash "${path_script}/05.report.plot.sh" \
+bash "${path_script}/05.report.plot.R" \
     --out "${path_out}" \
     --name "${name_job}"
 
