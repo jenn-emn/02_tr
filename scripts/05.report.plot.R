@@ -63,6 +63,7 @@ cat("Script Dir:", script_dir, "\n")
 # 1. Path Settings
 parent_dir <- file.path(path_out, name_job,"switch")
 out_dir <- file.path(parent_dir, "report")
+path_switch_log <- file.path(parent_dir, "switches.inhouse.log")
 html_path <- file.path(out_dir, "phasing_report.html")
 combined_plot_name1 <- "combined_phasing_plot1.png"
 combined_plot_name2 <- "combined_phasing_plot2.png"

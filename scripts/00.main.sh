@@ -101,12 +101,12 @@ bash "${path_script}/02.processing.hprc.sh" \
 bash "${path_script}/03.whatshap.sh" \
     --out "${path_out}" \
     --name "${name_job}"
-exit
+
 # switches
 bash "${path_script}/04.switches.sh" \
     --out "${path_out}" \
     --name "${name_job}"
-
+exit
 # report
 cash "${path_script}/05.report.plot.sh" \
     --out "${path_out}" \

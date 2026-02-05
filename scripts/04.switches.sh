@@ -2,7 +2,7 @@
 
 # ===============================================
 # Script to calculate switch errors
-# the hla-mapper (populational)
+# the estimated phases (hla-mapper populational)
 # and the HPRC (individual)
 # using InHouse awk scripts
 # ===============================================
@@ -21,12 +21,12 @@ name_job=""
 
 Usage() {
     echo "Usage: $(basename "$0")"
-    echo "path_out <path to the output folder where the extracted MHC VCFs will be saved>"
-    echo "name <string to identify the job, e.g., 'trios' or 'trios_hla-mapper'>"
+    echo " --out  <path to the output folder where the extracted MHC VCFs will be saved>"
+    echo " --name <string to identify the job, e.g., 'mvn' or 'hla_mapper'>"
     echo ""
     echo "Example:"
     echo "$(basename "$0") --out /path/to/output --name trios_analysis"
-    echo "04.switches.sh --out /home/jennifer/02_datas/04_data_processing_trios/01_intermediate --name test_hla-mapper"
+    echo "04.switches.sh --out /home/jennifer/02_datas/04_data_processing_trios/01_intermediate --name hla_mapper"
     echo ""
 }
 
@@ -75,7 +75,7 @@ path_int="${path_out}/${name_job}"
 mkdir -p "${path_int}"
 
 path_hprc="${path_int}/hprc.mhc"
-path_hlamapper="${path_int}/hlamapper.mhc"
+path_estimated="${path_int}/${name_job}"
 path_switch="${path_int}/switch"
 mkdir -p "${path_switch}"
 
@@ -140,7 +140,7 @@ for name in "${names[@]}"; do
     echo -e "SAMPLE: ${name} ------------------------------------------------"
 
     hprcvcf="${path_hprc}/${name}.dip.reheaded.vcf.gz"
-    hlamvcf="${path_hlamapper}/${name}.mapper.vcf.gz"
+    hlamvcf="${path_estimated}/${name}.${name_job}.vcf.gz"
     
     pathindiv="${path_switch}/${name}"
     mkdir -p "${pathindiv}"
@@ -155,13 +155,13 @@ for name in "${names[@]}"; do
     hprccomp="${pathindiv}/${name}.hprc.txt"
 
     
-    # HLA-mapper
+    # ESTIMATED
     bcftools \
         query -f '%CHROM:%POS:%REF:%ALT[\t%GT]' \
         "${hlamvcf}" \
-        -o "${pathindiv}/${name}.hlamapper.txt"
+        -o "${pathindiv}/${name}.${name_job}.txt"
     
-    hlamcomp="${pathindiv}/${name}.hlamapper.txt"
+    hlamcomp="${pathindiv}/${name}.${name_job}.txt"
 
 
     # merge by ID.comp
@@ -180,9 +180,9 @@ for name in "${names[@]}"; do
         }' \
         "${hprccomp}" \
         "${hlamcomp}" > \
-        "${pathindiv}/${name}.hprc.hlamapper.tsv"
+        "${pathindiv}/${name}.hprc.${name_job}.tsv"
 
-    path_hprc_hla="${pathindiv}/${name}.hprc.hlamapper.tsv"
+    path_hprc_est="${pathindiv}/${name}.hprc.${name_job}.tsv"
     
 
     # Checking numbers
@@ -190,7 +190,7 @@ for name in "${names[@]}"; do
     
     # Intersection by compoused ID variant in the "chr:pos:ref:alt" format
     # counting intersected variants
-    n_total_var=$(cat "${path_hprc_hla}" | wc -l)
+    n_total_var=$(cat "${path_hprc_est}" | wc -l)
     echo -e "- Number of intersected variants (pre-cleaning): ${n_total_var} " >> "${log}"
 
     
@@ -198,29 +198,28 @@ for name in "${names[@]}"; do
     # The hprc haplotypes have missing genotypes, we need to exclude them
 
     # counting missingness in hprc
-    n_missing_var_truth=$(cut -f2 "${path_hprc_hla}" | grep -e "\." | wc -l)
+    n_missing_var_truth=$(cut -f2 "${path_hprc_est}" | grep -e "\." | wc -l)
     echo -e "    - Number of missing variants in HPRC: ${n_missing_var_truth} " >> "${log}"
     
     # counting homozygous in hprc
-    n_homozygous_var_truth=$(cut -f2 "${path_hprc_hla}" | grep -F "1|1" | wc -l)
+    n_homozygous_var_truth=$(cut -f2 "${path_hprc_est}" | grep -F "1|1" | wc -l)
     echo -e "    - Number of homozygous variants in HPRC: ${n_homozygous_var_truth} " >> "${log}"
     
-    # counting  hla-mapper
-    n_missing_var_phased=$(cut -f3 "${path_hprc_hla}" | grep -e "\." | wc -l)
+    # counting missingness in the estimated phase
+    n_missing_var_phased=$(cut -f3 "${path_hprc_est}" | grep -e "\." | wc -l)
     #echo -e "    - Number of missing variants in HLA-mapper: ${n_missing_var_phased} " >> "${log}"
 
 
     # Cleaning missing genotypes and heterozygous
-    path_hprc_hla_clean="${pathindiv}/${name}.hprc.hlamapper.clean.tsv"
-    grep -v -e "\." "${path_hprc_hla}" | \
+    path_hprc_est_clean="${pathindiv}/${name}.hprc.${name_job}.clean.tsv"
+    grep -v -e "\." "${path_hprc_est}" | \
         grep -v -F "1|1" > \
-        "${path_hprc_hla_clean}"
-    
+        "${path_hprc_est_clean}"
     
     # After cleaning
 
     # counting intersected variants
-    n_total_var=$(( $(wc -l < "${path_hprc_hla_clean}") - 1 ))
+    n_total_var=$(( $(wc -l < "${path_hprc_est_clean}") - 1 ))
     echo -e "- Number of common heterozygous variants (pos-cleaning): ${n_total_var} " >> "${log}"
 
 
@@ -228,7 +227,7 @@ for name in "${names[@]}"; do
     # If the proportion of "DIFF" > 3%, we need to invert the genotypes of the HLA-mapper
     
     # counting unmatched genotypes
-    n_diff=$(cut -f4 "${path_hprc_hla_clean}" | grep "DIFF" | wc -l)
+    n_diff=$(cut -f4 "${path_hprc_est_clean}" | grep "DIFF" | wc -l)
 
     # calculating mismatch rate
     # Perform a floating-point calculation to determine if a mismatch rate exceeds a threshold of 30% (0.3).
@@ -266,7 +265,7 @@ for name in "${names[@]}"; do
                 } else {
                     print $1, $2, $3, $4, swapped_gt, "DIFF"
                 }
-            }' "${path_hprc_hla_clean}" > "${path_swapped}"
+            }' "${path_hprc_est_clean}" > "${path_swapped}"
         
         path_diff="${path_swapped}"
 
@@ -274,14 +273,14 @@ for name in "${names[@]}"; do
         awk '
             $6 == "DIFF" {
 
-                # split hprc ($2) and swapped hla-mapper (%5)
+                # split hprc ($2) and swapped estimated (%5)
                 split($2, hprc, "|")
                 split($5, hlam, "|")
                 
                 # -- Phasing Error
                 # The allele 1 of hprc have to be equals to allele 2 of hlam, and the 2 of hprc == 1 of hlam
                 # HPRC is 0|1, 1|0, 0|2, 2|0
-                # and HLa-mapper is 1|0, 0|1, 2|0, 0|2, respectly.
+                # and the swapped estimated is 1|0, 0|1, 2|0, 0|2, respectly.
 
                 if (hprc[1] == hlam[2] && hprc[2] == hlam[1]) {
                     phase_err++
@@ -292,13 +291,13 @@ for name in "${names[@]}"; do
                 else {
                     geno_err++
 
-                    # -- Genotyping Error: discrepant homozigous in the swapped HLA-mapper
+                    # -- Genotyping Error: discrepant homozigous in the swapped the estimated phase
                     #    when the swapped phase is homozigous for one of the truth alleles or for a third extra allele.
                     if (hlam[1] == hlam[2]) {
                         geno_hom_qry++
                     }
 
-                    # -- Genotyping Error: discrepant heterozigous in the swapped HLA-mapper
+                    # -- Genotyping Error: discrepant heterozigous in the swapped the estimated phase
                     #    when the swapped phase is heterozygous and contains a different allele (by state) from the two truth alleles
                     else {
                         geno_het_qry++
@@ -313,7 +312,7 @@ for name in "${names[@]}"; do
                 print "    ---------- after swap ----------"
                 print "    - Genotyping Errors: " geno_err " (" (geno_err * 100 / ( NR - 1)) "%)"
                 print "    - Final common heterozygous variants: " (NR - 1 - geno_err)
-                print "    - Switch (Phasing) Errors: " phase_err " (" (phase_err * 100 / ( NR - 1 - geno_err)) "%)"
+                print "    - Hamming distance: " phase_err " (" (phase_err * 100 / ( NR - 1 - geno_err)) "%)"
 
                 #print "- Genotyping Error by homozigous in phased: " geno_hom_qry
                 #print "- Genotyping Error by heterozigous in phased: " geno_het_qry
@@ -330,7 +329,7 @@ for name in "${names[@]}"; do
             }
             NR>1 && $6 == "DIFF" {
 
-                # split hprc ($2) and swapped hla-mapper (%5)
+                # split hprc ($2) and swapped estimated (%5)
                 split($2, hprc, "|")
                 split($5, hlam, "|")
 
@@ -344,7 +343,7 @@ for name in "${names[@]}"; do
 
         
         # tag genotyping errors
-        path_diff_err="${pathindiv}/${name}.hprc.hlamapper.switch.errors.tsv"
+        path_diff_err="${pathindiv}/${name}.hprc.${name_job}.switch.errors.tsv"
         awk '
             BEGIN{
                 OFS="\t"
@@ -352,7 +351,7 @@ for name in "${names[@]}"; do
             }
             NR>1 {
 
-                # split hprc ($2) and swapped hla-mapper ($5)
+                # split hprc ($2) and swapped estimated ($5)
                 split($2, hprc, "|")
                 split($5, hlam, "|")
 
@@ -373,12 +372,12 @@ for name in "${names[@]}"; do
         awk '
             $4 == "DIFF" {
 
-                # split hprc ($2) and swapped hla-mapper ($3)
+                # split hprc ($2) and swapped estimated ($3)
                 split($2, hprc, "|")
                 split($3, hlam, "|")
                 
                 # -- Phasing Error
-                # The alleles in HLA-mapper are inverted
+                # The alleles in the estimated phase are inverted
                 if (hprc[1] == hlam[2] && hprc[2] == hlam[1]) {
                     phase_err++
                 }
@@ -388,13 +387,13 @@ for name in "${names[@]}"; do
                 else {
                     geno_err++
 
-                    # -- Genotyping Error: discrepant homozigous in the swapped HLA-mapper
+                    # -- Genotyping Error: discrepant homozigous in the swapped the estimated phase
                     #    when the swapped phase is homozigous for one of the truth alleles or for a third extra allele.
                     if (hlam[1] == hlam[2]) {
                         geno_hom_qry++
                     }
 
-                    # -- Genotyping Error: discrepant heterozigous in the swapped HLA-mapper
+                    # -- Genotyping Error: discrepant heterozigous in the swapped the estimated phase
                     #    when the swapped phase is heterozygous and contains a different allele (by state) from the two truth alleles
                     else {
                         geno_het_qry++
@@ -409,12 +408,12 @@ for name in "${names[@]}"; do
                 #print "------------ NO SWAP ------------"
                 print "    - Genotyping Errors: " geno_err " (" (geno_err * 100 / ( NR - 1)) "%)"
                 print "    - Final common heterozygous variants: " (NR - 1 - geno_err)
-                print "    - Switch (Phasing) Errors: " phase_err " (" (phase_err * 100 / ( NR - 1 - geno_err)) "%)"
+                print "    - Hamming distance: " phase_err " (" (phase_err * 100 / ( NR - 1 - geno_err)) "%)"
                 
                 #print "    - Genotyping Error by homozigous in phased: " geno_hom_qry
                 #print "    - Genotyping Error by heterozigous in phased: " geno_het_qry
             }
-            ' "${path_hprc_hla_clean}" &>> "${log}"
+            ' "${path_hprc_est_clean}" &>> "${log}"
 
         
         # write genotyping errors
@@ -426,7 +425,7 @@ for name in "${names[@]}"; do
             }
             NR>1 && $4 == "DIFF" {
 
-                # split hprc ($2) and hla-mapper ($3)
+                # split hprc ($2) and the estimated phase ($3)
                 split($2, hprc, "|")
                 split($3, hlam, "|")
 
@@ -436,13 +435,13 @@ for name in "${names[@]}"; do
                 # -- Genotyping Error
                 else { print $0 }
             }
-            ' "${path_hprc_hla_clean}" > "${path_geno_errors}"
+            ' "${path_hprc_est_clean}" > "${path_geno_errors}"
         
-        path_diff="${path_hprc_hla_clean}"
+        path_diff="${path_hprc_est_clean}"
 
         
         # tag genotyping errors
-        path_diff_err="${pathindiv}/${name}.hprc.hlamapper.switch.errors.tsv"
+        path_diff_err="${pathindiv}/${name}.hprc.${name_job}.switch.errors.tsv"
         awk '
             BEGIN{
                 OFS="\t"
@@ -450,7 +449,7 @@ for name in "${names[@]}"; do
             }
             NR>1 {
 
-                # split hprc ($2) and swapped hla-mapper ($3)
+                # split hprc ($2) and swapped estimated ($3)
                 split($2, hprc, "|")
                 split($3, hlam, "|")
 
