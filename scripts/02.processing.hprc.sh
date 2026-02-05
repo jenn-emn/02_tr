@@ -26,11 +26,11 @@ Usage() {
     echo "path_truth <path to the folder containing the reference VCFs (one VCF per sample)>"
     echo "path_estimated_populational <path to the estimated population VCF containing phased haplotypes>"
     echo "path_out <path to the output folder where the extracted MHC VCFs will be saved>"
-    echo "name <string to identify the job, e.g., 'trios' or 'trios_hla-mapper'>"
+    echo "name <string to identify the job, e.g., 'mvn' or 'hla_mapper'>"
     echo ""
     echo "Example:"
     echo "$(basename "$0") --true /path/to/truth_vcfs --est /path/to/estimated_population.vcf --out /path/to/output --name trios_analysis"
-    echo "02.processing.hprc.sh --true /dados/home/DATA/HPRC_PLUS --est /dados/home/DATA/HLAcalls_1kgenHGDP_2024/SABE_1KGEN_HGDP/vcf_nay/whatshap/whatshap_bialelico_shapeit_multialelico_EDITADO7.vcf.gz --out /home/jennifer/02_datas/04_data_processing_trios/01_intermediate --name test_hla-mapper"
+    echo "02.processing.hprc.sh --true /dados/home/DATA/HPRC_PLUS --est /dados/home/DATA/HLAcalls_1kgenHGDP_2024/SABE_1KGEN_HGDP/vcf_nay/whatshap/whatshap_bialelico_shapeit_multialelico_EDITADO7.vcf.gz --out /home/jennifer/02_datas/04_data_processing_trios/01_intermediate --name test_hla_mapper"
     echo ""
 }
 
@@ -111,10 +111,10 @@ path_int="${path_out}/${name_job}"
 mkdir -p "${path_int}"
 
 path_hprc="${path_int}/hprc.mhc"
-path_hlamapper="${path_int}/hlamapper.mhc"
+path_estimated="${path_int}/${name_job}"
 
 # to check names
-samples_list="${path_int}/mapper.samples.in.hprc.txt"
+samples_list="${path_int}/${name_job}.samples.in.hprc.txt"
 # to .log
 log="${path_int}/01.log"
 
@@ -145,7 +145,7 @@ names=(${n1} ${n2} ${n3} ${n4} ${n5} ${n6} ${n7} ${n8} ${n9} ${n10} ${n11} ${n12
 
 bcftools \
     query -l \
-    "${path_estimated_populational}" \ #"/dados/home/DATA/HLAcalls_1kgenHGDP_2024/SABE_1KGEN_HGDP/vcf_nay/whatshap/whatshap_bialelico_shapeit_multialelico_EDITADO7.vcf.gz" > \
+    "${path_estimated_populational}" > \
     "${samples_list}"
 
 for name in "${names[@]}"; do
@@ -193,10 +193,10 @@ done
 
 
 
-# HLA-MAPPER vcfs
+# ESTIMATED vcfs
 
 # create folder to VCFs with the MHC region, one by sample (HLA-MAPPER)
-mkdir -p "${path_hlamapper}"
+mkdir -p "${path_estimated}"
 
 # selecting MHC from the populational (SABE_1KGEN_HGDP) phased VCFs (hla-mapper), one VCF by sample.
 
@@ -208,10 +208,10 @@ for name in "${names[@]}"; do
         -r chr6:29700000-33149972 \
         "${path_estimated_populational}" \
         -Oz \
-        -o "${path_hlamapper}/${name}.mapper.vcf.gz"
+        -o "${path_estimated}/${name}.${name_job}.vcf.gz"
         #"/dados/home/DATA/HLAcalls_1kgenHGDP_2024/SABE_1KGEN_HGDP/vcf_nay/whatshap/whatshap_bialelico_shapeit_multialelico_EDITADO7.vcf.gz" \
 
-    bcftools index "${path_hlamapper}/${name}.mapper.vcf.gz"
+    bcftools index "${path_estimated}/${name}.${name_job}.vcf.gz"
 
 done
 

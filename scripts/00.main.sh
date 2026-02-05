@@ -96,7 +96,7 @@ bash "${path_script}/02.processing.hprc.sh" \
     --est "${path_estimated_populational}" \
     --out "${path_out}" \
     --name "${name_job}"
-
+exit
 # Whatshap compare
 bash "${path_script}/03.whatshap.sh" \
     --out "${path_out}" \
