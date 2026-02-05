@@ -21,14 +21,14 @@ name_job=""
 
 Usage() {
     echo "Usage of $(basename "$0")"
-    echo "  --true <path to the folder containing the reference VCFs (one VCF per sample)>"
+    echo "  --tru  <path to the folder containing the reference VCFs (one VCF per sample)>"
     echo "  --est  <path to the estimated population VCF containing phased haplotypes>"
     echo "  --out  <path to the output folder where the extracted MHC VCFs will be saved>"
     echo "  --name <name to identify the job, e.g., 'trios' or 'trios_hla-mapper'>"
     echo ""
     echo "Example:"
-    echo "bash $(basename "$0") --true /path/to/truth_vcfs --est /path/to/estimated_population.vcf --out /path/to/output --name trios_analysis"
-    echo "bash 00.main.sh --true /dados/home/DATA/HPRC_PLUS --est /dados/home/DATA/HLAcalls_1kgenHGDP_2024/SABE_1KGEN_HGDP/vcf_nay/whatshap/whatshap_bialelico_shapeit_multialelico_EDITADO7.vcf.gz --out /home/jennifer/02_datas/04_data_processing_trios/01_intermediate --name test_hla-mapper"
+    echo "bash $(basename "$0") --tru /path/to/truth_vcfs --est /path/to/estimated_population.vcf --out /path/to/output --name trios_analysis"
+    echo "bash 00.main.sh --tru /dados/home/DATA/HPRC_PLUS --est /dados/home/DATA/HLAcalls_1kgenHGDP_2024/SABE_1KGEN_HGDP/vcf_nay/whatshap/whatshap_bialelico_shapeit_multialelico_EDITADO7.vcf.gz --out /home/jennifer/02_datas/04_data_processing_trios/01_intermediate --name test_hla-mapper"
     echo ""
 }
 
@@ -38,7 +38,7 @@ path_script=$(dirname "$(readlink -f "$0")")
 # Check all arguments (flags and their values)
 while [[ "$#" -gt 0 ]]; do
     case "$1" in
-        --true)
+        --tru)
             path_truth="$2"
             shift ; shift
             ;;
@@ -92,7 +92,7 @@ fi
 
 # Extract the MHC region from phased VCFs
 bash "${path_script}/02.processing.hprc.sh" \
-    --true "${path_truth}" \
+    --tru "${path_truth}" \
     --est "${path_estimated_populational}" \
     --out "${path_out}" \
     --name "${name_job}"
@@ -112,5 +112,5 @@ cash "${path_script}/05.report.plot.sh" \
     --out "${path_out}" \
     --name "${name_job}"
 
-# bash 00.main.sh --true /dados/home/DATA/HPRC_PLUS --est /dados/home/DATA/HLAcalls_1kgenHGDP_2024/SABE_1KGEN_HGDP/vcf_nay/whatshap/whatshap_bialelico_shapeit_multialelico_EDITADO7.vcf.gz --out /home/jennifer/02_datas/04_data_processing_trios/01_intermediate --name hla_mapper
+# bash 00.main.sh --tru /dados/home/DATA/HPRC_PLUS --est /dados/home/DATA/HLAcalls_1kgenHGDP_2024/SABE_1KGEN_HGDP/vcf_nay/whatshap/whatshap_bialelico_shapeit_multialelico_EDITADO7.vcf.gz --out /home/jennifer/02_datas/04_data_processing_trios/01_intermediate --name hla_mapper
 # end

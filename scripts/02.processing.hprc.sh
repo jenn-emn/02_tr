@@ -23,14 +23,14 @@ name_job=""
 
 Usage() {
     echo "Usage: $(basename "$0")"
-    echo "path_truth <path to the folder containing the reference VCFs (one VCF per sample)>"
-    echo "path_estimated_populational <path to the estimated population VCF containing phased haplotypes>"
-    echo "path_out <path to the output folder where the extracted MHC VCFs will be saved>"
-    echo "name <string to identify the job, e.g., 'mvn' or 'hla_mapper'>"
+    echo "  --tru  <path to the folder containing the reference VCFs (one VCF per sample)>"
+    echo "  --est  <path to the estimated population VCF containing phased haplotypes>"
+    echo "  --out  <path to the output folder where the extracted MHC VCFs will be saved>"
+    echo "  --name <string to identify the job, e.g., 'mvn' or 'hla_mapper'>"
     echo ""
     echo "Example:"
-    echo "$(basename "$0") --true /path/to/truth_vcfs --est /path/to/estimated_population.vcf --out /path/to/output --name trios_analysis"
-    echo "02.processing.hprc.sh --true /dados/home/DATA/HPRC_PLUS --est /dados/home/DATA/HLAcalls_1kgenHGDP_2024/SABE_1KGEN_HGDP/vcf_nay/whatshap/whatshap_bialelico_shapeit_multialelico_EDITADO7.vcf.gz --out /home/jennifer/02_datas/04_data_processing_trios/01_intermediate --name test_hla_mapper"
+    echo "$(basename "$0") --tru /path/to/truth_vcfs --est /path/to/estimated_population.vcf --out /path/to/output --name trios_analysis"
+    echo "02.processing.hprc.sh --tru /dados/home/DATA/HPRC_PLUS --est /dados/home/DATA/HLAcalls_1kgenHGDP_2024/SABE_1KGEN_HGDP/vcf_nay/whatshap/whatshap_bialelico_shapeit_multialelico_EDITADO7.vcf.gz --out /home/jennifer/02_datas/04_data_processing_trios/01_intermediate --name test_hla_mapper"
     echo ""
 }
 
@@ -40,7 +40,7 @@ SCRIPT_DIR=$(dirname "$(readlink -f "$0")")
 # Check all arguments (flags and their values)
 while [[ "$#" -gt 0 ]]; do
     case "$1" in
-        --true)
+        --tru)
             path_truth="$2"
             shift ; shift
             ;;
