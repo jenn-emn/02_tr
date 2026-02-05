@@ -22,11 +22,11 @@ name_job=""
 Usage() {
     echo "Usage: $(basename "$0")"
     echo "path_out <path to the output folder where the extracted MHC VCFs will be saved>"
-    echo "name <string to identify the job, e.g., 'trios' or 'trios_hla-mapper'>"
+    echo "name <string to identify the job, e.g., 'mvn' or 'hla_mapper'>"
     echo ""
     echo "Example:"
     echo "$(basename "$0") --out /path/to/output --name trios_analysis"
-    echo "03.whatshap.sh --out /home/jennifer/02_datas/04_data_processing_trios/01_intermediate --name test_hla-mapper"
+    echo "03.whatshap.sh --out /home/jennifer/02_datas/04_data_processing_trios/01_intermediate --name test_hla_mapper"
     echo ""
 }
 
@@ -75,7 +75,7 @@ path_int="${path_out}/${name_job}"
 mkdir -p "${path_int}"
 
 path_hprc="${path_int}/hprc.mhc"
-path_hlamapper="${path_int}/hlamapper.mhc"
+path_estimated="${path_int}/${name_job}.mhc"
 
 # SAMPLES
 #n1="HG002"
@@ -108,9 +108,9 @@ for name in "${names[@]}"; do
     echo -e "\nSAMPLE: ${name} ------------------------------------------------" >> "${log}"
 
     truthvcf="${path_hprc}/${name}.dip.reheaded.vcf.gz"
-    phasedvcf="${path_hlamapper}/${name}.mapper.vcf.gz"
+    phasedvcf="${path_estimated}/${name}.${name_job}.vcf.gz"
     tsvpairwise="${path_int}/${name}.pairwise.tsv"
-    echo -e "${name}\tchr6\ttruth\twhatshap\t${name}.dip.vcf.gz\t${name}.mapper.vcf.gz" > "${tsvpairwise}"
+    echo -e "${name}\tchr6\ttruth\twhatshap\t${name}.dip.vcf.gz\t${name}.${name_job}.vcf.gz" > "${tsvpairwise}"
 
     # comparison hla.mapper vs trios
     whatshap compare \
