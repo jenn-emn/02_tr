@@ -113,4 +113,5 @@ Rscript "${path_script}/05.report.plot.R" \
     --name "${name_job}"
 
 # bash 00.main.sh --tru /dados/home/DATA/HPRC_PLUS --est /dados/home/DATA/HLAcalls_1kgenHGDP_2024/SABE_1KGEN_HGDP/vcf_nay/whatshap/whatshap_bialelico_shapeit_multialelico_EDITADO7.vcf.gz --out /home/jennifer/02_datas/04_data_processing_trios/01_intermediate --name hla_mapper
+# bash 00.main.sh --tru /dados/home/DATA/HPRC_PLUS --est /home/DATA/1000GP.hg38/ALL.chr6.phase3_shapeit2_mvncall_integrated_v5_related_samples.20130502.genotypes.vcf.gz --out /home/jennifer/02_datas/04_data_processing_trios/01_intermediate --name mvn
 # end
