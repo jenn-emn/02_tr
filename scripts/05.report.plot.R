@@ -7,7 +7,7 @@
 # - Compares phasing accuracy using Hamming distance (Hd) in a plot
 # ###############################################
 
-library(tidyverse)
+library(tydiverse)
 library(ggplot2)
 library(scales)
 library(optparse)
