@@ -1,20 +1,70 @@
 #!/usr/bin/env Rscript
 
-############################################################################
-#
-# Phasing Accuracy Report - Chromosome 6
-#
-############################################################################
+# ###############################################
+# Phasing Accuracy Report - MHC region Chr6
+# - Generates an HTML report with tables and plots
+# - Compares phasing accuracy using Hd and switch error metrics in a table
+# - Compares phasing accuracy using Hamming distance (Hd) in a plot
+# ###############################################
 
 library(tidyverse)
 library(ggplot2)
 library(scales)
+library(optparse)
+
+
+
+# ===============================================
+# Verifying the input call
+# ===============================================
+
+option_list <- list(
+  make_option(c("--out"), type = "character", default = NULL,
+              help = "path to the output folder where the extracted MHC VCFs will be saved", 
+              metavar = "path"),
+  make_option(c("--name"), type = "character", default = NULL,
+              help = "string to identify the job, e.g., 'trios' or 'trios_hla-mapper'", 
+              metavar = "string")
+)
+
+usage_msg <- "%prog --out /path/to/output --name trios_analysis\n       %prog --out /home/jennifer/02_datas/01_intermediate --name test_hla-mapper"
+opt_parser <- OptionParser(option_list = option_list, usage = usage_msg)
+opt <- parse_args(opt_parser, catch_errors = TRUE)
+
+# Validate required arguments
+if (is.null(opt$out) || is.null(opt$name)) {
+  print_help(opt_parser)
+  stop("Erro: Argumentos --out e --name sao obrigatorios.\n", call. = FALSE)
+}
+
+# Validate output directory and path
+if (!dir.exists(opt$out)) {
+  stop(paste("The directory path ('", opt$out, "') is not an existing directory."), call. = FALSE)
+}
+
+# Directory of actual Rscript
+initial_options <- commandArgs(trailingOnly = FALSE)
+script_path <- sub("--file=", "", initial_options[grep("--file=", initial_options)])
+script_dir <- ifelse(length(script_path) > 0, dirname(normalizePath(script_path)), getwd())
+
+# Assigning variables
+path_out <- opt$out
+name_job <- opt$name
+cat("Job Name:", name_job, "\n")
+cat("Output Path:", path_out, "\n")
+cat("Script Dir:", script_dir, "\n")
+
+
+
+# ===============================================
+# Starting the analysis
+# ===============================================
 
 # 1. Path Settings
-parent_dir <- "/home/jennifer/02_datas/04_data_processing_trios/01_intermediate/switch"
+parent_dir <- file.path(path_out, name_job,"switch")
 out_dir <- file.path(parent_dir, "report")
 html_path <- file.path(out_dir, "phasing_report.html")
-combined_plot_name <- "combined_phasing_plot.png"
+combined_plot_name1 <- "combined_phasing_plot1.png"
 combined_plot_name2 <- "combined_phasing_plot2.png"
 
 if (!dir.exists(out_dir)) {
@@ -47,7 +97,6 @@ metrics_df <- data.frame(
   mutate(
     # Extract the %
     sort_key = as.numeric(str_extract(WhatsHap, "[0-9.]+(?=%)")),
-    
     # Extract the number of the %
     inhouse_val = as.numeric(str_extract(InHouse, "[0-9.]+(?=%)")),
     Pct_Label = paste0(Sample, " (", sprintf("%.2f", inhouse_val), "%)")
@@ -58,7 +107,7 @@ metrics_df <- data.frame(
 # 3. Start HTML Building
 html_lines <- c(
   "<!DOCTYPE html><html lang='en'><head><meta charset='UTF-8'>",
-  "<title>Phasing Accuracy Report - Chr6</title>",
+  glue("<title>Phasing Accuracy Report - Trios vs. {name_job}</title>"),
   "<style>",
   "  body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 40px; background: #f8f9fa; color: #333; line-height: 1.6; }",
   "  .container { max-width: 1200px; margin: auto; }",
@@ -86,7 +135,7 @@ html_lines <- c(html_lines,
                 "<table><thead><tr><th>Sample</th>",
                 "<th>WhatsHap (Switch error/common heterozygous variants, %)</th>",
                 "<th>WhatsHap (Hamming distance/common heterozygous variants, %)</th>",
-                "<th>InHouse (Hamming distance/common heterozygous variants, %)</th>",
+                glue("<th>{name_job} (Hamming distance/common heterozygous variants, %)</th>",),
                 "</tr></thead><tbody>")
 
 for(i in 1:nrow(metrics_df)) {
@@ -128,7 +177,11 @@ p_combined <- ggplot(master_df, aes(x = pos, y = 1)) +
   facet_grid(PlotLabel ~ ., switch = "y") + 
   scale_color_manual(values = c("MATCH" = "#27ae60", "DIFF" = "#e74c3c")) +
   scale_x_continuous(labels = label_comma(), expand = c(0.01, 0)) +
-  labs(title = "Phasing error map", x = "Position on Chromosome 6 (bp)", y = "Sample (Hamming distance %)", color = "Status") +
+  labs(
+      title = paste0("Phasing error map using ",name_job," (considering common heterozygous variants)"),
+      x = "Position on Chromosome 6 (bp)",
+      y = "Sample (Hamming distance %)",
+      color = "Status") +
   theme_minimal() +
   theme(
       axis.text.y = element_blank(),
@@ -144,7 +197,7 @@ p_combined <- ggplot(master_df, aes(x = pos, y = 1)) +
   )
 
 plot_height <- max(4, length(unique(master_df$Sample)) * 1)
-ggsave(filename = combined_plot_name, path = out_dir, plot = p_combined, 
+ggsave(filename = combined_plot_name1, path = out_dir, plot = p_combined, 
        width = 12, height = plot_height, dpi = 300, bg = "white")
 
 # 7. Generate Plot with genotyping errors
@@ -152,13 +205,18 @@ global_min_pos <- min(master_df$pos, na.rm = TRUE)
 global_max_pos <- max(master_df$pos, na.rm = TRUE)
 
 p_combined <- ggplot(master_df, aes(x = pos, y = 1)) +
-  annotate("segment", x = global_min_pos, xend = global_max_pos, y = 1, yend = 1, 
-           color = "grey90", linewidth = 0.5) +
+  annotate(
+      "segment", x = global_min_pos, xend = global_max_pos, y = 1, yend = 1, 
+      color = "grey90", linewidth = 0.5) +
   geom_point(aes(color = status_error), size = 2, alpha = 0.8, shape = 19) + 
   facet_grid(PlotLabel ~ ., switch = "y") + 
   scale_color_manual(values = c("MATCH" = "#27ae60", "DIFF" = "#e74c3c", "ERROR" = "#000000")) +
   scale_x_continuous(labels = label_comma(), expand = c(0.01, 0)) +
-  labs(title = "Phasing error map (considering common heterozygous variants)", x = "Position on Chromosome 6 (bp)", y = "Sample (Hamming distance %)", color = "Status") +
+  labs(
+      title = paste0("Phasing error map using ",name_job," (considering common heterozygous variants)"),
+      x = "Position on Chromosome 6 (bp)",
+      y = "Sample (Hamming distance %)",
+      color = "Status") +
   theme_minimal() +
   theme(
       axis.text.y = element_blank(),
@@ -181,13 +239,10 @@ html_lines <- c(html_lines,
   "<h3>Comparative plot</h3>",
   "<div class='plot-container'>",
   paste0("<img src='", combined_plot_name2, "' alt='Combined Switch Error Plot'>"),
-  "</div>"
+  "</div>",
+  "<div class='footer'>Report generated on ", as.character(Sys.Date()), "</div>",
+  "</div></body></html>"
 )
-
-html_lines <- c(html_lines, 
-                "<div class='footer'>Report generated on ", as.character(Sys.Date()), "</div>",
-                "</div></body></html>")
-
 writeLines(html_lines, con = html_path)
 
 cat("\n--- Report successfully generated ---\n")
