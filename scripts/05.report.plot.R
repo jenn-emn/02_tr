@@ -13,6 +13,8 @@ library(scales)
 library(optparse)
 library(glue)
 library(stringr)
+  
+# Rscript 05.report.plot.R  --out  /home/jennifer/02_datas/04_data_processing_trios/01_intermediate  --name hla_mapper
 
 
 # ===============================================
@@ -128,7 +130,7 @@ metrics_df <- data.frame(
 # 3. Start HTML Building
 html_lines <- c(
   "<!DOCTYPE html><html lang='en'><head><meta charset='UTF-8'>",
-  glue("<title>Phasing Accuracy Report - Trios vs. {name_job}</title>"),
+  glue("<title>Phasing Accuracy Report - HPRC vs. {name_job}</title>"),
   "<style>",
   "  body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 40px; background: #f8f9fa; color: #333; line-height: 1.6; }",
   "  .container { max-width: 1200px; margin: auto; }",
@@ -142,7 +144,7 @@ html_lines <- c(
   "  img { width: 100%; height: auto; border-radius: 4px; border: 1px solid #eee; }",
   "  .footer { text-align: center; font-size: 0.9em; color: #7f8c8d; margin-top: 50px; }",
   "</style></head><body><div class='container'>",
-  "<h1>Phasing Accuracy: MHC region</h1>",
+  glue("<h1>Phasing Accuracy Report - HPRC vs. {name_job}</h1>"),
   "<h3>Compartive table</h3>",
   "<div class='description-box'>",
   "<strong>HLA genomic region:</strong> corresponds to the genomic coordinates from 29700000 to 33149972.<br>",
@@ -171,15 +173,16 @@ html_lines <- c(html_lines, "</tbody></table><hr>")
 # 5. Load and Combine Data
 data_list <- list()
 for(sample_id in metrics_df$Sample) {
-  sample_file <- file.path(parent_dir, sample_id, paste0(sample_id, ".hprc.hlamapper.switch.errors.tsv"))
+  sample_file <- file.path(parent_dir, sample_id, paste0(sample_id, ".hprc.", name_job, ".switch.errors.tsv"))
   
   if (file.exists(sample_file)) {
     current_label <- metrics_df$Pct_Label[metrics_df$Sample == sample_id]
     
     temp_df <- read.table(sample_file, header=T, sep="\t") %>%
       mutate(pos = as.numeric(str_extract(idcomp, "(?<=:)[0-9]+")),
-             PlotLabel = current_label) %>%
-      select(PlotLabel, pos, status_error)
+             PlotLabel = current_label,
+             Sample = sample_id) %>%
+      select(PlotLabel, pos, status_error, Sample)
     data_list[[sample_id]] <- temp_df
   }
 }
