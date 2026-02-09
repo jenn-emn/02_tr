@@ -113,7 +113,7 @@ Rscript "${path_script}/05.metadata.R" \
     --name "${name_job}"
 
 # report
-Rscript "${path_script}/05.report.plot.R" \
+Rscript "${path_script}/06.report.plot.R" \
     --out "${path_out}" \
     --name "${name_job}"
 
