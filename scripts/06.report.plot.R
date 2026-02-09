@@ -70,6 +70,7 @@ path_switch_log <- file.path(parent_dir, "switches.inhouse.log")
 html_path <- paste0(out_dir, "/",name_job, ".phasing_report.html")
 combined_plot_name1 <- "combined_phasing_plot1.png"
 combined_plot_name2 <- "combined_phasing_plot2.png"
+path_metadata <- file.path(path_out, name_job, "metadata", "hprc_samples_metadata.tsv")
 
 if (!dir.exists(out_dir)) {
     dir.create(out_dir, recursive = TRUE, showWarnings = FALSE)
@@ -104,12 +105,7 @@ metrics_df <- data.frame(
             "1233/8174 (15.08%)", "2118/8737 (24.24%)", "1/8896 (0.01%)",
             "4/8827 (0.05%)", "1/9048 (0.01%)", "12/8990 (0.13%)",
             "1/7489 (0.01%)", "2/8621 (0.02%)", "1/8766 (0.01%)",
-            "1222/6311 (13.36%)", "1191/8353 (14.26%)") #,
-  #InHouse = c("0/8340 (0%)", "1/9533 (0.01%)", "0/7953 (0%)",
-  #          "1240/8193 (15%)", "2128/8773 (24.25%)", "1/8918 (0.01%)",
-  #          "4/8866 (0.045%)", "1/9069 (0.011%)", "12/8926 (0.134%)",
-  #          "1/7507 (0.013%)", "2/8645 (0.02%)", "1/8786 (0.01%)",
-  #          "1231/6334 (19.43%)", "1193/8363 (14.26%)")
+            "1222/6311 (13.36%)", "1191/8353 (14.26%)")
   ) %>%
   left_join(
     switch_log %>%
