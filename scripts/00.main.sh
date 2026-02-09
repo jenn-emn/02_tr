@@ -107,6 +107,11 @@ bash "${path_script}/04.switches.sh" \
     --out "${path_out}" \
     --name "${name_job}"
 
+# metadata
+Rscript "${path_script}/05.metadata.R" \
+    --out "${path_out}" \
+    --name "${name_job}"
+
 # report
 Rscript "${path_script}/05.report.plot.R" \
     --out "${path_out}" \
