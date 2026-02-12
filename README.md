@@ -27,3 +27,4 @@ There are [234 samples](https://github.com/human-pangenomics/hprc_intermediate_a
 ## Report
 
 - [Report of mapping phasing errors](https://htmlpreview.github.io/?https://github.com/jenn-emn/02_tr/blob/main/report/phasing_report.html)
+- [dasd](https://github.com/jenn-emn/02_tr/blob/main/reports/phasing_report.html)
