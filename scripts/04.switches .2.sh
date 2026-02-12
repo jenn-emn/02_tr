@@ -140,7 +140,7 @@ for name in "${names[@]}"; do
     echo -e "SAMPLE: ${name} ------------------------------------------------"
 
     hprcvcf="${path_hprc}/${name}.dip.reheaded.vcf.gz"
-    hlamvcf="${path_estimated}/${name}.${name_job}.vcf.gz"
+    estvcf="${path_estimated}/${name}.${name_job}.vcf.gz"
     
     pathindiv="${path_switch}/${name}"
     mkdir -p "${pathindiv}"
@@ -158,17 +158,17 @@ for name in "${names[@]}"; do
     # ESTIMATED
     bcftools \
         query -f '%CHROM:%POS:%REF:%ALT[\t%GT]' \
-        "${hlamvcf}" \
+        "${estvcf}" \
         -o "${pathindiv}/${name}.${name_job}.txt"
     
-    hlamcomp="${pathindiv}/${name}.${name_job}.txt"
+    estcomp="${pathindiv}/${name}.${name_job}.txt"
 
 
     # merge by ID.comp
     awk '
         BEGIN {
             OFS="\t"
-            print "idcomp", "hprc", "hlam", "status"
+            print "idcomp", "hprc", "estimated", "status"
         }
 
         NR == FNR { hprcidc[$1]=$2 ; next ; }
@@ -179,7 +179,7 @@ for name in "${names[@]}"; do
             }
         }' \
         "${hprccomp}" \
-        "${hlamcomp}" > \
+        "${estcomp}" > \
         "${pathindiv}/${name}.hprc.${name_job}.tsv"
 
     path_hprc_est="${pathindiv}/${name}.hprc.${name_job}.tsv"
@@ -248,18 +248,18 @@ for name in "${names[@]}"; do
         echo "- unswapped ${name}"
 
         # creating a unswapped column
-        path_swapped="${pathindiv}/${name}.hprc.hlamapper.clean.swapped.tsv"
+        path_swapped="${pathindiv}/${name}.hprc.${name_job}.clean.swapped.tsv"
         awk '
             BEGIN{
                 OFS="\t"
-                print "idcomp", "hprc", "hlam", "status", "hlam_swapped", "status_swapped"
+                print "idcomp", "hprc", "estimated", "status", "estimated_swapped", "status_swapped"
             }
             NR>1 {
-                # Split HLAM ($3) by the pipe; "0|1": a[1]=0 e a[2]=1
+                # Split estimated ($3) by the pipe; "0|1": a[1]=0 e a[2]=1
                 split($3, a, "|")
                 swapped_gt = a[2]"|"a[1]
                 
-                # Comparing HPRC ($2) with HLAM_swapped
+                # Comparing HPRC ($2) with estimated_swapped
                 if ($2 == swapped_gt) {
                     print $1, $2, $3, $4, swapped_gt, "MATCH"
                 } else {
@@ -275,14 +275,14 @@ for name in "${names[@]}"; do
 
                 # split hprc ($2) and swapped estimated (%5)
                 split($2, hprc, "|")
-                split($5, hlam, "|")
+                split($5, est, "|")
                 
                 # -- Phasing Error
-                # The allele 1 of hprc have to be equals to allele 2 of hlam, and the 2 of hprc == 1 of hlam
+                # The allele 1 of hprc have to be equals to allele 2 of est, and the 2 of hprc == 1 of est
                 # HPRC is 0|1, 1|0, 0|2, 2|0
                 # and the swapped estimated is 1|0, 0|1, 2|0, 0|2, respectly.
 
-                if (hprc[1] == hlam[2] && hprc[2] == hlam[1]) {
+                if (hprc[1] == est[2] && hprc[2] == est[1]) {
                     phase_err++
                 }
                 
@@ -293,7 +293,7 @@ for name in "${names[@]}"; do
 
                     # -- Genotyping Error: discrepant homozigous in the swapped the estimated phase
                     #    when the swapped phase is homozigous for one of the truth alleles or for a third extra allele.
-                    if (hlam[1] == hlam[2]) {
+                    if (est[1] == est[2]) {
                         geno_hom_qry++
                     }
 
@@ -325,16 +325,16 @@ for name in "${names[@]}"; do
         awk '
             BEGIN{
                 OFS="\t"
-                print "idcomp", "hprc", "hlam", "status", "hlam_swapped", "status_swapped"
+                print "idcomp", "hprc", "estimated", "status", "estimated_swapped", "status_swapped"
             }
             NR>1 && $6 == "DIFF" {
 
                 # split hprc ($2) and swapped estimated (%5)
                 split($2, hprc, "|")
-                split($5, hlam, "|")
+                split($5, est, "|")
 
                 # -- Phasing Error
-                if (hprc[1] == hlam[2] && hprc[2] == hlam[1]) { next }
+                if (hprc[1] == est[2] && hprc[2] == est[1]) { next }
                 
                 # -- Genotyping Error
                 else { print $0 }
@@ -347,16 +347,16 @@ for name in "${names[@]}"; do
         awk '
             BEGIN{
                 OFS="\t"
-                print "idcomp", "hprc", "hlam", "status", "hlam_swapped", "status_swapped", "status_error"
+                print "idcomp", "hprc", "estimated", "status", "estimated_swapped", "status_swapped", "status_error"
             }
             NR>1 {
 
                 # split hprc ($2) and swapped estimated ($5)
                 split($2, hprc, "|")
-                split($5, hlam, "|")
+                split($5, est, "|")
 
                 # -- Genotyping Error
-                if ($6 == "DIFF" && (hprc[1] != hlam[2] || hprc[2] != hlam[1])) { print $1, $2, $3, $4, $5, $6, "ERROR" }
+                if ($6 == "DIFF" && (hprc[1] != est[2] || hprc[2] != est[1])) { print $1, $2, $3, $4, $5, $6, "ERROR" }
                 
                 # -- Others
                 else { print $1, $2, $3, $4, $5, $6, $6 }
@@ -374,11 +374,11 @@ for name in "${names[@]}"; do
 
                 # split hprc ($2) and swapped estimated ($3)
                 split($2, hprc, "|")
-                split($3, hlam, "|")
+                split($3, est, "|")
                 
                 # -- Phasing Error
                 # The alleles in the estimated phase are inverted
-                if (hprc[1] == hlam[2] && hprc[2] == hlam[1]) {
+                if (hprc[1] == est[2] && hprc[2] == est[1]) {
                     phase_err++
                 }
                 
@@ -389,7 +389,7 @@ for name in "${names[@]}"; do
 
                     # -- Genotyping Error: discrepant homozigous in the swapped the estimated phase
                     #    when the swapped phase is homozigous for one of the truth alleles or for a third extra allele.
-                    if (hlam[1] == hlam[2]) {
+                    if (est[1] == est[2]) {
                         geno_hom_qry++
                     }
 
@@ -421,16 +421,16 @@ for name in "${names[@]}"; do
         awk '
             BEGIN{
                 OFS="\t"
-                print "idcomp", "hprc", "hlam", "status"
+                print "idcomp", "hprc", "estimated", "status"
             }
             NR>1 && $4 == "DIFF" {
 
                 # split hprc ($2) and the estimated phase ($3)
                 split($2, hprc, "|")
-                split($3, hlam, "|")
+                split($3, est, "|")
 
                 # -- Phasing Error
-                if (hprc[1] == hlam[2] && hprc[2] == hlam[1]) { next }
+                if (hprc[1] == est[2] && hprc[2] == est[1]) { next }
                 
                 # -- Genotyping Error
                 else { print $0 }
@@ -445,16 +445,16 @@ for name in "${names[@]}"; do
         awk '
             BEGIN{
                 OFS="\t"
-                print "idcomp", "hprc", "hlam", "status", "status_error"
+                print "idcomp", "hprc", "estimated", "status", "status_error"
             }
             NR>1 {
 
                 # split hprc ($2) and swapped estimated ($3)
                 split($2, hprc, "|")
-                split($3, hlam, "|")
+                split($3, est, "|")
 
                 # -- Genotyping Error
-                if ($4 == "DIFF" && (hprc[1] != hlam[2] || hprc[2] != hlam[1])) { print $1, $2, $3, $4, "ERROR" }
+                if ($4 == "DIFF" && (hprc[1] != est[2] || hprc[2] != est[1])) { print $1, $2, $3, $4, "ERROR" }
                 
                 # -- Others
                 else { print $1, $2, $3, $4, $4 }
