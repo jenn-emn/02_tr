@@ -222,9 +222,9 @@ for name in "${names[@]}"; do
         #"/dados/home/DATA/HLAcalls_1kgenHGDP_2024/SABE_1KGEN_HGDP/vcf_nay/whatshap/whatshap_bialelico_shapeit_multialelico_EDITADO7.vcf.gz" \
 
 
-    # double filter
+    # split multiallelics
     bcftools norm \
-        -v snps \
+        -m snps \
         "${path_estimated}/${name}.${name_job}.homo.vcf.gz" \
         -Oz \
         -o "${path_estimated}/${name}.${name_job}.norm.vcf.gz"
@@ -234,7 +234,7 @@ for name in "${names[@]}"; do
     fi
 
 
-    # double filter
+    # just biallelics
     bcftools view \
         -g het \
         -m2 \
