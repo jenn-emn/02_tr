@@ -75,7 +75,7 @@ path_int="${path_out}/${name_job}"
 mkdir -p "${path_int}"
 
 path_hprc="${path_int}/hprc.mhc"
-path_estimated="${path_int}/${name_job}"
+path_estimated="${path_int}/${name_job}.mhc"
 path_switch="${path_int}/switch"
 mkdir -p "${path_switch}"
 

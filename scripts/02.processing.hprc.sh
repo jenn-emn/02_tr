@@ -111,7 +111,7 @@ path_int="${path_out}/${name_job}"
 mkdir -p "${path_int}"
 
 path_hprc="${path_int}/hprc.mhc"
-path_estimated="${path_int}/${name_job}"
+path_estimated="${path_int}/${name_job}.mhc"
 
 # to check names
 samples_list="${path_int}/${name_job}.samples.in.hprc.txt"
@@ -172,6 +172,10 @@ for name in "${names[@]}"; do
     bcftools view \
         -r chr6:29700000-33149972 \
         "${path_truth}/${name}.f1_assembly_v2.dip.vcf.gz" \
+        -m2 \
+        -M2 \
+        -v snps \
+        -e 'GT~"\."' \
         -Oz \
         -o "${path_hprc}/${name}.dip.vcf.gz"
         #"/home/DATA/HPRC_PLUS/${name}.f1_assembly_v2.dip.vcf.gz" \
@@ -185,6 +189,7 @@ for name in "${names[@]}"; do
         -o "${path_hprc}/${name}.dip.reheaded.vcf.gz"
 
     bcftools index "${path_hprc}/${name}.dip.reheaded.vcf.gz"
+
     if [ -s "${path_hprc}/${name}.dip.reheaded.vcf.gz.csi" ]; then
         rm "${path_hprc}/${name}.dip.vcf.gz"
     fi
@@ -206,12 +211,31 @@ for name in "${names[@]}"; do
     bcftools view \
         -s "${name}" \
         -r chr6:29700000-33149972 \
+        -g het \
+        -m2 \
+        -M2 \
+        -v snps \
         "${path_estimated_populational}" \
         -Oz \
-        -o "${path_estimated}/${name}.${name_job}.vcf.gz"
+        -o "${path_estimated}/${name}.${name_job}.homo.vcf.gz"
         #"/dados/home/DATA/HLAcalls_1kgenHGDP_2024/SABE_1KGEN_HGDP/vcf_nay/whatshap/whatshap_bialelico_shapeit_multialelico_EDITADO7.vcf.gz" \
 
+
+    # double filter
+    bcftools view \
+        -g het \
+        -m2 \
+        -M2 \
+        -v snps \
+        "${path_estimated}/${name}.${name_job}.homo.vcf.gz" \
+        -Oz \
+        -o "${path_estimated}/${name}.${name_job}.vcf.gz"
+
     bcftools index "${path_estimated}/${name}.${name_job}.vcf.gz"
+
+    if [ -s "${path_estimated}/${name}.${name_job}.vcf.gz" ]; then
+        rm "${path_estimated}/${name}.${name_job}.homo.vcf.gz"
+    fi
 
 done
 

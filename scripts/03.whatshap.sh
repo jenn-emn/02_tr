@@ -28,6 +28,8 @@ Usage() {
     echo "$(basename "$0") --out /path/to/output --name trios_analysis"
     echo "03.whatshap.sh --out /home/jennifer/02_datas/04_data_processing_trios/01_intermediate --name test_hla_mapper"
     echo ""
+    echo "Obs: Activate the conda environment with Whatshap installed before running the script."
+    echo ""
 }
 
 # Get the absolute path of the directory where the script is located.

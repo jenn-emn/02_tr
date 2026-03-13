@@ -189,9 +189,10 @@ master_df$PlotLabel <- factor(master_df$PlotLabel, levels = metrics_df$Pct_Label
 global_min_pos <- min(master_df$pos, na.rm = TRUE)
 global_max_pos <- max(master_df$pos, na.rm = TRUE)
 
-p_combined <- ggplot(master_df, aes(x = pos, y = 1)) +
-  annotate(
-      "segment", x = global_min_pos, xend = global_max_pos, y = 1, yend = 1, 
+# p1
+p_combined <-
+  ggplot(master_df, aes(x = pos, y = 1)) +
+  annotate("segment", x = global_min_pos, xend = global_max_pos, y = 1, yend = 1, 
       color = "grey90", linewidth = 0.5) +
   geom_point(aes(color = status_error), size = 2, alpha = 0.8, shape = 19) + 
   facet_grid(PlotLabel ~ ., switch = "y") + 
@@ -218,6 +219,42 @@ p_combined <- ggplot(master_df, aes(x = pos, y = 1)) +
 plot_height <- max(4, length(unique(master_df$Sample)) * 1)
 ggsave(filename = combined_plot_name, path = out_dir, plot = p_combined, 
        width = 12, height = plot_height, dpi = 300, bg = "white")
+
+# p2
+# mask
+mask_regions <- data.frame(
+  xmin = c(29717701, 29795501, 29847201, 29874101),
+  xmax = c(29720200, 29795800, 29847800, 29881400),
+  ymin = -Inf,
+  ymax = Inf
+)
+
+#p_combined <- ggplot() +
+#  geom_rect(data = mask_regions, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax), fill = "grey90", alpha = 0.5) +
+#  annotate("segment", x = global_min_pos, xend = global_max_pos, y = 1, yend = 1, color = "grey80", linewidth = 0.5) +
+#  geom_point(data = master_df, aes(x = pos, y = 1, color = status_error), size = 2, alpha = 0.8, shape = 19) + 
+#  facet_grid(PlotLabel ~ ., switch = "y") + 
+#  scale_color_manual(values = c("MATCH" = "#27ae60", "DIFF" = "#e74c3c", "ERROR" = "#000000")) +
+#  scale_x_continuous(labels = label_comma(), expand = c(0.01, 0)) +
+#  labs(title = paste0("Phasing error map using ", name_job, " (considering common heterozygous variants)"),
+#      subtitle = "Gray shaded areas represent masked regions",
+#      x = "Position on Chromosome 6 (bp)",
+#      y = "Sample (Hamming distance %)",
+#      color = "Status") +
+#  theme_minimal() +
+#  theme(
+#      axis.text.y = element_blank(),
+#      axis.ticks.y = element_blank(),
+#      panel.grid.major.y = element_blank(),
+#      panel.grid.minor = element_blank(),
+#      strip.text.y.left = element_text(angle = 0, hjust = 1, vjust = 0.5, 
+#                                       face = "bold", size = 9, family = "mono"),
+#      strip.background = element_rect(fill = "white", color = NA),
+#      legend.position = "bottom",
+#      panel.spacing = unit(0.1, "lines")
+#  )
+#plot_height <- max(4, length(unique(master_df$Sample)) * 1)
+#ggsave(filename = "test_mask", path = out_dir, plot = p_combined, width = 12, height = plot_height, dpi = 300, bg = "white")
 
 # 7. Finalize HTML
 html_lines <- c(html_lines, 
