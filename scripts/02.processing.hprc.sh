@@ -212,6 +212,7 @@ for name in "${names[@]}"; do
         -s "${name}" \
         -r chr6:29700000-33149972 \
         -g het \
+        -m any \
         -m2 \
         -M2 \
         -v snps \
