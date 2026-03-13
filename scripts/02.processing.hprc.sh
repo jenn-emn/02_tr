@@ -223,19 +223,30 @@ for name in "${names[@]}"; do
 
 
     # double filter
+    bcftools norm \
+        -v snps \
+        "${path_estimated}/${name}.${name_job}.homo.vcf.gz" \
+        -Oz \
+        -o "${path_estimated}/${name}.${name_job}.norm.vcf.gz"
+
+    if [ -s "${path_estimated}/${name}.${name_job}.norm.vcf.gz" ]; then
+        rm "${path_estimated}/${name}.${name_job}.homo.vcf.gz"
+    fi
+
+
+    # double filter
     bcftools view \
         -g het \
         -m2 \
         -M2 \
-        -v snps \
-        "${path_estimated}/${name}.${name_job}.homo.vcf.gz" \
+        "${path_estimated}/${name}.${name_job}.norm.vcf.gz" \
         -Oz \
         -o "${path_estimated}/${name}.${name_job}.vcf.gz"
 
     bcftools index "${path_estimated}/${name}.${name_job}.vcf.gz"
 
     if [ -s "${path_estimated}/${name}.${name_job}.vcf.gz" ]; then
-        rm "${path_estimated}/${name}.${name_job}.homo.vcf.gz"
+        rm "${path_estimated}/${name}.${name_job}.norm.vcf.gz"
     fi
 
 done
