@@ -224,7 +224,7 @@ for name in "${names[@]}"; do
 
     # split multiallelics
     bcftools norm \
-        -m snps \
+        -m -snps \
         "${path_estimated}/${name}.${name_job}.homo.vcf.gz" \
         -Oz \
         -o "${path_estimated}/${name}.${name_job}.norm.vcf.gz"
