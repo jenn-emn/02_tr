@@ -212,7 +212,6 @@ for name in "${names[@]}"; do
         -s "${name}" \
         -r chr6:29700000-33149972 \
         -g het \
-        -m any \
         -m2 \
         -M2 \
         -v snps \
@@ -251,6 +250,7 @@ for name in "${names[@]}"; do
 
 done
 
+# bash 02.processing.hprc.sh --tru /dados/home/DATA/HPRC_PLUS --est /dados/home/DATA/HLAcalls_1kgenHGDP_2024/SABE_1KGEN_HGDP/vcf_nay/whatshap/whatshap_bialelico_shapeit_multialelico_EDITADO7.vcf.gz --out /home/jennifer/02_datas/04_data_processing_trios/01_intermediate --name hlamapper
 
 
 # end
