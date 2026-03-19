@@ -56,6 +56,14 @@ cat("Job Name:", name_job, "\n")
 cat("Output Path:", path_out, "\n")
 cat("Script Dir:", script_dir, "\n")
 
+# Path to the mask files
+path_mask_introns <- file.path("/home/DATA/reference_files/introns_to_remove.bed")
+path_mask_cnv <- file.path("/home/DATA/reference_files/cnv.bed")
+# head /home/DATA/reference_files/introns_to_remove.bed
+# chr6	32579105	32580246
+# chr6	32581839	32584108
+# chr6	32584379	32589642
+
 
 
 # ===============================================
@@ -67,7 +75,8 @@ parent_dir <- file.path(path_out, name_job, "switch")
 out_dir <- file.path(parent_dir, "report")
 path_switch_log <- file.path(parent_dir, "switches.inhouse.log")
 html_path <- paste0(out_dir, "/",name_job, ".phasing_report.html")
-combined_plot_name <- "combined_phasing_plot.png"
+combined_plot_name <- paste0(out_dir, "/",name_job, "_combined_phasing_plot.png")
+combined_plot_name_mask <- paste0(out_dir, "/",name_job, "_combined_phasing_plot_mask.png")
 path_metadata <- file.path(path_out, name_job, "metadata", "hprc_samples_metadata.tsv")
 
 if (!dir.exists(out_dir)) {
@@ -75,6 +84,7 @@ if (!dir.exists(out_dir)) {
 }
 
 # 2. Table Data (with Standardized Labels)
+cat("\n--- Table Data (with Standardized Labels) ---\n")
 
 switch_log <- readLines(path_switch_log) %>%
   grep("SAMPLE|Final|Hamm", ., value=T) %>%
@@ -122,6 +132,8 @@ metrics_df <- data.frame(
   select(-sort_key, -inhouse_val)
 
 # 3. Start HTML Building
+cat("\n--- Start HTML Building ---\n")
+
 html_lines <- c(
   "<!DOCTYPE html><html lang='en'><head><meta charset='UTF-8'>",
   glue("<title>Phasing Accuracy Report - HPRC vs. {name_job}</title>"),
@@ -148,6 +160,8 @@ html_lines <- c(
 )
 
 # 4. Add the Table
+cat("\n--- Add lines to the Table ---\n")
+
 html_lines <- c(html_lines,
                 "<table><thead><tr><th>Sample</th>",
                 "<th>WhatsHap (Switch error/common heterozygous variants, %)</th>",
@@ -169,6 +183,7 @@ html_lines <- c(html_lines, "</tbody></table><hr>")
 # idcomp	          hprc	hlam	status	status_error
 # chr6:29700194:A:G	1|0	  1|0	  MATCH 	MATCH
 # chr6:29700221:C:G	1|0	  1|0  	MATCH	  MATCH
+cat("\n--- Load and Combine Data from 'HG00733.hprc.hlamapper.switch.errors.tsv' ---\n")
 
 data_list <- list()
 for(sample_id in metrics_df$Sample) {
@@ -190,6 +205,8 @@ master_df <- bind_rows(data_list)
 master_df$PlotLabel <- factor(master_df$PlotLabel, levels = metrics_df$Pct_Label)
 
 # 6. Generate Plot with genotyping errors
+cat("\n--- Generating Plot 1 with genotyping errors ---\n")
+
 global_min_pos <- min(master_df$pos, na.rm = TRUE)
 global_max_pos <- max(master_df$pos, na.rm = TRUE)
 
@@ -199,7 +216,7 @@ p_combined <-
   annotate("segment", x = global_min_pos, xend = global_max_pos, y = 1, yend = 1,
       color = "grey90", linewidth = 0.5) +
   geom_point(aes(color = status_error), size = 2, alpha = 0.8, shape = 19) +
-  facet_grid(PlotLabel ~ ., switch = "y") + 
+  facet_grid(PlotLabel ~ ., switch = "y", scales = "free") + 
   scale_color_manual(values = c("MATCH" = "#27ae60", "DIFF" = "#e74c3c", "ERROR" = "#000000")) +
   scale_x_continuous(labels = label_comma(), expand = c(0.01, 0)) +
   labs(
@@ -213,30 +230,31 @@ p_combined <-
       axis.ticks.y = element_blank(),
       panel.grid.major.y = element_blank(),
       panel.grid.minor = element_blank(),
-      strip.text.y.left = element_text(angle = 0, hjust = 1, vjust = 0.5, 
-                                       face = "bold", size = 9, family = "mono"),
+      strip.text.y.left = element_text(angle = 0, hjust = 1, vjust = 0.5, face = "bold", size = 9, family = "mono"),
       strip.background = element_rect(fill = "white", color = NA),
       legend.position = "bottom",
-      panel.spacing = unit(0.1, "lines")
+      panel.spacing = unit(0.5, "lines")
   )
 
 plot_height <- max(4, length(unique(master_df$Sample)) * 1)
-ggsave(filename = html_path, plot = p_combined, width = 12, height = plot_height, dpi = 300, bg = "white")
+ggsave(filename = combined_plot_name, plot = p_combined, width = 16, height = plot_height, dpi = 300, bg = "white")
 
 # p2
-# mask
-mask_regions <- data.frame(
-  xmin = c(29717701, 29795501, 29847201, 29874101),
-  xmax = c(29720200, 29795800, 29847800, 29881400),
-  ymin = -Inf,
-  ymax = Inf
-)
+cat("\n--- Generating Plot 2 with masks ---\n")
+
+# masks
+mask_introns <- read.table(path_mask_introns, header = TRUE, sep = "\t") %>% mutate(mask = "intron")
+colnames(mask_introns) <- c("chrom", "start", "end")
+mask_cnv <- read.table(path_mask_cnv, header = TRUE, sep = "\t") %>% mutate(mask = "cnv")
+colnames(mask_cnv) <- c("chrom", "start", "end")
+
+mask_regions <- bind_rows(mask_introns, mask_cnv)
 
 p_combined <- ggplot() +
-  geom_rect(data = mask_regions, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax), fill = "grey90", alpha = 0.5) +
+  geom_rect(data = mask_regions, aes(xmin = start, xmax = end, ymin = 0.9, ymax = 1.1), fill = "grey90", alpha = 0.5) +
   annotate("segment", x = global_min_pos, xend = global_max_pos, y = 1, yend = 1, color = "grey80", linewidth = 0.5) +
   geom_point(data = master_df, aes(x = pos, y = 1, color = status_error), size = 2, alpha = 0.8, shape = 19) + 
-  facet_grid(PlotLabel ~ ., switch = "y") + 
+  facet_grid(PlotLabel ~ ., switch = "y", scales = "free") + 
   scale_color_manual(values = c("MATCH" = "#27ae60", "DIFF" = "#e74c3c", "ERROR" = "#000000")) +
   scale_x_continuous(labels = label_comma(), expand = c(0.01, 0)) +
   labs(title = paste0("Phasing error map using ", name_job, " (considering common heterozygous variants)"),
@@ -250,21 +268,21 @@ p_combined <- ggplot() +
       axis.ticks.y = element_blank(),
       panel.grid.major.y = element_blank(),
       panel.grid.minor = element_blank(),
-      strip.text.y.left = element_text(angle = 0, hjust = 1, vjust = 0.5, 
-                                       face = "bold", size = 9, family = "mono"),
+      strip.text.y.left = element_text(angle = 0, hjust = 1, vjust = 0.5, face = "bold", size = 9, family = "mono"),
       strip.background = element_rect(fill = "white", color = NA),
       legend.position = "bottom",
-      panel.spacing = unit(0.1, "lines")
+      panel.spacing = unit(0.2, "lines")
   )
 plot_height <- max(4, length(unique(master_df$Sample)) * 1)
-html_path <- paste0(out_dir, "/",name_job, ".phasing_report_mask.html")
-ggsave(filename = html_path, path = out_dir, plot = p_combined, width = 12, height = plot_height, dpi = 300, bg = "white")
+ggsave(filename = combined_plot_name_mask, plot = p_combined, width = 16, height = plot_height, dpi = 300, bg = "white")
 
 # 7. Finalize HTMLs
+cat("\n--- Finalize HTMLs ---\n")
+
 html_lines <- c(html_lines, 
   "<h3>Comparative plot</h3>",
   "<div class='plot-container'>",
-  paste0("<img src='", combined_plot_name, "' alt='Combined Switch Error Plot'>"),
+  paste0("<img src='", combined_plot_name_mask, "' alt='Combined Switch Error Plot'>"),
   "</div>",
   "<div class='footer'>Report generated on ", as.character(Sys.Date()), "</div>",
   "</div></body></html>"
@@ -274,7 +292,7 @@ writeLines(html_lines, con = html_path)
 cat("\n--- Report successfully generated ---\n")
 cat("Location:", html_path, "\n")
 
-# Rscript 05.report.plot.R  --out  /home/jennifer/02_datas/04_data_processing_trios/01_intermediate  --name hlamapper
+# Rscript 06.report.plot.R  --out  /home/jennifer/02_datas/04_data_processing_trios/01_intermediate  --name hlamapper
 
 
 # end
