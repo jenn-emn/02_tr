@@ -287,7 +287,6 @@ cat("\n--- Finalize HTMLs ---\n")
 html_lines <- c(html_lines, 
   "<h3>Comparative plot</h3>",
   "<div class='plot-container'>",
-  #paste0("<img src='", path_plot_mask, "' alt='Switch Error Plot'>"),
   paste0("<img src='", plot_mask, "' alt='Switch Error Plot'>"),
   "</div>",
   "<div class='footer'>Report generated on ", as.character(Sys.Date()), "</div>",
