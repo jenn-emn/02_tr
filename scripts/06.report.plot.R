@@ -56,14 +56,6 @@ cat("Job Name:", name_job, "\n")
 cat("Output Path:", path_out, "\n")
 cat("Script Dir:", script_dir, "\n")
 
-# Path to the mask files
-path_mask_introns <- file.path("/home/DATA/reference_files/introns_to_remove.bed")
-path_mask_cnv <- file.path("/home/DATA/reference_files/cnv.bed")
-# head /home/DATA/reference_files/introns_to_remove.bed
-# chr6	32579105	32580246
-# chr6	32581839	32584108
-# chr6	32584379	32589642
-
 
 
 # ===============================================
@@ -71,17 +63,30 @@ path_mask_cnv <- file.path("/home/DATA/reference_files/cnv.bed")
 # ===============================================
 
 # 1. Path Settings
+# existing folder and paths
 parent_dir <- file.path(path_out, name_job, "switch")
-out_dir <- file.path(parent_dir, "report")
-path_switch_log <- file.path(parent_dir, "switches.inhouse.log")
-html_path <- paste0(out_dir, "/",name_job, ".phasing_report.html")
-combined_plot_name <- paste0(out_dir, "/",name_job, "_combined_phasing_plot.png")
-combined_plot_name_mask <- paste0(out_dir, "/",name_job, "_combined_phasing_plot_mask.png")
 path_metadata <- file.path(path_out, name_job, "metadata", "hprc_samples_metadata.tsv")
+path_switch_log <- file.path(parent_dir, "switches.inhouse.log")
+path_mask_introns <- file.path("/home/DATA/reference_files/introns_to_remove.bed")
+path_mask_cnv <- file.path("/home/DATA/reference_files/cnv.bed")
+# example of mask file format
+# head /home/DATA/reference_files/introns_to_remove.bed
+# chr6	32579105	32580246
 
+# new folder
+out_dir <- file.path(parent_dir, "report")
 if (!dir.exists(out_dir)) {
     dir.create(out_dir, recursive = TRUE, showWarnings = FALSE)
 }
+
+# new names
+plot <- "combined_phasing_plot.png"
+plot_mask <- "combined_phasing_plot_mask.png"
+
+# new paths
+html_path <- paste0(out_dir, "/",name_job, ".phasing_report.html")
+path_plot <- paste0(out_dir, "/",plot)
+path_plot_mask <- paste0(out_dir, "/",plot_mask)
 
 # 2. Table Data (with Standardized Labels)
 cat("\n--- Table Data (with Standardized Labels) ---\n")
@@ -237,7 +242,7 @@ p_combined <-
   )
 
 plot_height <- max(4, length(unique(master_df$Sample)) * 1)
-ggsave(filename = combined_plot_name, plot = p_combined, width = 16, height = plot_height, dpi = 300, bg = "white")
+ggsave(filename = path_plot, plot = p_combined, width = 16, height = plot_height, dpi = 300, bg = "white")
 
 # p2
 cat("\n--- Generating Plot 2 with masks ---\n")
@@ -274,7 +279,7 @@ p_combined <- ggplot() +
       panel.spacing = unit(0.2, "lines")
   )
 plot_height <- max(4, length(unique(master_df$Sample)) * 1)
-ggsave(filename = combined_plot_name_mask, plot = p_combined, width = 16, height = plot_height, dpi = 300, bg = "white")
+ggsave(filename = path_plot_mask, plot = p_combined, width = 16, height = plot_height, dpi = 300, bg = "white")
 
 # 7. Finalize HTMLs
 cat("\n--- Finalize HTMLs ---\n")
@@ -282,7 +287,8 @@ cat("\n--- Finalize HTMLs ---\n")
 html_lines <- c(html_lines, 
   "<h3>Comparative plot</h3>",
   "<div class='plot-container'>",
-  paste0("<img src='", combined_plot_name_mask, "' alt='Combined Switch Error Plot'>"),
+  #paste0("<img src='", path_plot_mask, "' alt='Switch Error Plot'>"),
+  paste0("<img src='", plot_mask, "' alt='Switch Error Plot'>"),
   "</div>",
   "<div class='footer'>Report generated on ", as.character(Sys.Date()), "</div>",
   "</div></body></html>"
